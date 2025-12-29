@@ -4,9 +4,9 @@ from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
 // 🔴 Configura Firebase
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
+  apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
+  authDomain: "syscod7-d1753.firebaseapp.com",
+  projectId: "syscod7-d1753",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -143,3 +143,4 @@ window.onload = () => {
   const groupParam = params.get("group");
   if(groupParam) document.getElementById("joinGroupName").value = groupParam;
 }
+
