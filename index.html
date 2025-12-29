@@ -2,19 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Profesional</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="login" class="container">
-  <h2>Bienvenido al Chat</h2>
+  <h2 style="color:#2B7FFF;">Bienvenido al Chat</h2>
   <input type="text" id="usernameInput" placeholder="Tu nombre">
   <button id="enterSystem" class="btn">Entrar</button>
 </div>
 
 <div id="system" class="container" style="display:none;">
   <h3>Hola, <span id="userName"></span></h3>
+  <p>ID único: <span id="userIdDisplay" style="color:#2B7FFF;"></span></p>
 
   <div class="section">
     <h4>Grupos</h4>
