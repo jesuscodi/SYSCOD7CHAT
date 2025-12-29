@@ -10,16 +10,36 @@
 <div id="login" class="container">
   <h2>Bienvenido al Chat</h2>
   <input type="text" id="usernameInput" placeholder="Tu nombre">
-  <input type="text" id="groupInput" placeholder="Nombre del grupo">
-  <input type="password" id="groupPassword" placeholder="Clave del grupo">
-  <button id="enterChat" class="btn">Entrar al chat</button>
+  <button id="enterSystem" class="btn">Entrar</button>
 </div>
 
-<div id="chat" class="container" style="display:none;">
+<div id="system" class="container" style="display:none;">
+  <h3>Hola, <span id="userName"></span></h3>
+
+  <div class="section">
+    <h4>Grupos</h4>
+    <input type="text" id="newGroupName" placeholder="Nombre del grupo">
+    <input type="password" id="newGroupPassword" placeholder="Clave del grupo">
+    <button id="createGroup" class="btn">Crear Grupo</button>
+    <hr>
+    <h5>Unirse a un grupo existente</h5>
+    <input type="text" id="joinGroupName" placeholder="Nombre del grupo">
+    <input type="password" id="joinGroupPassword" placeholder="Clave del grupo">
+    <button id="joinGroup" class="btn">Unirse</button>
+  </div>
+
+  <div class="section">
+    <h4>Chats Privados</h4>
+    <input type="text" id="privateUserId" placeholder="ID de usuario para chat privado">
+    <button id="startPrivateChat" class="btn">Iniciar Chat Privado</button>
+  </div>
+</div>
+
+<div id="chat" class="container chat-container" style="display:none;">
   <div class="header">
     <div>
-      <h3 id="userName"></h3>
-      <h4 id="groupName"></h4>
+      <h3 id="chatUserName"></h3>
+      <h4 id="chatGroupName"></h4>
     </div>
     <div class="share">
       <button id="shareGroup" class="btn">Compartir grupo</button>
@@ -33,6 +53,8 @@
     <input type="text" id="messageInput" placeholder="Escribe un mensaje">
     <button id="sendMessage" class="btn">Enviar</button>
   </div>
+
+  <button id="backSystem" class="btn" style="margin-top:10px;">Volver a inicio</button>
 </div>
 
 <script type="module" src="app.js"></script>
