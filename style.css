@@ -1,52 +1,93 @@
+/* General */
 body {
-  font-family: Arial, sans-serif;
-  background: #e0f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #ece5dd;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  flex-direction: column;
 }
 
-#login, #chat {
+.container {
   background: white;
   padding: 20px;
   border-radius: 10px;
   width: 400px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
-#messages {
-  background: #f1f1f1;
+h2, h3, h4 {
+  margin: 5px 0;
+  color: #075e54;
+}
+
+/* Botones */
+.btn {
+  background: #25d366;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #128c7e;
+}
+
+/* Chat window */
+.chat-window {
+  background: #f0f0f0;
   height: 400px;
   overflow-y: auto;
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Mensajes */
 .message {
-  padding: 8px 12px;
-  border-radius: 15px;
-  margin-bottom: 10px;
-  max-width: 80%;
-  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  margin: 5px 0;
+  max-width: 70%;
+  position: relative;
+  word-wrap: break-word;
 }
 
 .message.me {
-  background: #00796b;
-  color: white;
+  background: #dcf8c6;
   align-self: flex-end;
 }
 
 .message.other {
-  background: #80cbc4;
-  color: black;
+  background: #ffffff;
   align-self: flex-start;
 }
 
-#shareLinkDiv {
-  margin-bottom: 10px;
+/* Hora mensaje */
+.message small {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Inputs */
+.input-group {
+  display: flex;
+}
+
+#messageInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  margin-right: 5px;
 }
 
 #groupLink {
@@ -57,3 +98,7 @@ body {
   border: 1px solid #ccc;
 }
 
+/* Compartir link */
+.share {
+  margin-bottom: 10px;
+}
