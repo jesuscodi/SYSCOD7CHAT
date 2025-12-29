@@ -2,27 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Chat Web</title>
+  <title>Chat Online</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="login-container">
-    <h2>Chat Web</h2>
-    <button id="login">Iniciar sesión con Google</button>
-  </div>
+<div id="login">
+  <input type="text" id="usernameInput" placeholder="Ingresa tu nombre">
+  <button id="enterChat">Entrar al chat</button>
+</div>
 
-  <div id="chat-container" style="display:none;">
-    <h3 id="user"></h3>
+<div id="chat" style="display:none;">
+  <h3 id="userName"></h3>
 
-    <div id="messages"></div>
+  <div id="messages"></div>
 
-    <input type="text" id="messageInput" placeholder="Escribe un mensaje">
-    <button id="send">Enviar</button>
+  <input type="text" id="messageInput" placeholder="Escribe un mensaje">
+  <button id="sendMessage">Enviar</button>
+</div>
 
-    <button id="logout">Cerrar sesión</button>
-  </div>
-
-  <script type="module" src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
