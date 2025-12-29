@@ -5,7 +5,7 @@ from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 // 🔴 Configura Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: "syscod7-d1753.firebaseapp.com",
+  authDomain: " syscod7-d1753.firebaseapp.com",
   projectId: "syscod7-d1753",
 };
 
@@ -17,7 +17,7 @@ let userId = "";
 let currentChat = "";
 let isPrivate = false;
 
-// Función para generar ID único
+// Generar ID único
 function generateUserId(name){
   return name + "_" + Math.floor(Math.random()*10000);
 }
@@ -26,16 +26,17 @@ function generateUserId(name){
 document.getElementById("enterSystem").onclick = async () => {
   const nameInput = document.getElementById("usernameInput").value.trim();
   if(!nameInput) return alert("Ingresa tu nombre");
+
   username = nameInput;
   userId = generateUserId(username);
 
-  // Guardar en Firebase
+  // Guardar usuario en Firebase
   await setDoc(doc(db, "users", userId), { name: username });
 
   document.getElementById("login").style.display = "none";
   document.getElementById("system").style.display = "block";
   document.getElementById("userName").innerText = username;
-  document.getElementById("userIdDisplay").innerText = userId;
+  document.getElementById("userIdDisplay").innerText = `Tu ID: ${userId}`;
 };
 
 // Crear grupo
@@ -43,7 +44,7 @@ document.getElementById("createGroup").onclick = async () => {
   const name = document.getElementById("newGroupName").value.trim();
   const pass = document.getElementById("newGroupPassword").value.trim();
   if(!name || !pass) return alert("Completa los campos");
-  
+
   const groupRef = doc(db, "groups", name);
   const groupSnap = await getDoc(groupRef);
   if(groupSnap.exists()) return alert("Grupo ya existe");
@@ -67,9 +68,13 @@ document.getElementById("joinGroup").onclick = async () => {
 };
 
 // Iniciar chat privado
-document.getElementById("startPrivateChat").onclick = () => {
+document.getElementById("startPrivateChat").onclick = async () => {
   const otherId = document.getElementById("privateUserId").value.trim();
-  if(!otherId) return alert("Ingresa ID del usuario");
+  if(!otherId) return alert("Ingresa el ID del usuario");
+
+  // Revisar si el usuario existe
+  const userSnap = await getDoc(doc(db, "users", otherId));
+  if(!userSnap.exists()) return alert("Usuario no existe");
 
   const chatId = [userId, otherId].sort().join("_");
   openChat(chatId, true);
@@ -79,6 +84,7 @@ document.getElementById("startPrivateChat").onclick = () => {
 function openChat(id, privateChat){
   isPrivate = privateChat;
   currentChat = id;
+
   document.getElementById("system").style.display = "none";
   document.getElementById("chat").style.display = "block";
   document.getElementById("chatUserName").innerText = username;
@@ -101,7 +107,7 @@ document.getElementById("sendMessage").onclick = async () => {
   if(!text) return;
 
   const col = isPrivate ?
-    collection(db, "privateChats", currentChat, "messages") :
+    collection(db, "users", userId, "privateChats", currentChat, "messages") :
     collection(db, "groups", currentChat, "messages");
 
   await addDoc(col, { user: username, text, timestamp: serverTimestamp() });
@@ -129,7 +135,7 @@ function loadMessages(){
   messagesDiv.innerHTML = "";
 
   const col = isPrivate ?
-    collection(db, "privateChats", currentChat, "messages") :
+    collection(db, "users", userId, "privateChats", currentChat, "messages") :
     collection(db, "groups", currentChat, "messages");
 
   const q = query(col, orderBy("timestamp"));
@@ -142,4 +148,16 @@ function loadMessages(){
       div.classList.add("message");
       div.classList.add(msg.user === username ? "me" : "other");
       const time = msg.timestamp ? new Date(msg.timestamp.seconds*1000).toLocaleTimeString() : "";
-      div.innerHTML = `<b>${msg.user}:</b> ${msg.text}
+      div.innerHTML = `<b>${msg.user}:</b> ${msg.text} <small>${time}</small>`;
+      messagesDiv.appendChild(div);
+    });
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+}
+
+// Prellenar grupo desde link
+window.onload = () => {
+  const params = new URLSearchParams(window.location.search);
+  const groupParam = params.get("group");
+  if(groupParam) document.getElementById("joinGroupName").value = groupParam;
+}
