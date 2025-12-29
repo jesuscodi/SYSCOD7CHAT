@@ -13,17 +13,29 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let username = "";
-let currentChat = ""; // grupo o chat privado
+let userId = "";
+let currentChat = "";
 let isPrivate = false;
 
+// Función para generar ID único
+function generateUserId(name){
+  return name + "_" + Math.floor(Math.random()*10000);
+}
+
 // Entrar al sistema
-document.getElementById("enterSystem").onclick = () => {
+document.getElementById("enterSystem").onclick = async () => {
   const nameInput = document.getElementById("usernameInput").value.trim();
   if(!nameInput) return alert("Ingresa tu nombre");
   username = nameInput;
+  userId = generateUserId(username);
+
+  // Guardar en Firebase
+  await setDoc(doc(db, "users", userId), { name: username });
+
   document.getElementById("login").style.display = "none";
   document.getElementById("system").style.display = "block";
   document.getElementById("userName").innerText = username;
+  document.getElementById("userIdDisplay").innerText = userId;
 };
 
 // Crear grupo
@@ -56,10 +68,10 @@ document.getElementById("joinGroup").onclick = async () => {
 
 // Iniciar chat privado
 document.getElementById("startPrivateChat").onclick = () => {
-  const otherUser = document.getElementById("privateUserId").value.trim();
-  if(!otherUser) return alert("Ingresa ID del usuario");
+  const otherId = document.getElementById("privateUserId").value.trim();
+  if(!otherId) return alert("Ingresa ID del usuario");
 
-  const chatId = [username, otherUser].sort().join("_"); // id único
+  const chatId = [userId, otherId].sort().join("_");
   openChat(chatId, true);
 };
 
@@ -76,7 +88,7 @@ function openChat(id, privateChat){
     const linkInput = document.getElementById("groupLink");
     const link = `${window.location.origin}${window.location.pathname}?group=${encodeURIComponent(id)}`;
     linkInput.value = link;
-  }else{
+  } else {
     document.getElementById("groupLink").value = "";
   }
 
@@ -89,7 +101,7 @@ document.getElementById("sendMessage").onclick = async () => {
   if(!text) return;
 
   const col = isPrivate ?
-    collection(db, "users", username, "privateChats", currentChat, "messages") :
+    collection(db, "privateChats", currentChat, "messages") :
     collection(db, "groups", currentChat, "messages");
 
   await addDoc(col, { user: username, text, timestamp: serverTimestamp() });
@@ -117,7 +129,7 @@ function loadMessages(){
   messagesDiv.innerHTML = "";
 
   const col = isPrivate ?
-    collection(db, "users", username, "privateChats", currentChat, "messages") :
+    collection(db, "privateChats", currentChat, "messages") :
     collection(db, "groups", currentChat, "messages");
 
   const q = query(col, orderBy("timestamp"));
@@ -130,17 +142,4 @@ function loadMessages(){
       div.classList.add("message");
       div.classList.add(msg.user === username ? "me" : "other");
       const time = msg.timestamp ? new Date(msg.timestamp.seconds*1000).toLocaleTimeString() : "";
-      div.innerHTML = `<b>${msg.user}:</b> ${msg.text} <small>${time}</small>`;
-      messagesDiv.appendChild(div);
-    });
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-}
-
-// Prellenar grupo desde link
-window.onload = () => {
-  const params = new URLSearchParams(window.location.search);
-  const groupParam = params.get("group");
-  if(groupParam) document.getElementById("joinGroupName").value = groupParam;
-}
-
+      div.innerHTML = `<b>${msg.user}:</b> ${msg.text}
