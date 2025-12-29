@@ -38,20 +38,14 @@ body, html {
   transition: 0.2s;
 }
 
-.btn:hover {
-  background: #1a5ecc;
-}
+.btn:hover { background: #1a5ecc; }
 
 /* Secciones */
-.section {
-  margin: 15px 0;
-}
-
+.section { margin: 15px 0; }
 h2,h3,h4,h5 { color: #2B7FFF; margin:5px 0; }
 
 /* Chat window */
 .chat-container { height: 100%; }
-
 .header {
   background: #2B7FFF;
   color: white;
@@ -61,7 +55,6 @@ h2,h3,h4,h5 { color: #2B7FFF; margin:5px 0; }
   align-items: center;
   border-radius: 10px 10px 0 0;
 }
-
 .share input {
   width: 200px;
   max-width: 100%;
@@ -80,7 +73,6 @@ h2,h3,h4,h5 { color: #2B7FFF; margin:5px 0; }
   flex-direction: column;
   border-radius: 0 0 10px 10px;
 }
-
 .message {
   padding: 12px 18px;
   border-radius: 25px;
@@ -91,15 +83,19 @@ h2,h3,h4,h5 { color: #2B7FFF; margin:5px 0; }
   line-height: 1.4;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
 .message.me { background: #DCF8C6; align-self: flex-end; }
 .message.other { background: white; align-self: flex-start; }
-
 .message small { display:block; font-size:10px; color:#666; margin-top:5px; }
 
 /* Input de mensaje */
 .input-group { display: flex; padding: 10px; background: #f0f2f5; }
 #messageInput { flex:1; padding:12px; border-radius:25px; border:1px solid #ccc; margin-right:5px; font-size:15px; }
+
+/* Modal */
+.modal { display: none; position: fixed; z-index: 100; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.5);}
+.modal-content { background:white; margin:15% auto; padding:20px; border-radius:15px; width:80%; max-width:400px; box-shadow:0 10px 25px rgba(0,0,0,0.3);}
+.close { color:#aaa; float:right; font-size:25px; font-weight:bold; cursor:pointer;}
+.close:hover { color:#2B7FFF; }
 
 /* Responsive */
 @media (max-width:600px){
