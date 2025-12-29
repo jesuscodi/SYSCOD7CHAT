@@ -2,79 +2,125 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebas
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
-// Configura Firebase
+// 🔴 Configura Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: "syscod7-d1753.firebaseapp.com",
-  projectId: "syscod7-d1753",
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROJECT.firebaseapp.com",
+  projectId: "TU_PROJECT_ID",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let username = "";
-let groupName = "";
+let currentChat = ""; // grupo o chat privado
+let isPrivate = false;
 
-// Entrar al chat
-document.getElementById("enterChat").onclick = async () => {
+// Entrar al sistema
+document.getElementById("enterSystem").onclick = () => {
   const nameInput = document.getElementById("usernameInput").value.trim();
-  const groupInput = document.getElementById("groupInput").value.trim();
-  const groupPass = document.getElementById("groupPassword").value.trim();
-
-  if(!nameInput || !groupInput || !groupPass) return alert("Completa todos los campos");
-
+  if(!nameInput) return alert("Ingresa tu nombre");
   username = nameInput;
-  groupName = groupInput;
+  document.getElementById("login").style.display = "none";
+  document.getElementById("system").style.display = "block";
+  document.getElementById("userName").innerText = username;
+};
 
-  // Revisar si el grupo ya existe
-  const groupRef = doc(db, "groups", groupName);
+// Crear grupo
+document.getElementById("createGroup").onclick = async () => {
+  const name = document.getElementById("newGroupName").value.trim();
+  const pass = document.getElementById("newGroupPassword").value.trim();
+  if(!name || !pass) return alert("Completa los campos");
+  
+  const groupRef = doc(db, "groups", name);
   const groupSnap = await getDoc(groupRef);
+  if(groupSnap.exists()) return alert("Grupo ya existe");
 
-  if(!groupSnap.exists()) {
-    await setDoc(groupRef, { password: groupPass });
-  } else {
-    if(groupSnap.data().password !== groupPass) return alert("Clave incorrecta para este grupo");
+  await setDoc(groupRef, { password: pass });
+  openChat(name, false);
+};
+
+// Unirse a grupo
+document.getElementById("joinGroup").onclick = async () => {
+  const name = document.getElementById("joinGroupName").value.trim();
+  const pass = document.getElementById("joinGroupPassword").value.trim();
+  if(!name || !pass) return alert("Completa los campos");
+
+  const groupRef = doc(db, "groups", name);
+  const groupSnap = await getDoc(groupRef);
+  if(!groupSnap.exists()) return alert("Grupo no existe");
+  if(groupSnap.data().password !== pass) return alert("Clave incorrecta");
+
+  openChat(name, false);
+};
+
+// Iniciar chat privado
+document.getElementById("startPrivateChat").onclick = () => {
+  const otherUser = document.getElementById("privateUserId").value.trim();
+  if(!otherUser) return alert("Ingresa ID del usuario");
+
+  const chatId = [username, otherUser].sort().join("_"); // id único
+  openChat(chatId, true);
+};
+
+// Abrir chat
+function openChat(id, privateChat){
+  isPrivate = privateChat;
+  currentChat = id;
+  document.getElementById("system").style.display = "none";
+  document.getElementById("chat").style.display = "block";
+  document.getElementById("chatUserName").innerText = username;
+  document.getElementById("chatGroupName").innerText = privateChat ? `Chat privado` : `Grupo: ${id}`;
+
+  if(!privateChat){
+    const linkInput = document.getElementById("groupLink");
+    const link = `${window.location.origin}${window.location.pathname}?group=${encodeURIComponent(id)}`;
+    linkInput.value = link;
+  }else{
+    document.getElementById("groupLink").value = "";
   }
 
-  document.getElementById("login").style.display = "none";
-  document.getElementById("chat").style.display = "block";
-  document.getElementById("userName").innerText = "Hola, " + username;
-  document.getElementById("groupName").innerText = "Grupo: " + groupName;
-
-  // Generar link para compartir
-  const linkInput = document.getElementById("groupLink");
-  const link = `${window.location.origin}${window.location.pathname}?group=${encodeURIComponent(groupName)}`;
-  linkInput.value = link;
-
   loadMessages();
-};
+}
 
 // Enviar mensaje
 document.getElementById("sendMessage").onclick = async () => {
   const text = document.getElementById("messageInput").value.trim();
   if(!text) return;
 
-  await addDoc(collection(db, "groups", groupName, "messages"), {
-    user: username,
-    text,
-    timestamp: serverTimestamp()
-  });
+  const col = isPrivate ?
+    collection(db, "users", username, "privateChats", currentChat, "messages") :
+    collection(db, "groups", currentChat, "messages");
 
+  await addDoc(col, { user: username, text, timestamp: serverTimestamp() });
   document.getElementById("messageInput").value = "";
-};
+}
 
 // Compartir grupo
 document.getElementById("shareGroup").onclick = () => {
   const linkInput = document.getElementById("groupLink");
+  if(!linkInput.value) return;
   linkInput.select();
   document.execCommand("copy");
-  alert("Link del grupo copiado al portapapeles!");
-};
+  alert("Link copiado!");
+}
+
+// Volver al sistema
+document.getElementById("backSystem").onclick = () => {
+  document.getElementById("chat").style.display = "none";
+  document.getElementById("system").style.display = "block";
+}
 
 // Cargar mensajes en tiempo real
-function loadMessages() {
+function loadMessages(){
   const messagesDiv = document.getElementById("messages");
-  const q = query(collection(db, "groups", groupName, "messages"), orderBy("timestamp"));
+  messagesDiv.innerHTML = "";
+
+  const col = isPrivate ?
+    collection(db, "users", username, "privateChats", currentChat, "messages") :
+    collection(db, "groups", currentChat, "messages");
+
+  const q = query(col, orderBy("timestamp"));
 
   onSnapshot(q, snapshot => {
     messagesDiv.innerHTML = "";
@@ -95,5 +141,5 @@ function loadMessages() {
 window.onload = () => {
   const params = new URLSearchParams(window.location.search);
   const groupParam = params.get("group");
-  if(groupParam) document.getElementById("groupInput").value = groupParam;
-};
+  if(groupParam) document.getElementById("joinGroupName").value = groupParam;
+}
