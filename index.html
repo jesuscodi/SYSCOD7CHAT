@@ -8,35 +8,34 @@
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login" class="container">
   <h2>Bienvenido al Chat</h2>
   <input type="text" id="usernameInput" placeholder="Tu nombre">
   <button id="enterSystem" class="btn">Entrar</button>
 </div>
 
+<!-- SISTEMA PRINCIPAL -->
 <div id="system" class="container" style="display:none;">
   <h3>Hola, <span id="userName"></span></h3>
   <p id="userIdDisplay">Tu ID: </p>
 
+  <!-- Botones para grupos -->
   <div class="section">
-    <h4>Grupos</h4>
-    <input type="text" id="newGroupName" placeholder="Nombre del grupo">
-    <input type="password" id="newGroupPassword" placeholder="Clave del grupo">
-    <button id="createGroup" class="btn">Crear Grupo</button>
-    <hr>
-    <h5>Unirse a un grupo existente</h5>
-    <input type="text" id="joinGroupName" placeholder="Nombre del grupo">
-    <input type="password" id="joinGroupPassword" placeholder="Clave del grupo">
-    <button id="joinGroup" class="btn">Unirse</button>
+    <button class="btn" id="btnCreateGroup">Crear Grupo</button>
+    <button class="btn" id="btnJoinGroup">Unirse a Grupo</button>
   </div>
 
+  <!-- Bandeja de chats privados -->
   <div class="section">
     <h4>Chats Privados</h4>
     <input type="text" id="privateUserId" placeholder="ID del usuario">
     <button id="startPrivateChat" class="btn">Iniciar Chat Privado</button>
+    <div id="privateChatsList"></div>
   </div>
 </div>
 
+<!-- CHAT -->
 <div id="chat" class="container chat-container" style="display:none;">
   <div class="header">
     <div>
@@ -57,6 +56,28 @@
   </div>
 
   <button id="backSystem" class="btn" style="margin-top:10px;">Volver a inicio</button>
+</div>
+
+<!-- MODAL CREAR GRUPO -->
+<div id="modalCreate" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeCreate">&times;</span>
+    <h4>Crear Grupo</h4>
+    <input type="text" id="newGroupName" placeholder="Nombre del grupo">
+    <input type="password" id="newGroupPassword" placeholder="Clave del grupo">
+    <button id="createGroup" class="btn">Crear</button>
+  </div>
+</div>
+
+<!-- MODAL UNIRSE A GRUPO -->
+<div id="modalJoin" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeJoin">&times;</span>
+    <h4>Unirse a Grupo</h4>
+    <input type="text" id="joinGroupName" placeholder="Nombre del grupo">
+    <input type="password" id="joinGroupPassword" placeholder="Clave del grupo">
+    <button id="joinGroup" class="btn">Unirse</button>
+  </div>
 </div>
 
 <script type="module" src="app.js"></script>
