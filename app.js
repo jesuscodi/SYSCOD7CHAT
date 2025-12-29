@@ -2,10 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebas
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
-// 🔴 Configuración Firebase
+// Configura Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: " syscod7-d1753.firebaseapp.com",
+  authDomain: "syscod7-d1753.firebaseapp.com",
   projectId: "syscod7-d1753",
 };
 
@@ -91,10 +91,9 @@ function loadMessages() {
   });
 }
 
-// Comprobar si se accede desde link con grupo
+// Prellenar grupo desde link
 window.onload = () => {
   const params = new URLSearchParams(window.location.search);
   const groupParam = params.get("group");
   if(groupParam) document.getElementById("groupInput").value = groupParam;
 };
-
