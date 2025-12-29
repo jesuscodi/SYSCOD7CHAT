@@ -2,11 +2,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebas
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
-// 🔴 Configura Firebase aquí
+// 🔴 Configuración Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: "syscod7-d1753.firebaseapp.com",
-  projectId: "syscod7-d1753",
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROJECT.firebaseapp.com",
+  projectId: "TU_PROJECT_ID",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -20,7 +20,7 @@ document.getElementById("enterChat").onclick = async () => {
   const nameInput = document.getElementById("usernameInput").value.trim();
   const groupInput = document.getElementById("groupInput").value.trim();
   const groupPass = document.getElementById("groupPassword").value.trim();
-  
+
   if(!nameInput || !groupInput || !groupPass) return alert("Completa todos los campos");
 
   username = nameInput;
@@ -31,19 +31,20 @@ document.getElementById("enterChat").onclick = async () => {
   const groupSnap = await getDoc(groupRef);
 
   if(!groupSnap.exists()) {
-    // Crear grupo nuevo con clave
     await setDoc(groupRef, { password: groupPass });
   } else {
-    // Validar clave
-    if(groupSnap.data().password !== groupPass) {
-      return alert("Clave incorrecta para este grupo");
-    }
+    if(groupSnap.data().password !== groupPass) return alert("Clave incorrecta para este grupo");
   }
 
   document.getElementById("login").style.display = "none";
   document.getElementById("chat").style.display = "block";
   document.getElementById("userName").innerText = "Hola, " + username;
   document.getElementById("groupName").innerText = "Grupo: " + groupName;
+
+  // Generar link para compartir
+  const linkInput = document.getElementById("groupLink");
+  const link = `${window.location.origin}${window.location.pathname}?group=${encodeURIComponent(groupName)}`;
+  linkInput.value = link;
 
   loadMessages();
 };
@@ -60,6 +61,14 @@ document.getElementById("sendMessage").onclick = async () => {
   });
 
   document.getElementById("messageInput").value = "";
+};
+
+// Compartir grupo
+document.getElementById("shareGroup").onclick = () => {
+  const linkInput = document.getElementById("groupLink");
+  linkInput.select();
+  document.execCommand("copy");
+  alert("Link del grupo copiado al portapapeles!");
 };
 
 // Cargar mensajes en tiempo real
@@ -81,3 +90,10 @@ function loadMessages() {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
 }
+
+// Comprobar si se accede desde link con grupo
+window.onload = () => {
+  const params = new URLSearchParams(window.location.search);
+  const groupParam = params.get("group");
+  if(groupParam) document.getElementById("groupInput").value = groupParam;
+};
