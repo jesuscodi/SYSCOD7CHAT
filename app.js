@@ -5,7 +5,7 @@ from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 // 🔴 Configura Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: " syscod7-d1753.firebaseapp.com",
+  authDomain: "syscod7-d1753.firebaseapp.com",
   projectId: "syscod7-d1753",
 };
 
@@ -30,13 +30,17 @@ document.getElementById("enterSystem").onclick = async () => {
   username = nameInput;
   userId = generateUserId(username);
 
-  // Guardar usuario en Firebase
-  await setDoc(doc(db, "users", userId), { name: username });
-
-  document.getElementById("login").style.display = "none";
-  document.getElementById("system").style.display = "block";
-  document.getElementById("userName").innerText = username;
-  document.getElementById("userIdDisplay").innerText = `Tu ID: ${userId}`;
+  try {
+    // Guardar usuario en Firebase
+    await setDoc(doc(db, "users", userId), { name: username });
+    document.getElementById("login").style.display = "none";
+    document.getElementById("system").style.display = "block";
+    document.getElementById("userName").innerText = username;
+    document.getElementById("userIdDisplay").innerText = `Tu ID: ${userId}`;
+  } catch (error) {
+    console.error("Error al guardar usuario:", error);
+    alert("Error al ingresar. Revisa tu conexión o configuración de Firebase.");
+  }
 };
 
 // Crear grupo
@@ -72,7 +76,6 @@ document.getElementById("startPrivateChat").onclick = async () => {
   const otherId = document.getElementById("privateUserId").value.trim();
   if(!otherId) return alert("Ingresa el ID del usuario");
 
-  // Revisar si el usuario existe
   const userSnap = await getDoc(doc(db, "users", otherId));
   if(!userSnap.exists()) return alert("Usuario no existe");
 
