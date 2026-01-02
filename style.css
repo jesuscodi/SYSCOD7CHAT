@@ -74,18 +74,21 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     overflow-y:auto;
 }
 #sendMessage {
-    flex:1;
-    padding:12px 0;
-    border-radius:25px;
+    flex:0.8;               /* ocupa menos espacio que el input */
+    padding:8px 10px;       /* altura más pequeña */
+    border-radius:20px;
     border:none;
     background:#FF7700;
     color:white;
     font-weight:bold;
+    font-size:14px;
     cursor:pointer;
 }
+
 
 /* Responsive */
 @media (max-width:600px) {
     .container { width:98%; padding:10px; }
     #chatSystem { height:75vh; }
 }
+
