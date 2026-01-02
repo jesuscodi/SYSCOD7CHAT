@@ -142,7 +142,7 @@ function loadMessages() {
 
         // Botones para agregar nuevas reacciones
         const addReactionBtn = document.createElement("button");
-        addReactionBtn.innerText = "❤️";
+        addReactionBtn.innerText = "😏";
         addReactionBtn.onclick = async () => {
           const emoji = prompt("Ingresa emoji a reaccionar");
           if(!emoji) return;
@@ -197,4 +197,5 @@ function loadInbox() {
     });
   });
 }
+
 
