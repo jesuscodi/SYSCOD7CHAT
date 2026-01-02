@@ -60,15 +60,7 @@ input {
     overflow:hidden;
 }
 
-/* Ventana de mensajes ocupa todo el espacio excepto la caja de texto */
-.chat-window { 
-    flex:1; 
-    background:#e5e5e5; 
-    padding:10px; 
-    overflow-y:auto; 
-    display:flex; 
-    flex-direction:column; 
-}
+
 
 /* Caja de texto fija abajo */
 .input-group {
@@ -117,3 +109,4 @@ input {
     .container { width:98%; padding:10px; }
     #chatContainer { height:75vh; }
 }
+
