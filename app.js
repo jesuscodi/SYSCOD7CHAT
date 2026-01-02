@@ -4,7 +4,7 @@ import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, 
 // Configuración Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
-  authDomain: "syscod7-d1753.firebaseapp.com",
+  authDomain: " syscod7-d1753.firebaseapp.com ",
   projectId: "syscod7-d1753",
 };
 const app = initializeApp(firebaseConfig);
@@ -74,3 +74,4 @@ function loadMessages() {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
 }
+
