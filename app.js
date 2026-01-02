@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
 // Configuración Firebase
 const firebaseConfig = {
@@ -12,12 +12,25 @@ const db = getFirestore(app);
 
 let dni = "", userId = "", currentChatDNI = "";
 
+// Revisar si hay sesión guardada
+if(localStorage.getItem("dni")) {
+  dni = localStorage.getItem("dni");
+  userId = "user_" + dni;
+  document.getElementById("loginDiv").style.display = "none";
+  document.getElementById("chatSystem").style.display = "flex";
+  document.getElementById("inboxDiv").style.display = "block";
+  document.getElementById("userDisplay").innerText = "Usuario: " + dni;
+  loadInbox();
+}
+
 // LOGIN
 document.getElementById("loginBtn").onclick = async () => {
   dni = document.getElementById("dniInput").value.trim();
-  if (!/^\d{9}$/.test(dni)) return alert("El DNI debe tener 9 dígitos");
+  if (!/^\d{8}$/.test(dni)) return alert("El DNI debe tener 8 dígitos");
 
   userId = "user_" + dni;
+  localStorage.setItem("dni", dni); // guardar sesión
+
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
   if (!userSnap.exists()) await setDoc(userRef, { dni: dni });
@@ -25,6 +38,7 @@ document.getElementById("loginBtn").onclick = async () => {
   document.getElementById("loginDiv").style.display = "none";
   document.getElementById("chatSystem").style.display = "flex";
   document.getElementById("inboxDiv").style.display = "block";
+  document.getElementById("userDisplay").innerText = "Usuario: " + dni;
 
   loadInbox();
 };
@@ -32,11 +46,7 @@ document.getElementById("loginBtn").onclick = async () => {
 // Iniciar chat con otro DNI
 document.getElementById("startChat").onclick = async () => {
   const otherDNI = document.getElementById("chatWithDNI").value.trim();
-  if (!/^\d{9}$/.test(otherDNI)) return alert("El DNI del otro usuario debe tener 9 dígitos");
-
-  const otherId = "user_" + otherDNI;
-  const otherSnap = await getDoc(doc(db, "users", otherId));
-  if (!otherSnap.exists()) return alert("El otro usuario no existe");
+  if (!/^\d{8}$/.test(otherDNI)) return alert("El DNI del otro usuario debe tener 8 dígitos");
 
   currentChatDNI = otherDNI;
   loadMessages();
@@ -63,10 +73,7 @@ function loadMessages() {
   messagesDiv.innerHTML = "";
 
   const messagesCol = collection(db, "messages");
-  const q = query(
-    messagesCol,
-    orderBy("timestamp")
-  );
+  const q = query(messagesCol, orderBy("timestamp"));
 
   onSnapshot(q, snapshot => {
     messagesDiv.innerHTML = "";
