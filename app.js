@@ -3,9 +3,9 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 
 // Configuración Firebase
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
+  apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
+  authDomain: "syscod7-d1753.firebaseapp.com ",
+  projectId: "syscod7-d1753",
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -32,3 +32,4 @@ document.getElementById("enterSystem").onclick = async () => {
   document.getElementById("userDNI").innerText = dni;
   document.getElementById("userIdDisplay").innerText = `Tu ID: ${userId}`;
 };
+
