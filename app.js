@@ -3,9 +3,9 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, getD
 
 // Config Firebase
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
+  apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
+  authDomain: "syscod7-d1753.firebaseapp.com",
+  projectId: "syscod7-d1753",
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -173,3 +173,4 @@ function loadGroupChats(){
     });
   });
 }
+
