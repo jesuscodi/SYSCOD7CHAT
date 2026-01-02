@@ -25,16 +25,22 @@
     <button id="startChat" class="btn">Iniciar Chat</button>
   </div>
 
-  <!-- Ventana de chat -->
-  <div id="chatContainer" style="display:none;">
-    <div id="messages" class="chat-window"></div>
-    <div class="input-group">
-      <input type="text" id="messageInput" placeholder="Escribe un mensaje">
-      <button id="sendMessage" class="btn">Enviar</button>
-    </div>
+ <!-- Ventana de chat -->
+<div id="chatContainer" class="chat-container" style="display:none;">
+  <div id="messages" class="chat-window"></div>
+
+  <!-- Caja de texto fija al final -->
+  <div class="input-group">
+    <input type="text" id="messageInput" placeholder="Escribe un mensaje">
+    <button id="sendMessage" class="btn">Enviar</button>
   </div>
+</div>
+
+
+  
 </div>
 
 <script type="module" src="app.js"></script>
 </body>
 </html>
+
