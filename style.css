@@ -22,14 +22,14 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
 .btn { background:#FF7700; border:none; color:white; padding:12px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:5px; width:100%; transition:0.2s; }
 .btn:hover { background:#e65c00; }
 
-/* Sección de login */
+/* Sección de login y chat con DNI */
 #loginDiv, #chatWithDiv {
     display:flex;
     flex-direction: column;
     margin-bottom:10px;
 }
 
-/* Header de chat (DNI de la otra persona) */
+/* Header de chat */
 .chat-header { display:flex; margin-bottom:10px; }
 .chat-header input { flex:4; margin-right:5px; }
 .chat-header button { flex:1; }
@@ -62,7 +62,7 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     flex-shrink:0;
 }
 #messageInput {
-    flex:4;               /* caja más grande que el botón */
+    flex:4;               
     padding:12px 20px;
     border-radius:25px;
     border:1px solid #ccc;
@@ -74,8 +74,8 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     overflow-y:auto;
 }
 #sendMessage {
-    flex:0.8;               /* ocupa menos espacio que el input */
-    padding:8px 10px;       /* altura más pequeña */
+    flex:0.8;               
+    padding:8px 10px;       
     border-radius:20px;
     border:none;
     background:#FF7700;
@@ -85,10 +85,13 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     cursor:pointer;
 }
 
+/* Inbox */
+#inboxDiv { margin-top:10px; }
+#inboxList { background:#f7f7f7; padding:10px; border-radius:10px; max-height:200px; overflow-y:auto; }
+#inboxList .message { max-width:100%; margin:3px 0; font-size:14px; }
 
 /* Responsive */
 @media (max-width:600px) {
     .container { width:98%; padding:10px; }
     #chatSystem { height:75vh; }
 }
-
