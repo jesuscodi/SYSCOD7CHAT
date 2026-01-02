@@ -85,40 +85,43 @@ function loadInbox() {
   const chatsCol = collection(db, "privateChats");
   onSnapshot(chatsCol, snapshot => {
     inboxList.innerHTML = "";
-
-    // Usamos un Set para no repetir usuarios
-    const senders = new Set();
+    const inbox = [];
 
     snapshot.forEach(chatDoc => {
       const chatId = chatDoc.id;
-
-      // Revisar si tu usuario está en la conversación
       if (chatId.includes(userId)) {
+        const users = chatId.split("_");
+        const otherUser = users.find(u => u !== userId);
         const messagesCol = collection(db, "privateChats", chatId, "messages");
         const q = query(messagesCol, orderBy("timestamp"));
         onSnapshot(q, msgSnap => {
+          let counter = 1;
+          let lastMsgText = "";
           msgSnap.forEach(doc => {
             const msg = doc.data();
-            if (msg.user !== dni) { // Solo mensajes que NO enviaste tú
-              senders.add(msg.user); // Guardamos el usuario que te envió mensaje
+            if (msg.user !== dni) {
+              lastMsgText = msg.text; // último mensaje recibido
             }
           });
 
-          // Mostramos cada remitente una sola vez
+          if (lastMsgText) {
+            inbox.push({ user: otherUser, lastMsg: lastMsgText, counter: msgSnap.size });
+          }
+
+          // Mostrar inbox
           inboxList.innerHTML = "";
-          let counter = 1;
-          senders.forEach(senderDNI => {
+          inbox.forEach(item => {
             const div = document.createElement("div");
             div.classList.add("message", "other");
-            div.innerHTML = `<b>${senderDNI}</b> <small>Mensaje #${counter}</small> <button class="btnOpenChat">Abrir chat</button>`;
+            div.innerHTML = `<b>${item.user}</b>: ${item.lastMsg} <small>${item.counter} mensajes</small> 
+            <button class="btnOpenChat">Abrir chat</button>`;
             inboxList.appendChild(div);
-            counter++;
           });
 
-          // Agregamos evento para abrir chat
+          // Evento abrir chat
           document.querySelectorAll(".btnOpenChat").forEach((btn, index) => {
             btn.onclick = () => {
-              const selectedDNI = Array.from(senders)[index];
+              const selectedDNI = inbox[index].user.replace("user_","");
               document.getElementById("chatWithDNI").value = selectedDNI;
               document.getElementById("startChat").click();
             };
