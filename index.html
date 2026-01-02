@@ -44,6 +44,29 @@
       <div id="inboxList" class="chat-window"></div>
     </div>
 
+<!-- Mostrar usuario y estado -->
+<div id="userDisplay" style="text-align:center; margin-bottom:10px; font-weight:bold; color:#FF7700;"></div>
+
+<!-- Crear grupo -->
+<div style="margin-bottom:10px;">
+  <input type="text" id="groupNameInput" placeholder="Nombre del grupo">
+  <input type="text" id="groupUsersInput" placeholder="Usuarios (DNI separados por coma)">
+  <button id="createGroupBtn" class="btn">Crear grupo</button>
+</div>
+
+<!-- Lista de grupos -->
+<div id="groupsList" style="margin-bottom:10px;">
+  <h3>Grupos disponibles</h3>
+  <div id="groupsContainer"></div>
+</div>
+
+<!-- Contenedor de chat existente -->
+<div class="chat-header">
+  <input type="text" id="chatWithDNI" placeholder="Ingresa el DNI de la otra persona o grupo">
+  <button id="startChat" class="btn">Chatear</button>
+</div>
+
+    
   </div>
 
 </div>
@@ -51,3 +74,4 @@
 <script type="module" src="app.js"></script>
 </body>
 </html>
+
