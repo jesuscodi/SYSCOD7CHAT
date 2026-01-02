@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
 // Configuración Firebase
 const firebaseConfig = {
@@ -10,15 +10,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let dni = "", userId = "", currentChat = "";
+let dni = "", userId = "", currentChatDNI = "";
 
-// LOGIN con validación de 9 dígitos
+// LOGIN
 document.getElementById("loginBtn").onclick = async () => {
   dni = document.getElementById("dniInput").value.trim();
   if (!/^\d{9}$/.test(dni)) return alert("El DNI debe tener 9 dígitos");
 
   userId = "user_" + dni;
-
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
   if (!userSnap.exists()) await setDoc(userRef, { dni: dni });
@@ -39,103 +38,83 @@ document.getElementById("startChat").onclick = async () => {
   const otherSnap = await getDoc(doc(db, "users", otherId));
   if (!otherSnap.exists()) return alert("El otro usuario no existe");
 
-  currentChat = [userId, otherId].sort().join("_");
-
+  currentChatDNI = otherDNI;
   loadMessages();
 };
 
 // Enviar mensaje
 document.getElementById("sendMessage").onclick = async () => {
   const text = document.getElementById("messageInput").value.trim();
-  if (!text) return;
+  if (!text || !currentChatDNI) return;
 
-  const messagesCol = collection(db, "privateChats", currentChat, "messages");
-  await addDoc(messagesCol, { user: dni, text, timestamp: serverTimestamp() });
+  await addDoc(collection(db, "messages"), {
+    from: dni,
+    to: currentChatDNI,
+    text: text,
+    timestamp: serverTimestamp()
+  });
 
   document.getElementById("messageInput").value = "";
 };
 
-// Cargar mensajes en tiempo real
+// Cargar chat actual
 function loadMessages() {
   const messagesDiv = document.getElementById("messages");
   messagesDiv.innerHTML = "";
 
-  const messagesCol = collection(db, "privateChats", currentChat, "messages");
-  const q = query(messagesCol, orderBy("timestamp"));
+  const messagesCol = collection(db, "messages");
+  const q = query(
+    messagesCol,
+    orderBy("timestamp")
+  );
+
   onSnapshot(q, snapshot => {
     messagesDiv.innerHTML = "";
     snapshot.forEach(doc => {
       const msg = doc.data();
-      const div = document.createElement("div");
-      div.classList.add("message");
-      div.classList.add(msg.user === dni ? "me" : "other");
-      const time = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString() : "";
-      div.innerHTML = `<b>${msg.user}:</b> ${msg.text} <small>${time}</small>`;
-      messagesDiv.appendChild(div);
+      if ((msg.from === dni && msg.to === currentChatDNI) || (msg.from === currentChatDNI && msg.to === dni)) {
+        const div = document.createElement("div");
+        div.classList.add("message", msg.from === dni ? "me" : "other");
+        const time = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString() : "";
+        div.innerHTML = `<b>${msg.from}</b>: ${msg.text} <small>${time}</small>`;
+        messagesDiv.appendChild(div);
+      }
     });
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
 }
 
-// Cargar inbox de mensajes recibidos
+// Cargar inbox (mensajes recibidos)
 function loadInbox() {
   const inboxList = document.getElementById("inboxList");
   inboxList.innerHTML = "";
 
-  const chatsCol = collection(db, "privateChats");
-  onSnapshot(chatsCol, snapshot => {
-    const inboxMap = new Map(); // Map para no repetir usuarios
+  const messagesCol = collection(db, "messages");
+  onSnapshot(messagesCol, snapshot => {
+    const inboxMap = new Map();
 
-    snapshot.forEach(chatDoc => {
-      const chatId = chatDoc.id;
-
-      if (chatId.includes(userId)) {
-        const users = chatId.split("_");
-        const otherUser = users.find(u => u !== userId);
-        if (!otherUser) return;
-
-        const messagesCol = collection(db, "privateChats", chatId, "messages");
-        const q = query(messagesCol, orderBy("timestamp", "desc")); // ordenar del más reciente al más viejo
-
-        onSnapshot(q, msgSnap => {
-          let lastMsgText = "";
-          let msgCount = 0;
-
-          msgSnap.forEach(doc => {
-            const msg = doc.data();
-            if (msg.user !== dni) { // solo mensajes que NO enviaste tú
-              if (!lastMsgText) lastMsgText = msg.text; // primer mensaje recibido = último
-              msgCount++;
-            }
-          });
-
-          if (lastMsgText) {
-            inboxMap.set(otherUser, { lastMsg: lastMsgText, counter: msgCount });
-          }
-
-          // Mostrar inbox actualizado
-          inboxList.innerHTML = "";
-          let counter = 1;
-          inboxMap.forEach((value, key) => {
-            const div = document.createElement("div");
-            div.classList.add("message", "other");
-            div.innerHTML = `<b>${key.replace("user_","")}</b>: ${value.lastMsg} <small>${value.counter} mensajes</small>
-            <button class="btnOpenChat">Abrir chat</button>`;
-            inboxList.appendChild(div);
-            counter++;
-          });
-
-          // Evento abrir chat
-          document.querySelectorAll(".btnOpenChat").forEach((btn, index) => {
-            btn.onclick = () => {
-              const selectedDNI = Array.from(inboxMap.keys())[index].replace("user_","");
-              document.getElementById("chatWithDNI").value = selectedDNI;
-              document.getElementById("startChat").click();
-            };
-          });
-
-        });
+    snapshot.forEach(doc => {
+      const msg = doc.data();
+      if (msg.to === dni) { // mensajes recibidos
+        inboxMap.set(msg.from, { lastMsg: msg.text, timestamp: msg.timestamp });
       }
+    });
+
+    inboxList.innerHTML = "";
+    inboxMap.forEach((value, key) => {
+      const div = document.createElement("div");
+      div.classList.add("message", "other");
+      div.innerHTML = `<b>${key}</b>: ${value.lastMsg} 
+      <button class="btnOpenChat">Abrir chat</button>`;
+      inboxList.appendChild(div);
+    });
+
+    document.querySelectorAll(".btnOpenChat").forEach((btn, index) => {
+      btn.onclick = () => {
+        const selectedDNI = Array.from(inboxMap.keys())[index];
+        document.getElementById("chatWithDNI").value = selectedDNI;
+        document.getElementById("startChat").click();
+      };
     });
   });
 }
