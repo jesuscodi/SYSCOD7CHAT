@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
 
-// Config Firebase
+// Configuración Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAOSY1Ju8T5jexXSRsnZhHvsUZU0vvyixc",
   authDomain: "syscod7-d1753.firebaseapp.com",
@@ -12,14 +12,13 @@ const db = getFirestore(app);
 
 let dni = "", userId = "", currentChat = "";
 
-// Login
+// LOGIN
 document.getElementById("loginBtn").onclick = async () => {
   dni = document.getElementById("dniInput").value.trim();
   if (!dni) return alert("Ingresa tu DNI");
 
   userId = "user_" + dni;
 
-  // Guardar usuario si no existe
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
   if (!userSnap.exists()) await setDoc(userRef, { dni: dni });
