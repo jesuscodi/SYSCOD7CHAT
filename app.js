@@ -84,44 +84,51 @@ function loadInbox() {
 
   const chatsCol = collection(db, "privateChats");
   onSnapshot(chatsCol, snapshot => {
-    inboxList.innerHTML = "";
-    const inbox = [];
+    const inboxMap = new Map(); // Map para no repetir usuarios
 
     snapshot.forEach(chatDoc => {
       const chatId = chatDoc.id;
+
       if (chatId.includes(userId)) {
         const users = chatId.split("_");
         const otherUser = users.find(u => u !== userId);
+        if (!otherUser) return;
+
         const messagesCol = collection(db, "privateChats", chatId, "messages");
-        const q = query(messagesCol, orderBy("timestamp"));
+        const q = query(messagesCol, orderBy("timestamp", "desc")); // ordenar del más reciente al más viejo
+
         onSnapshot(q, msgSnap => {
-          let counter = 1;
           let lastMsgText = "";
+          let msgCount = 0;
+
           msgSnap.forEach(doc => {
             const msg = doc.data();
-            if (msg.user !== dni) {
-              lastMsgText = msg.text; // último mensaje recibido
+            if (msg.user !== dni) { // solo mensajes que NO enviaste tú
+              if (!lastMsgText) lastMsgText = msg.text; // primer mensaje recibido = último
+              msgCount++;
             }
           });
 
           if (lastMsgText) {
-            inbox.push({ user: otherUser, lastMsg: lastMsgText, counter: msgSnap.size });
+            inboxMap.set(otherUser, { lastMsg: lastMsgText, counter: msgCount });
           }
 
-          // Mostrar inbox
+          // Mostrar inbox actualizado
           inboxList.innerHTML = "";
-          inbox.forEach(item => {
+          let counter = 1;
+          inboxMap.forEach((value, key) => {
             const div = document.createElement("div");
             div.classList.add("message", "other");
-            div.innerHTML = `<b>${item.user}</b>: ${item.lastMsg} <small>${item.counter} mensajes</small> 
+            div.innerHTML = `<b>${key.replace("user_","")}</b>: ${value.lastMsg} <small>${value.counter} mensajes</small>
             <button class="btnOpenChat">Abrir chat</button>`;
             inboxList.appendChild(div);
+            counter++;
           });
 
           // Evento abrir chat
           document.querySelectorAll(".btnOpenChat").forEach((btn, index) => {
             btn.onclick = () => {
-              const selectedDNI = inbox[index].user.replace("user_","");
+              const selectedDNI = Array.from(inboxMap.keys())[index].replace("user_","");
               document.getElementById("chatWithDNI").value = selectedDNI;
               document.getElementById("startChat").click();
             };
