@@ -3,73 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatPro</title>
+<title>ChatPro - Sistema Completo</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <h1>ChatPro</h1>
-</header>
-
-<div class="container">
-
-  <!-- Info usuario -->
-  <div class="user-info">
-    <p>Usuario: <span id="usernameDisplay">Nombre</span></p>
-    <p>Tu ID: <span id="userIdDisplay">XXXX</span></p>
-  </div>
-
-  <!-- Botones Crear / Unirse grupo -->
-  <div class="buttons">
-    <button id="btnCreateGroup">Crear Grupo</button>
-    <button id="btnJoinGroup">Unirse a Grupo</button>
-  </div>
-
-  <!-- Listado de chats -->
-  <div class="chat-panel">
-    <div class="chat-list">
-      <h3>Chats Privados</h3>
-      <div id="privateChatsList"></div>
-    </div>
-    <div class="chat-list">
-      <h3>Chats Grupales</h3>
-      <div id="groupChatsList"></div>
-    </div>
-  </div>
-
+<!-- LOGIN -->
+<div id="login" class="container">
+  <h2>Bienvenido a ChatPro</h2>
+  <input type="text" id="usernameInput" placeholder="Tu nombre">
+  <button id="enterSystem" class="btn">Entrar</button>
 </div>
 
-<!-- Chat activo -->
-<div class="chat-window" id="chatWindow">
-  <div class="chat-header">
-    <h3 id="chatTitle">Selecciona un chat</h3>
+<!-- SISTEMA PRINCIPAL -->
+<div id="system" class="container" style="display:none;">
+  <h3>Hola, <span id="userName"></span></h3>
+  <p id="userIdDisplay">Tu ID: </p>
+
+  <!-- Botones para grupos -->
+  <div class="section">
+    <button class="btn" id="btnCreateGroup">Crear Grupo</button>
+    <button class="btn" id="btnJoinGroup">Unirse a Grupo</button>
   </div>
-  <div class="messages" id="messages"></div>
-  <div class="chat-input">
-    <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
-    <button id="sendMessage">Enviar</button>
+
+  <!-- Bandeja de chats -->
+  <div class="section">
+    <h4>Chats Privados</h4>
+    <input type="text" id="privateUserId" placeholder="ID del usuario">
+    <button id="startPrivateChat" class="btn">Iniciar Chat Privado</button>
+    <div id="privateChatsList"></div>
+  </div>
+
+  <div class="section">
+    <h4>Chats Grupales</h4>
+    <div id="groupChatsList"></div>
   </div>
 </div>
 
-<!-- Modales Crear/Unirse grupo -->
-<div class="modal" id="modalCreate">
+<!-- CHAT -->
+<div id="chat" class="container chat-container" style="display:none;">
+  <div class="header">
+    <div>
+      <h3 id="chatUserName"></h3>
+      <h4 id="chatGroupName"></h4>
+    </div>
+    <div class="share">
+      <button id="shareGroup" class="btn">Compartir grupo</button>
+      <input type="text" id="groupLink" readonly>
+    </div>
+  </div>
+
+  <div id="messages" class="chat-window"></div>
+
+  <div class="input-group">
+    <input type="text" id="messageInput" placeholder="Escribe un mensaje">
+    <button id="sendMessage" class="btn">Enviar</button>
+  </div>
+
+  <button id="backSystem" class="btn" style="margin-top:10px;">Volver a inicio</button>
+</div>
+
+<!-- MODAL CREAR GRUPO -->
+<div id="modalCreate" class="modal">
   <div class="modal-content">
     <span class="close" id="closeCreate">&times;</span>
-    <h3>Crear Grupo</h3>
+    <h4>Crear Grupo</h4>
     <input type="text" id="newGroupName" placeholder="Nombre del grupo">
     <input type="password" id="newGroupPassword" placeholder="Clave del grupo">
-    <button id="createGroup">Crear</button>
+    <button id="createGroup" class="btn">Crear</button>
   </div>
 </div>
 
-<div class="modal" id="modalJoin">
+<!-- MODAL UNIRSE A GRUPO -->
+<div id="modalJoin" class="modal">
   <div class="modal-content">
     <span class="close" id="closeJoin">&times;</span>
-    <h3>Unirse a Grupo</h3>
+    <h4>Unirse a Grupo</h4>
     <input type="text" id="joinGroupName" placeholder="Nombre del grupo">
     <input type="password" id="joinGroupPassword" placeholder="Clave del grupo">
-    <button id="joinGroup">Unirse</button>
+    <button id="joinGroup" class="btn">Unirse</button>
   </div>
 </div>
 
