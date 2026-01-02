@@ -84,13 +84,14 @@ function loadInbox() {
 
   const chatsCol = collection(db, "privateChats");
   onSnapshot(chatsCol, snapshot => {
-    inboxList.innerHTML = "";
+    inboxList.innerHTML = ""; // Limpiamos solo al cargar los chats
     snapshot.forEach(chatDoc => {
       const chatId = chatDoc.id;
       if (chatId.includes(userId)) {
         const messagesCol = collection(db, "privateChats", chatId, "messages");
-        onSnapshot(messagesCol, msgSnap => {
-          inboxList.innerHTML = "";
+        const q = query(messagesCol, orderBy("timestamp"));
+        onSnapshot(q, msgSnap => {
+          inboxList.innerHTML = ""; // Limpiamos solo los mensajes del inbox
           let counter = 1;
           msgSnap.forEach(doc => {
             const msg = doc.data();
@@ -107,3 +108,5 @@ function loadInbox() {
     });
   });
 }
+
+
