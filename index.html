@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatPro - Sistema Completo</title>
+<title>ChatPro - Login con DNI</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,13 +11,13 @@
 <!-- LOGIN -->
 <div id="login" class="container">
   <h2>Bienvenido a ChatPro</h2>
-  <input type="text" id="usernameInput" placeholder="Tu nombre">
+  <input type="text" id="dniInput" placeholder="Ingresa tu DNI">
   <button id="enterSystem" class="btn">Entrar</button>
 </div>
 
 <!-- SISTEMA PRINCIPAL -->
 <div id="system" class="container" style="display:none;">
-  <h3>Hola, <span id="userName"></span></h3>
+  <h3>Hola, <span id="userDNI"></span></h3>
   <p id="userIdDisplay">Tu ID: </p>
 
   <!-- Botones para grupos -->
@@ -37,51 +37,6 @@
   <div class="section">
     <h4>Chats Grupales</h4>
     <div id="groupChatsList"></div>
-  </div>
-</div>
-
-<!-- CHAT -->
-<div id="chat" class="container chat-container" style="display:none;">
-  <div class="header">
-    <div>
-      <h3 id="chatUserName"></h3>
-      <h4 id="chatGroupName"></h4>
-    </div>
-    <div class="share">
-      <button id="shareGroup" class="btn">Compartir grupo</button>
-      <input type="text" id="groupLink" readonly>
-    </div>
-  </div>
-
-  <div id="messages" class="chat-window"></div>
-
-  <div class="input-group">
-    <input type="text" id="messageInput" placeholder="Escribe un mensaje">
-    <button id="sendMessage" class="btn">Enviar</button>
-  </div>
-
-  <button id="backSystem" class="btn" style="margin-top:10px;">Volver a inicio</button>
-</div>
-
-<!-- MODAL CREAR GRUPO -->
-<div id="modalCreate" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeCreate">&times;</span>
-    <h4>Crear Grupo</h4>
-    <input type="text" id="newGroupName" placeholder="Nombre del grupo">
-    <input type="password" id="newGroupPassword" placeholder="Clave del grupo">
-    <button id="createGroup" class="btn">Crear</button>
-  </div>
-</div>
-
-<!-- MODAL UNIRSE A GRUPO -->
-<div id="modalJoin" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeJoin">&times;</span>
-    <h4>Unirse a Grupo</h4>
-    <input type="text" id="joinGroupName" placeholder="Nombre del grupo">
-    <input type="password" id="joinGroupPassword" placeholder="Clave del grupo">
-    <button id="joinGroup" class="btn">Unirse</button>
   </div>
 </div>
 
