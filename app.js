@@ -22,6 +22,7 @@ if(localStorage.getItem("dni")) {
   document.getElementById("userDisplay").innerText = "Usuario: " + dni;
   updateOnlineStatus(true);
   loadInbox();
+  loadGroups();
 }
 
 // ======== LOGIN ========
@@ -47,6 +48,7 @@ document.getElementById("loginBtn").onclick = async () => {
 
   updateOnlineStatus(true);
   loadInbox();
+  loadGroups();
 };
 
 // ======== Estado online/última vez ========
@@ -57,10 +59,7 @@ async function updateOnlineStatus(online) {
     lastSeen: online ? null : serverTimestamp()
   });
 }
-
-window.addEventListener("beforeunload", () => {
-  updateOnlineStatus(false);
-});
+window.addEventListener("beforeunload", () => { updateOnlineStatus(false); });
 
 // ======== CHAT ========
 document.getElementById("startChat").onclick = async () => {
@@ -77,12 +76,7 @@ document.getElementById("sendMessage").onclick = async () => {
   const text = document.getElementById("messageInput").value.trim();
   if (!text || (!currentChatDNI && !currentGroup)) return;
 
-  const data = {
-    from: dni,
-    text,
-    timestamp: serverTimestamp(),
-    emojis: {}
-  };
+  const data = { from: dni, text, timestamp: serverTimestamp(), emojis: {} };
 
   if(currentGroup){
     data.toGroup = currentGroup;
@@ -112,11 +106,7 @@ function loadMessages() {
     messagesDiv.innerHTML = "";
     snapshot.forEach(doc => {
       const msg = doc.data();
-      if(
-        currentGroup || 
-        (msg.from === dni && msg.to === currentChatDNI) || 
-        (msg.from === currentChatDNI && msg.to === dni)
-      ){
+      if(currentGroup || (msg.from === dni && msg.to === currentChatDNI) || (msg.from === currentChatDNI && msg.to === dni)){
         const div = document.createElement("div");
         div.classList.add("message", msg.from === dni ? "me" : "other");
         const time = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString() : "";
@@ -133,14 +123,11 @@ function loadMessages() {
             const docRef = currentGroup 
               ? doc(db, "groups", currentGroup, "messages", doc.id)
               : doc(db, "messages", doc.id);
-            await updateDoc(docRef, {
-              [`emojis.${emoji}`]: (msg.emojis[emoji] || 0) +1
-            });
+            await updateDoc(docRef, { [`emojis.${emoji}`]: (msg.emojis[emoji] || 0) +1 });
           };
           reactions.appendChild(btn);
         }
 
-        // Botones para agregar nuevas reacciones
         const addReactionBtn = document.createElement("button");
         addReactionBtn.innerText = "😊";
         addReactionBtn.onclick = async () => {
@@ -149,9 +136,7 @@ function loadMessages() {
           const docRef = currentGroup 
             ? doc(db, "groups", currentGroup, "messages", doc.id)
             : doc(db, "messages", doc.id);
-          await updateDoc(docRef, {
-            [`emojis.${emoji}`]: (msg.emojis[emoji] || 0) +1
-          });
+          await updateDoc(docRef, { [`emojis.${emoji}`]: (msg.emojis[emoji] || 0) +1 });
         };
         reactions.appendChild(addReactionBtn);
 
@@ -183,17 +168,84 @@ function loadInbox() {
     inboxMap.forEach((value, key) => {
       const div = document.createElement("div");
       div.classList.add("message", "other");
-      div.innerHTML = `<b>${key}</b>: ${value.lastMsg} 
-      <button class="btnOpenChat">Abrir chat</button>`;
-      inboxList.appendChild(div);
-    });
-
-    document.querySelectorAll(".btnOpenChat").forEach((btn, index) => {
+      const status = document.createElement("small");
+      showUserStatus(key, status);
+      div.innerHTML = `<b>${key}</b>: ${value.lastMsg} `;
+      div.appendChild(status);
+      const btn = document.createElement("button");
+      btn.innerText = "Abrir chat";
+      btn.classList.add("btnOpenChat");
       btn.onclick = () => {
-        const selectedDNI = Array.from(inboxMap.keys())[index];
-        document.getElementById("chatWithDNI").value = selectedDNI;
+        document.getElementById("chatWithDNI").value = key;
         document.getElementById("startChat").click();
       };
+      div.appendChild(btn);
+      inboxList.appendChild(div);
+    });
+  });
+}
+
+// ======== Estado usuarios ========
+function showUserStatus(userDNI, container){
+  const userRef = doc(db,"users","user_" + userDNI);
+  onSnapshot(userRef, snapshot => {
+    if(snapshot.exists()){
+      const data = snapshot.data();
+      container.innerText = data.online ? " - En línea" : ` - Última vez: ${data.lastSeen ? new Date(data.lastSeen.seconds*1000).toLocaleString() : "Desconocido"}`;
+    }
+  });
+}
+
+// ======== Crear grupos ========
+document.getElementById("createGroupBtn").onclick = async () => {
+  const groupName = document.getElementById("groupNameInput").value.trim();
+  const usersText = document.getElementById("groupUsersInput").value.trim();
+  if(!groupName || !usersText) return alert("Ingrese nombre y usuarios");
+
+  const users = usersText.split(",").map(u => "user_" + u.trim());
+  if(!users.includes(userId)) users.push(userId);
+
+  const groupRef = doc(db, "groups", groupName);
+  await setDoc(groupRef, { name: groupName, members: users });
+
+  document.getElementById("groupNameInput").value = "";
+  document.getElementById("groupUsersInput").value = "";
+  loadGroups();
+}
+
+// ======== Listar grupos ========
+function loadGroups(){
+  const groupsContainer = document.getElementById("groupsContainer");
+  groupsContainer.innerHTML = "";
+
+  const groupsCol = collection(db, "groups");
+  onSnapshot(groupsCol, snapshot => {
+    groupsContainer.innerHTML = "";
+    snapshot.forEach(doc => {
+      const grp = doc.data();
+      if(grp.members.includes(userId)){
+        const div = document.createElement("div");
+        div.style.margin = "5px 0";
+        div.innerHTML = `<b>${grp.name}</b> - <span id="membersStatus"></span> <button class="btnOpenGroup">Abrir</button>`;
+        groupsContainer.appendChild(div);
+
+        // Mostrar estado miembros
+        const membersStatus = div.querySelector("#membersStatus");
+        grp.members.forEach(member => {
+          const span = document.createElement("span");
+          showUserStatus(member.replace("user_",""), span);
+          membersStatus.appendChild(span);
+        });
+      }
+    });
+
+    document.querySelectorAll(".btnOpenGroup").forEach((btn,index)=>{
+      btn.onclick = () => {
+        const grpName = snapshot.docs[index].id;
+        currentGroup = grpName;
+        currentChatDNI = "";
+        loadMessages();
+      }
     });
   });
 }
