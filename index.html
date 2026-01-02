@@ -12,7 +12,7 @@
 
   <!-- LOGIN con DNI -->
   <div id="loginDiv">
-    <h2>Bienvenidoo a Chat DNI</h2>
+    <h2>Bienvenido a Chat DNI</h2>
     <input type="text" id="dniInput" placeholder="Ingresa tu DNI">
     <button id="loginBtn" class="btn">Entrar</button>
   </div>
@@ -20,7 +20,7 @@
   <!-- SISTEMA DE CHAT -->
   <div id="chatSystem" style="display:none; flex-direction:column; height:80vh;">
     
-    <!-- Ingresarr DNI de la otra persona -->
+    <!-- Ingresar DNI de la otra persona -->
     <div class="chat-header">
       <input type="text" id="chatWithDNI" placeholder="Ingresa el DNI de la otra persona">
       <button id="startChat" class="btn">Chatear</button>
@@ -33,6 +33,12 @@
     <div class="input-group">
       <input type="text" id="messageInput" placeholder="Escribe un mensaje">
       <button id="sendMessage" class="btn">Enviar</button>
+    </div>
+
+    <!-- Mensajes recibidos -->
+    <div id="inboxDiv" style="display:none; margin-top:10px;">
+      <h3>Mensajes recibidos</h3>
+      <div id="inboxList" class="chat-window"></div>
     </div>
 
   </div>
