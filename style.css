@@ -22,13 +22,20 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
 .btn { background:#FF7700; border:none; color:white; padding:12px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:5px; width:100%; transition:0.2s; }
 .btn:hover { background:#e65c00; }
 
-/* Header de chat */
+/* Sección de login */
+#loginDiv, #chatWithDiv {
+    display:flex;
+    flex-direction: column;
+    margin-bottom:10px;
+}
+
+/* Header de chat (DNI de la otra persona) */
 .chat-header { display:flex; margin-bottom:10px; }
-.chat-header input { flex:1; margin-right:5px; }
-.chat-header button { width:auto; }
+.chat-header input { flex:4; margin-right:5px; }
+.chat-header button { flex:1; }
 
 /* Chat ventana */
-#chatSystem { display:flex; flex-direction:column; height:80vh; }
+#chatSystem { display:flex; flex-direction:column; height:70vh; }
 .chat-window { 
     flex:1; 
     background:#e5e5e5; 
@@ -54,10 +61,8 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     background:white;
     flex-shrink:0;
 }
-
-/* Caja de texto más grande que el botón */
 #messageInput {
-    flex:4;               /* ocupa más espacio */
+    flex:4;               /* caja más grande que el botón */
     padding:12px 20px;
     border-radius:25px;
     border:1px solid #ccc;
@@ -68,10 +73,8 @@ input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px
     resize:none;
     overflow-y:auto;
 }
-
-/* Botón más pequeño */
 #sendMessage {
-    flex:1;               /* ocupa menos espacio que input */
+    flex:1;
     padding:12px 0;
     border-radius:25px;
     border:none;
