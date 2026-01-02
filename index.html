@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatPro - Login con DNI</title>
+<title>Chat DNI - Estilo WhatsApp</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login" class="container">
-  <h2>Bienvenido a ChatPro</h2>
+  <h2>Bienvenido a Chat DNI</h2>
   <input type="text" id="dniInput" placeholder="Ingresa tu DNI">
   <button id="enterSystem" class="btn">Entrar</button>
 </div>
@@ -18,25 +18,20 @@
 <!-- SISTEMA PRINCIPAL -->
 <div id="system" class="container" style="display:none;">
   <h3>Hola, <span id="userDNI"></span></h3>
-  <p id="userIdDisplay">Tu ID: </p>
 
-  <!-- Botones para grupos -->
+  <!-- Elegir con quién chatear -->
   <div class="section">
-    <button class="btn" id="btnCreateGroup">Crear Grupo</button>
-    <button class="btn" id="btnJoinGroup">Unirse a Grupo</button>
+    <input type="text" id="chatWithDNI" placeholder="Ingresa el DNI de la otra persona">
+    <button id="startChat" class="btn">Iniciar Chat</button>
   </div>
 
-  <!-- Bandeja de chats -->
-  <div class="section">
-    <h4>Chats Privados</h4>
-    <input type="text" id="privateUserId" placeholder="ID del usuario">
-    <button id="startPrivateChat" class="btn">Iniciar Chat Privado</button>
-    <div id="privateChatsList"></div>
-  </div>
-
-  <div class="section">
-    <h4>Chats Grupales</h4>
-    <div id="groupChatsList"></div>
+  <!-- Ventana de chat -->
+  <div id="chatContainer" style="display:none;">
+    <div id="messages" class="chat-window"></div>
+    <div class="input-group">
+      <input type="text" id="messageInput" placeholder="Escribe un mensaje">
+      <button id="sendMessage" class="btn">Enviar</button>
+    </div>
   </div>
 </div>
 
