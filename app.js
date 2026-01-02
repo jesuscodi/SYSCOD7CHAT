@@ -12,10 +12,10 @@ const db = getFirestore(app);
 
 let dni = "", userId = "", currentChat = "";
 
-// LOGIN
+// LOGIN con validación de 9 dígitos
 document.getElementById("loginBtn").onclick = async () => {
   dni = document.getElementById("dniInput").value.trim();
-  if (!dni) return alert("Ingresa tu DNI");
+  if (!/^\d{9}$/.test(dni)) return alert("El DNI debe tener 9 dígitos");
 
   userId = "user_" + dni;
 
@@ -25,18 +25,20 @@ document.getElementById("loginBtn").onclick = async () => {
 
   document.getElementById("loginDiv").style.display = "none";
   document.getElementById("chatSystem").style.display = "flex";
+  document.getElementById("inboxDiv").style.display = "block";
+
+  loadInbox();
 };
 
 // Iniciar chat con otro DNI
 document.getElementById("startChat").onclick = async () => {
   const otherDNI = document.getElementById("chatWithDNI").value.trim();
-  if (!otherDNI) return alert("Ingresa el DNI de la otra persona");
+  if (!/^\d{9}$/.test(otherDNI)) return alert("El DNI del otro usuario debe tener 9 dígitos");
 
   const otherId = "user_" + otherDNI;
   const otherSnap = await getDoc(doc(db, "users", otherId));
   if (!otherSnap.exists()) return alert("El otro usuario no existe");
 
-  // ID único de conversación
   currentChat = [userId, otherId].sort().join("_");
 
   loadMessages();
@@ -75,3 +77,33 @@ function loadMessages() {
   });
 }
 
+// Cargar inbox de mensajes recibidos
+function loadInbox() {
+  const inboxList = document.getElementById("inboxList");
+  inboxList.innerHTML = "";
+
+  const chatsCol = collection(db, "privateChats");
+  onSnapshot(chatsCol, snapshot => {
+    inboxList.innerHTML = "";
+    snapshot.forEach(chatDoc => {
+      const chatId = chatDoc.id;
+      if (chatId.includes(userId)) {
+        const messagesCol = collection(db, "privateChats", chatId, "messages");
+        onSnapshot(messagesCol, msgSnap => {
+          inboxList.innerHTML = "";
+          let counter = 1;
+          msgSnap.forEach(doc => {
+            const msg = doc.data();
+            if (msg.user !== dni) {
+              const div = document.createElement("div");
+              div.classList.add("message", "other");
+              div.innerHTML = `<b>${msg.user}</b>: ${msg.text} <small>Mensaje #${counter}</small>`;
+              inboxList.appendChild(div);
+              counter++;
+            }
+          });
+        });
+      }
+    });
+  });
+}
