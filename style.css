@@ -52,17 +52,49 @@ input {
 .btn:hover { background:#1a5ecc; }
 
 /* Chat ventana */
-#chatContainer { display:flex; flex-direction:column; height:70vh; margin-top:10px; }
+#chatContainer {
+    display:flex;
+    flex-direction:column;
+    height:70vh; /* Altura total del chat */
+    border-radius:10px;
+    overflow:hidden;
+}
 
+/* Ventana de mensajes ocupa todo el espacio excepto la caja de texto */
 .chat-window { 
-    background:#e5e5e5; 
     flex:1; 
-    overflow-y:auto; 
+    background:#e5e5e5; 
     padding:10px; 
+    overflow-y:auto; 
     display:flex; 
     flex-direction:column; 
-    border-radius:10px; 
-    margin-bottom:10px; 
+}
+
+/* Caja de texto fija abajo */
+.input-group {
+    display:flex;
+    padding:5px;
+    background:white;
+    flex-shrink:0;
+}
+
+#messageInput {
+    flex:1; 
+    padding:12px 15px; 
+    border-radius:25px; 
+    border:1px solid #ccc; 
+    font-size:15px; 
+    margin-right:5px; 
+}
+
+#sendMessage {
+    padding:12px 18px;
+    border-radius:25px;
+    border:none;
+    background:#2B7FFF;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
 
 /* Mensajes */
@@ -79,10 +111,6 @@ input {
 .message.me { background:#DCF8C6; align-self:flex-end; }
 .message.other { background:white; align-self:flex-start; }
 .message small { display:block; font-size:10px; color:#666; margin-top:5px; }
-
-/* Input grupo */
-.input-group { display:flex; width:100%; }
-#messageInput { flex:1; padding:12px 15px; border-radius:25px; border:1px solid #ccc; font-size:15px; margin-right:5px; }
 
 /* Responsive */
 @media (max-width:600px) {
