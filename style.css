@@ -1,66 +1,84 @@
+/* style.css */
+
 /* Reset básico */
-* { box-sizing: border-box; margin:0; padding:0; }
-body, html { font-family:'Segoe UI', sans-serif; background:#f0f2f5; height:100%; width:100%; }
-
-/* Contenedor general */
-.container { 
-    background:white; 
-    border-radius:15px; 
-    display:flex; 
-    flex-direction:column; 
-    padding:15px; 
-    width:95%; 
-    max-width:500px; 
-    margin:20px auto; 
-    box-shadow:0 10px 25px rgba(0,0,0,0.2); 
-    height:auto; 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Titulos y botones */
-h2,h3 { color:#FF7700; margin:5px 0; text-align:center; }
-input { padding:12px 15px; border-radius:25px; border:1px solid #ccc; margin:5px 0; width:100%; font-size:16px; }
-.btn { background:#FF7700; border:none; color:white; padding:12px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:5px; width:100%; transition:0.2s; }
-.btn:hover { background:#e65c00; }
-
-/* Chat header */
-.chat-header { display:flex; align-items:center; margin-bottom:10px; }
-.chat-header input { flex:4; margin-right:5px; }
-.chat-header button { flex:1; }
-#userDisplay { font-weight:bold; padding:10px; color:#fff; background:#FF7700; border-radius:10px; margin-bottom:10px; text-align:center; }
-
-/* Chat ventana */
-#chatSystem { display:flex; flex-direction:column; height:70vh; }
-.chat-window { 
-    flex:1; 
-    background:#e5e5e5; 
-    padding:10px; 
-    overflow-y:auto; 
-    display:flex; 
-    flex-direction:column; 
-    border-radius:10px; 
-    margin-bottom:10px; 
+/* Fondo de toda la página */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
 }
 
-/* Mensajes */
-.message { padding:12px 18px; border-radius:25px; margin:5px 0; max-width:75%; word-wrap:break-word; font-size:15px; line-height:1.4; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.message.me { background:#FFD8A8; align-self:flex-end; }
-.message.other { background:white; align-self:flex-start; }
-.message small { display:block; font-size:10px; color:#666; margin-top:5px; }
+/* Contenedor del login */
+.login-container {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
 
-/* Input de mensaje */
-.input-group { display:flex; width:100%; padding:5px; background:white; flex-shrink:0; }
-#messageInput { flex:4; padding:12px 20px; border-radius:25px; border:1px solid #ccc; font-size:16px; margin-right:5px; min-height:45px; max-height:120px; resize:none; overflow-y:auto; }
-#sendMessage { flex:0.8; padding:8px 10px; border-radius:20px; border:none; background:#FF7700; color:white; font-weight:bold; font-size:14px; cursor:pointer; }
+/* Título */
+.login-container h2 {
+    margin-bottom: 25px;
+    color: #333;
+}
 
-/* Inbox */
-#inboxDiv { margin-top:10px; }
-#inboxList { background:#f7f7f7; padding:10px; border-radius:10px; max-height:200px; overflow-y:auto; }
-#inboxList .message { max-width:100%; margin:3px 0; font-size:14px; }
-#inboxList .btnOpenChat { padding:5px 8px; font-size:12px; margin-left:5px; background:#FF7700; color:white; border:none; border-radius:15px; cursor:pointer; }
-#inboxList .btnOpenChat:hover { background:#e65c00; }
+/* Inputs */
+.login-container input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s;
+}
 
-/* Responsive */
-@media (max-width:600px) {
-    .container { width:98%; padding:10px; }
-    #chatSystem { height:75vh; }
+.login-container input:focus {
+    border-color: #2575fc;
+    outline: none;
+}
+
+/* Botón */
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2575fc;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #6a11cb;
+}
+
+/* Mensaje de error */
+.error-msg {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Dashboard */
+body.dashboard {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: #fff;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 50px;
 }
