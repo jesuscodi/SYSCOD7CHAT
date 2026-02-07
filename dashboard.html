@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Panel Principal</h2>
+
+<a href="aulas.html">Aulas</a>
+<a href="alumnos.html">Alumnos</a>
+<a href="asistencia.html">Asistencia</a>
+
+<button id="logout">Cerrar sesión</button>
+
+<script type="module">
+import { auth } from "./firebase.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+document.getElementById("logout").onclick = async () => {
+  await signOut(auth);
+  window.location = "index.html";
+};
+</script>
+
+</body>
+</html>
