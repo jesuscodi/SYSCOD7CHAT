@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Alumnos</title>
+</head>
+<body>
+
+<h2>Alumnos</h2>
+
+<input type="text" id="nombre" placeholder="Nombre">
+<input type="text" id="aula" placeholder="Aula">
+<button id="guardar">Guardar</button>
+
+<ul id="lista"></ul>
+
+<script type="module">
+import { db } from "./firebase.js";
+import {
+  collection, addDoc, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const lista = document.getElementById("lista");
+
+document.getElementById("guardar").onclick = async () => {
+  await addDoc(collection(db, "alumnos"), {
+    nombre: nombre.value,
+    aula: aula.value
+  });
+  cargar();
+};
+
+async function cargar() {
+  lista.innerHTML = "";
+  const data = await getDocs(collection(db, "alumnos"));
+  data.forEach(doc => {
+    lista.innerHTML += `<li>${doc.data().nombre} - ${doc.data().aula}</li>`;
+  });
+}
+
+cargar();
+</script>
+
+</body>
+</html>
