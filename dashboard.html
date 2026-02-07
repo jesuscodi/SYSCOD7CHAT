@@ -1,30 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
+  <title>Dashboard Escuela</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Panel Principal</h2>
+<h1>Panel de Control - Escuela</h1>
 
-<a href="aulas.html">Aulas</a>
-<a href="alumnos.html">Alumnos</a>
-<a href="asistencia.html">Asistencia</a>
+<div class="dashboard-container">
+  <div class="card" id="cardAulas">
+    <h3>Aulas</h3>
+    <p id="totalAulas">0</p>
+    <a href="aulas.html">Gestionar Aulas</a>
+  </div>
+
+  <div class="card" id="cardAlumnos">
+    <h3>Alumnos</h3>
+    <p id="totalAlumnos">0</p>
+    <a href="alumnos.html">Gestionar Alumnos</a>
+  </div>
+
+  <div class="card" id="cardAsistencia">
+    <h3>Asistencia</h3>
+    <p id="totalAsistencias">0</p>
+    <a href="asistencia.html">Registrar / Ver Asistencia</a>
+  </div>
+</div>
 
 <div>
   <button id="logout">Cerrar sesión</button>
 </div>
 
 <script type="module">
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Cerrar sesión
 document.getElementById("logout").onclick = async () => {
   await signOut(auth);
   window.location = "index.html";
 };
-</script>
 
+// Mostrar totales en tarjetas
+async function cargarDashboard() {
+  const aulas = await getDocs(collection(db, "aulas"));
+  const alumnos = await getDocs(collection(db, "alumnos"));
+  const asistencias = await getDocs(collection(db, "asistencias"));
+
+  document.getElementById("totalAulas").textContent = aulas.size;
+  document.getElementById("totalAlumnos").textContent = alumnos.size;
+  document.getElementById("totalAsistencias").textContent = asistencias.size;
+}
+
+// Inicial
+cargarDashboard();
+
+</script>
 </body>
 </html>
