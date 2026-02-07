@@ -1,74 +1,52 @@
-/* General */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #e0f7fa; /* azul claro */
-  color: #01579b; /* azul oscuro para texto */
+  color: #01579b;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 20px;
 }
 
-/* Títulos */
-h2 {
-  margin-top: 20px;
+h2, h3 {
   color: #0277bd;
 }
 
-/* Inputs */
-input[type="text"], input[type="email"], input[type="password"], input[type="date"] {
-  padding: 10px;
-  margin: 10px 0;
-  width: 250px;
-  border: 2px solid #81d4fa;
-  border-radius: 8px;
-  font-size: 16px;
+input[type="text"], input[type="date"] {
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #81d4fa;
 }
 
-/* Botones */
 button {
-  padding: 10px 20px;
-  margin: 5px;
-  background: #ff9800; /* naranja */
+  padding: 8px 15px;
+  background: #ff9800;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
 }
 
 button:hover {
   background: #fb8c00;
 }
 
-/* Lista */
-ul {
-  list-style: none;
-  padding: 0;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 30px;
 }
 
-li {
-  background: #b3e5fc;
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 8px;
+th, td {
+  border: 1px solid #81d4fa;
+  padding: 8px;
+  text-align: center;
 }
 
-/* Links */
-a {
-  margin: 10px;
+th {
+  background: #4fc3f7;
   color: #01579b;
-  text-decoration: none;
-  font-weight: bold;
 }
 
-a:hover {
-  color: #ff9800;
-}
-
-/* Contenedores */
-div {
-  margin: 10px 0;
+tr:nth-child(even) {
+  background: #b3e5fc;
 }
