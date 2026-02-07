@@ -1,0 +1,74 @@
+/* General */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #e0f7fa; /* azul claro */
+  color: #01579b; /* azul oscuro para texto */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Títulos */
+h2 {
+  margin-top: 20px;
+  color: #0277bd;
+}
+
+/* Inputs */
+input[type="text"], input[type="email"], input[type="password"], input[type="date"] {
+  padding: 10px;
+  margin: 10px 0;
+  width: 250px;
+  border: 2px solid #81d4fa;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* Botones */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  background: #ff9800; /* naranja */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #fb8c00;
+}
+
+/* Lista */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #b3e5fc;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+}
+
+/* Links */
+a {
+  margin: 10px;
+  color: #01579b;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ff9800;
+}
+
+/* Contenedores */
+div {
+  margin: 10px 0;
+}
