@@ -9,6 +9,7 @@
 <h2>Alumnos</h2>
 
 <input type="text" id="nombre" placeholder="Nombre alumno">
+<input type="number" id="edad" placeholder="Edad" min="3" max="18">
 <select id="aula">
   <option value="">Seleccionar aula</option>
 </select>
@@ -22,12 +23,13 @@ import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/
 
 const lista = document.getElementById("lista");
 const nombre = document.getElementById("nombre");
+const edad = document.getElementById("edad");
 const aulaSelect = document.getElementById("aula");
 
 // Cargar aulas en el select
 async function cargarAulas() {
   const data = await getDocs(collection(db, "aulas"));
-  aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>'; // reset
+  aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
   data.forEach(a => {
     aulaSelect.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
   });
@@ -35,14 +37,16 @@ async function cargarAulas() {
 
 // Guardar alumno
 document.getElementById("guardar").onclick = async () => {
-  if(nombre.value.trim() === "" || aulaSelect.value === "") {
+  if(nombre.value.trim() === "" || edad.value === "" || aulaSelect.value === "") {
     return alert("Complete todos los campos");
   }
   await addDoc(collection(db, "alumnos"), {
     nombre: nombre.value,
+    edad: parseInt(edad.value),
     aula: aulaSelect.value
   });
   nombre.value = "";
+  edad.value = "";
   aulaSelect.value = "";
   cargarAlumnos();
 };
@@ -52,7 +56,7 @@ async function cargarAlumnos() {
   lista.innerHTML = "";
   const data = await getDocs(collection(db, "alumnos"));
   data.forEach(doc => {
-    lista.innerHTML += `<li>${doc.data().nombre} - ${doc.data().aula}</li>`;
+    lista.innerHTML += `<li>${doc.data().nombre} - ${doc.data().edad} años - ${doc.data().aula}</li>`;
   });
 }
 
