@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Asistencia</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -15,13 +14,14 @@
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  collection, getDocs, addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const contenedor = document.getElementById("alumnos");
 
 async function cargar() {
   const data = await getDocs(collection(db, "alumnos"));
-  contenedor.innerHTML = "";
   data.forEach(doc => {
     contenedor.innerHTML += `
       <div>
@@ -34,7 +34,6 @@ async function cargar() {
 
 document.getElementById("guardar").onclick = async () => {
   const fecha = document.getElementById("fecha").value;
-  if(!fecha) return alert("Seleccione una fecha");
   const checks = document.querySelectorAll("input[type=checkbox]");
 
   for (const c of checks) {
