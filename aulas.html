@@ -1,90 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Gestionar Aulas</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Aulas</title>
 </head>
 <body>
 
-<h2>Gestionar Aulas</h2>
+<h2>Aulas</h2>
 
-<!-- Formulario de registro de aula -->
-<input type="text" id="nombreAula" placeholder="Nombre del aula">
-<button id="guardarAula">Guardar</button>
+<input type="text" id="nombreAula" placeholder="Nombre aula">
+<button id="guardar">Guardar</button>
 
-<h3>Lista de aulas registradas</h3>
-<table id="listaAulas">
-  <thead>
-    <tr>
-      <th>Nombre Aula</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<ul id="lista"></ul>
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  collection, addDoc, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const nombreAula = document.getElementById("nombreAula");
-const guardarBtn = document.getElementById("guardarAula");
-const listaAulas = document.querySelector("#listaAulas tbody");
+const nombre = document.getElementById("nombreAula");
+const lista = document.getElementById("lista");
 
-let editId = null; // Si estamos editando un aula
-
-// Guardar nueva aula o actualizar existente
-guardarBtn.onclick = async () => {
-  if(nombreAula.value.trim() === "") return alert("Ingrese un nombre de aula");
-
-  if(editId) {
-    // Actualizar
-    await updateDoc(doc(db, "aulas", editId), { nombre: nombreAula.value });
-    editId = null;
-    guardarBtn.textContent = "Guardar";
-    alert("Aula actualizada");
-  } else {
-    // Nuevo registro
-    await addDoc(collection(db, "aulas"), { nombre: nombreAula.value });
-    alert("Aula registrada");
-  }
-
-  nombreAula.value = "";
-  cargarAulas();
+document.getElementById("guardar").onclick = async () => {
+  await addDoc(collection(db, "aulas"), {
+    nombre: nombre.value
+  });
+  cargar();
 };
 
-// Cargar aulas y mostrar en tabla
-async function cargarAulas() {
-  listaAulas.innerHTML = "";
+async function cargar() {
+  lista.innerHTML = "";
   const data = await getDocs(collection(db, "aulas"));
-  data.forEach(docu => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${docu.data().nombre}</td>
-      <td>
-        <button class="editar">Editar</button>
-        <button class="eliminar">Eliminar</button>
-      </td>
-    `;
-    // Editar aula
-    tr.querySelector(".editar").onclick = () => {
-      nombreAula.value = docu.data().nombre;
-      editId = docu.id;
-      guardarBtn.textContent = "Actualizar";
-    };
-    // Eliminar aula
-    tr.querySelector(".eliminar").onclick = async () => {
-      if(confirm(`¿Eliminar el aula ${docu.data().nombre}?`)) {
-        await deleteDoc(doc(db, "aulas", docu.id));
-        cargarAulas();
-      }
-    };
-    listaAulas.appendChild(tr);
+  data.forEach(doc => {
+    lista.innerHTML += `<li>${doc.data().nombre}</li>`;
   });
 }
 
-// Inicial
-cargarAulas();
+cargar();
 </script>
 
 </body>
