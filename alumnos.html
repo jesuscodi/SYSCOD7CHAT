@@ -2,13 +2,12 @@
 <html>
 <head>
   <title>Alumnos</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>Alumnos</h2>
 
-<input type="text" id="nombre" placeholder="Nombre alumno">
+<input type="text" id="nombre" placeholder="Nombre">
 <input type="text" id="aula" placeholder="Aula">
 <button id="guardar">Guardar</button>
 
@@ -16,19 +15,17 @@
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  collection, addDoc, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const lista = document.getElementById("lista");
-const nombre = document.getElementById("nombre");
-const aula = document.getElementById("aula");
 
 document.getElementById("guardar").onclick = async () => {
-  if(nombre.value.trim() === "" || aula.value.trim() === "") return alert("Complete todos los campos");
   await addDoc(collection(db, "alumnos"), {
     nombre: nombre.value,
     aula: aula.value
   });
-  nombre.value = ""; aula.value = "";
   cargar();
 };
 
