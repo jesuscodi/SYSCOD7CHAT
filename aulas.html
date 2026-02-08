@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Aulas</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -14,17 +15,15 @@
 
 <script type="module">
 import { db } from "./firebase.js";
-import {
-  collection, addDoc, getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const nombre = document.getElementById("nombreAula");
 const lista = document.getElementById("lista");
 
 document.getElementById("guardar").onclick = async () => {
-  await addDoc(collection(db, "aulas"), {
-    nombre: nombre.value
-  });
+  if(nombre.value.trim() === "") return alert("Ingrese un nombre");
+  await addDoc(collection(db, "aulas"), { nombre: nombre.value });
+  nombre.value = "";
   cargar();
 };
 
