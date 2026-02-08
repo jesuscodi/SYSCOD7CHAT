@@ -1,52 +1,74 @@
+/* General */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #e0f7fa; /* azul claro */
-  color: #01579b;
+  color: #01579b; /* azul oscuro para texto */
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-h2, h3 {
+/* Títulos */
+h2 {
+  margin-top: 20px;
   color: #0277bd;
 }
 
-input[type="text"], input[type="date"] {
-  padding: 8px;
-  margin: 5px 0;
-  border-radius: 5px;
-  border: 1px solid #81d4fa;
+/* Inputs */
+input[type="text"], input[type="email"], input[type="password"], input[type="date"] {
+  padding: 10px;
+  margin: 10px 0;
+  width: 250px;
+  border: 2px solid #81d4fa;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
+/* Botones */
 button {
-  padding: 8px 15px;
-  background: #ff9800;
+  padding: 10px 20px;
+  margin: 5px;
+  background: #ff9800; /* naranja */
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 button:hover {
   background: #fb8c00;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 10px 0 30px;
+/* Lista */
+ul {
+  list-style: none;
+  padding: 0;
 }
 
-th, td {
-  border: 1px solid #81d4fa;
-  padding: 8px;
-  text-align: center;
-}
-
-th {
-  background: #4fc3f7;
-  color: #01579b;
-}
-
-tr:nth-child(even) {
+li {
   background: #b3e5fc;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+}
+
+/* Links */
+a {
+  margin: 10px;
+  color: #01579b;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ff9800;
+}
+
+/* Contenedores */
+div {
+  margin: 10px 0;
 }
