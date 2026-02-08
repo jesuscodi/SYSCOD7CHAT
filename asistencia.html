@@ -1,55 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Asistencia</title>
+  <title>Asistencia Profesional</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Registrar asistencia</h2>
+<h2>Registrar Asistencia</h2>
 
-<input type="date" id="fecha">
-<button id="guardar">Guardar asistencia</button>
+<label>Fecha:</label>
+<input type="date" id="fecha" value="">
+<button id="cargar">Cargar Alumnos</button>
 
-<div id="alumnos"></div>
+<table id="tablaAsistencia">
+  <thead>
+    <tr>
+      <th>Alumno</th>
+      <th>Aula</th>
+      <th>Presente</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-<script type="module">
-import { db } from "./firebase.js";
-import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<h3>Historial de Asistencias</h3>
+<table id="historial">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Alumno</th>
+      <th>Aula</th>
+      <th>Presente</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-const contenedor = document.getElementById("alumnos");
-
-async function cargar() {
-  const data = await getDocs(collection(db, "alumnos"));
-  contenedor.innerHTML = "";
-  data.forEach(doc => {
-    contenedor.innerHTML += `
-      <div>
-        ${doc.data().nombre}
-        <input type="checkbox" data-id="${doc.id}">
-      </div>
-    `;
-  });
-}
-
-document.getElementById("guardar").onclick = async () => {
-  const fecha = document.getElementById("fecha").value;
-  if(!fecha) return alert("Seleccione una fecha");
-  const checks = document.querySelectorAll("input[type=checkbox]");
-
-  for (const c of checks) {
-    await addDoc(collection(db, "asistencias"), {
-      alumno: c.dataset.id,
-      fecha: fecha,
-      presente: c.checked
-    });
-  }
-
-  alert("Asistencia guardada");
-};
-
-cargar();
-</script>
+<script type="module" src="app.js"></script>
 
 </body>
 </html>
