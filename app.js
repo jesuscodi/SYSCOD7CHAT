@@ -2,7 +2,7 @@ import { db } from "./firebase.js";
 import { collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const fechaInput = document.getElementById("fecha");
-const listaAlumnos = document.querySelector("#tablaAsistencia tbody");
+const listaAlumnos = document.querySelector("#listaAlumnos tbody");
 const historial = document.querySelector("#historial tbody");
 const cargarBtn = document.getElementById("cargar");
 
@@ -29,6 +29,7 @@ cargarBtn.onclick = async () => {
         fecha: fechaInput.value,
         presente: presente
       });
+      
       alert("Asistencia registrada");
       cargarHistorial();
     };
@@ -39,6 +40,7 @@ cargarBtn.onclick = async () => {
 // Cargar historial de asistencias
 async function cargarHistorial() {
   historial.innerHTML = "";
+  
   const data = await getDocs(collection(db, "asistencias"));
   data.forEach(as => {
     const tr = document.createElement("tr");
