@@ -5,14 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
+<div class="login-wrapper">
   <div class="login-container">
-    <h2>Iniciar sesión</h2>
+    <h2>Bienvenido</h2>
+    <p>Ingresa tus datos para continuar</p>
 
-    <input type="email" id="email" placeholder="Correo">
-    <input type="password" id="password" placeholder="Contraseña">
+    <div class="input-group">
+      <i class="fa fa-envelope"></i>
+      <input type="email" id="email" placeholder="Correo">
+    </div>
+
+    <div class="input-group">
+      <i class="fa fa-lock"></i>
+      <input type="password" id="password" placeholder="Contraseña">
+    </div>
 
     <div class="botones">
       <button id="btnLogin">Ingresar</button>
@@ -21,7 +31,8 @@
 
     <p id="mensaje"></p>
   </div>
+</div>
 
-  <script type="module" src="login.js"></script>
+<script type="module" src="login.js"></script>
 </body>
 </html>
