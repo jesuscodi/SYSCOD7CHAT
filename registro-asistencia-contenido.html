@@ -1,0 +1,32 @@
+<h2>Registrar Asistencia</h2>
+
+<div class="form-grid">
+  <div>
+    <label>Fecha:</label>
+    <input type="date" id="fecha">
+  </div>
+
+  <div>
+    <label>Aula:</label>
+    <select id="aulaSelect">
+      <option value="">Seleccionar aula</option>
+    </select>
+  </div>
+
+  <div style="align-self:end;">
+    <button id="cargarAlumnos">Cargar Alumnos</button>
+  </div>
+</div>
+
+<h3>Alumnos</h3>
+
+<table id="tablaAlumnos">
+  <thead>
+    <tr>
+      <th>Alumno</th>
+      <th>Presente</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
