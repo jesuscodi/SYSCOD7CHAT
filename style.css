@@ -14,6 +14,9 @@
   background: #ffb347;
   padding: 10px 20px;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .navbar .logo {
@@ -22,14 +25,23 @@
   color: #fff;
 }
 
-.menu-horizontal {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
-.menu-horizontal li button {
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-links li button {
   background: none;
   border: none;
   color: white;
@@ -40,15 +52,15 @@
   transition: 0.3s;
 }
 
-.menu-horizontal li button:hover {
+.nav-links li button:hover {
   background-color: #ff7f50;
 }
 
-/* Contenido principal */
+/* Main content */
 .main-content {
   padding: 30px;
   background-color: #fdf6e3;
-  min-height: calc(100vh - 60px); /* navbar altura aprox */
+  min-height: calc(100vh - 60px);
 }
 
 /* Tarjetas */
@@ -93,10 +105,26 @@
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-  .menu-horizontal {
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    width: 100%;
+  }
+  .nav-links.active {
+    display: block;
+  }
+  .nav-links ul {
     flex-direction: column;
-    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+  .nav-links li button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
   }
   .cards {
     flex-direction: column;
