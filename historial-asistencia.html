@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Asistencias</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Historial de Asistencias</h2>
+
+<div>
+  <label>Fecha:</label>
+  <input type="date" id="filtroFecha">
+  <label>Aula:</label>
+  <select id="filtroAula">
+    <option value="">Todas las aulas</option>
+  </select>
+  <button id="filtrar">Filtrar</button>
+</div>
+
+<table id="tablaHistorial">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Alumno</th>
+      <th>Aula</th>
+      <th>Presente</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script type="module" src="historial-asistencia.js"></script>
+</body>
+</html>
