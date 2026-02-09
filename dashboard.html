@@ -28,26 +28,26 @@
   <!-- Contenido principal -->
   <main class="main-content">
     <header>
-      <h1>Bienvenido al Dashboard</h1>
-      <p>Visualiza tus datos y navega por las secciones.</p>
+      <h1>¡Bienvenido!</h1>
+      <p>Vamos a aprender y divertirnos 😊</p>
     </header>
 
     <section class="cards">
-      <div class="card">
+      <div class="card card-aulas">
         <i class="fa fa-chalkboard card-icon"></i>
         <div class="card-info">
           <h3>Aulas</h3>
           <p id="totalAulas">0</p>
         </div>
       </div>
-      <div class="card">
+      <div class="card card-alumnos">
         <i class="fa fa-user-graduate card-icon"></i>
         <div class="card-info">
           <h3>Alumnos</h3>
           <p id="totalAlumnos">0</p>
         </div>
       </div>
-      <div class="card">
+      <div class="card card-asistencias">
         <i class="fa fa-clipboard-list card-icon"></i>
         <div class="card-info">
           <h3>Asistencias Hoy</h3>
@@ -73,7 +73,7 @@ document.getElementById("logout").onclick = () => {
 // Verificar login
 if (!localStorage.getItem("usuario")) window.location = "index.html";
 
-// Cargar datos de ejemplo (puedes reemplazar con Firestore)
+// Datos de ejemplo (puedes usar Firestore)
 document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
