@@ -6,139 +6,49 @@
   font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-/* --- LOGIN --- */
-body {
-  height: 100vh;
-  background: linear-gradient(135deg, #f6d365, #fda085);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ... LOGIN styles siguen iguales ... */
-
-/* --- DASHBOARD --- */
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #fdf6e3;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  background-color: #ffb347;
-  color: #fff;
-  padding: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  transition: width 0.3s;
-  overflow: hidden;
-}
-
-.sidebar.active {
-  width: 60px;
-}
-
-/* Sidebar Header */
-.sidebar-header {
+/* Navbar horizontal */
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  background: #ffb347;
+  padding: 10px 20px;
+  flex-wrap: wrap;
 }
 
-.sidebar-header h2 {
-  font-size: 1.4rem;
-  color: #fff;
-}
-
-#btnToggle {
-  background: none;
-  border: none;
-  color: #fff;
+.navbar .logo {
   font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 1001;
+  font-weight: bold;
+  color: #fff;
 }
 
-/* Menú */
-.sidebar .menu {
+.menu-horizontal {
   list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar .menu li {
-  margin: 15px 0;
-}
-
-.sidebar .menu li a,
-.sidebar .menu li button {
-  text-decoration: none;
-  color: white;
   display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  border-radius: 15px;
-  transition: 0.3s;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.menu-horizontal li button {
   background: none;
   border: none;
-  width: 100%;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
 }
 
-.sidebar .menu li a:hover,
-.sidebar .menu li button:hover {
+.menu-horizontal li button:hover {
   background-color: #ff7f50;
 }
 
-.sidebar .menu li a i,
-.sidebar .menu li button i {
-  font-size: 1.2rem;
-  transition: all 0.3s;
-}
-
-/* Sidebar colapsado: solo iconos */
-.sidebar.active .menu li a span,
-.sidebar.active .menu li button span {
-  display: none;
-}
-
-.sidebar.active .menu li a i,
-.sidebar.active .menu li button i {
-  margin: 0 auto;
-  display: block;
-}
-
-/* Main content */
+/* Contenido principal */
 .main-content {
-  flex: 1;
   padding: 30px;
-  margin-left: 250px; /* ancho completo sidebar */
-  transition: margin-left 0.3s;
-  position: relative;
-  z-index: 1;
-}
-
-.sidebar.active ~ .main-content {
-  margin-left: 60px; /* ancho colapsado */
-}
-
-/* Header */
-.main-content header h1 {
-  color: #ff6f61;
-  margin-bottom: 10px;
-}
-
-.main-content header p {
-  color: #ff9f43;
-  margin-bottom: 30px;
+  background-color: #fdf6e3;
+  min-height: calc(100vh - 60px); /* navbar altura aprox */
 }
 
 /* Tarjetas */
@@ -146,12 +56,14 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
 }
 
 .card {
   background-color: #fff3e0;
   flex: 1;
   min-width: 180px;
+  max-width: 220px;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
@@ -182,9 +94,12 @@ body {
 
 /* Responsive */
 @media (max-width: 600px) {
-  .cards { flex-direction: column; }
-  .sidebar { width: 200px; }
-  .sidebar.active { width: 50px; }
-  .main-content { margin-left: 200px; }
-  .sidebar.active ~ .main-content { margin-left: 50px; }
+  .menu-horizontal {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
 }
