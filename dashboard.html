@@ -1,36 +1,121 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-<h2>Panel Principal</h2>
+<!-- Navbar horizontal -->
+<header class="navbar">
+  <div class="logo">Mi Sistema</div>
+  <button id="menu-toggle" class="menu-toggle"><i class="fa fa-bars"></i></button>
+  <nav class="nav-links" id="nav-links">
+    <ul class="menu-horizontal">
+      <li><button class="menu-btn" data-section="dashboard">Dashboard</button></li>
+      <li><button class="menu-btn" data-section="aulas">Aulas</button></li>
+      <li><button class="menu-btn" data-section="alumnos">Alumnos</button></li>
+      <li><button class="menu-btn" data-section="asistencia">Registrar Asistencia</button></li>
+      <li><button class="menu-btn" data-section="historial">Historial</button></li>
+      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button></li>
+    </ul>
+  </nav>
+</header>
 
-<a href="aulas.html">Aulas</a>
-<a href="alumnos.html">Alumnos</a>
-<a href="asistencia.html">Asistencia</a>
+<!-- Contenido principal -->
+<main class="main-content">
+  <!-- Dashboard inicial -->
+  <section class="cards" id="dashboard-cards">
+    <div class="card card-aulas">
+      <i class="fa fa-chalkboard card-icon"></i>
+      <div class="card-info">
+        <h3>Aulas</h3>
+        <p id="totalAulas">0</p>
+      </div>
+    </div>
+    <div class="card card-alumnos">
+      <i class="fa fa-user-graduate card-icon"></i>
+      <div class="card-info">
+        <h3>Alumnos</h3>
+        <p id="totalAlumnos">0</p>
+      </div>
+    </div>
+    <div class="card card-asistencias">
+      <i class="fa fa-clipboard-list card-icon"></i>
+      <div class="card-info">
+        <h3>Asistencias Hoy</h3>
+        <p id="asistenciasHoy">0</p>
+      </div>
+    </div>
+  </section>
 
-<div>
-  <button id="logout">Cerrar sesión</button>
-</div>
+  <!-- Contenido dinámico -->
+  <section id="dynamic-content" style="display:none; margin-top:30px;">
+    <!-- Aquí se carga el contenido de cada sección -->
+  </section>
+</main>
 
 <script type="module">
-import { auth } from "./firebase.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { loadContent, initAlumnos, initAulas, initAsistencia } from "./app.js";
 
-document.getElementById("logout").onclick = async () => {
-  await signOut(auth);
-  window.location = "index.html";
+// Logout
+document.getElementById("logout").onclick = () => {
+  localStorage.removeItem("usuario");
+  window.location.href = "index.html";
+};
+
+// Verificar login
+if (!localStorage.getItem("usuario")) window.location.href = "index.html";
+
+// Datos de ejemplo (puedes actualizar luego con Firestore)
+document.getElementById("totalAulas").innerText = 0;
+document.getElementById("totalAlumnos").innerText = 0;
+document.getElementById("asistenciasHoy").innerText = 0;
+
+// Manejar clic en menú
+document.querySelectorAll('.menu-btn').forEach(btn => {
+  btn.onclick = async () => {
+    const section = btn.getAttribute('data-section');
+    
+    if(section === 'dashboard'){
+      document.getElementById("dashboard-cards").style.display = 'flex';
+      document.getElementById("dynamic-content").style.display = 'none';
+    } else {
+      document.getElementById("dashboard-cards").style.display = 'none';
+      const dynamicContent = document.getElementById("dynamic-content");
+      dynamicContent.style.display = 'block';
+
+      try {
+        const response = await fetch(`${section}-contenido.html`);
+        if(response.ok){
+          const html = await response.text();
+          dynamicContent.innerHTML = html;
+
+          // Inicializar la lógica de cada sección
+          if(section === "alumnos") await initAlumnos();
+          if(section === "aulas") await initAulas();
+          if(section === "asistencia") await initAsistencia();
+        } else {
+          dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
+        }
+      } catch (error) {
+        dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
+      }
+    }
+
+    // Cerrar menú en móvil
+    if(window.innerWidth <= 768) document.getElementById("nav-links").classList.remove('active');
+  };
+});
+
+// Toggle menú en móvil
+document.getElementById("menu-toggle").onclick = () => {
+  document.getElementById("nav-links").classList.toggle('active');
 };
 </script>
 
-<script type="module>
-  if (!localStorage.getItem("usuario")) {
-  window.location = "index.html";
-}
-</script>
 </body>
 </html>
