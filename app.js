@@ -9,7 +9,7 @@ const cargarBtn = document.getElementById("cargar");
 // Cargar alumnos para marcar asistencia
 cargarBtn.onclick = async () => {
   if(!fechaInput.value) return alert("Seleccione una fecha");
-  tabla.innerHTML = "";
+  listaAlumnos.innerHTML = "";
   const data = await getDocs(collection(db, "alumnos"));
   data.forEach(al => {
     const tr = document.createElement("tr");
