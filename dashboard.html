@@ -12,7 +12,8 @@
 <!-- Navbar horizontal -->
 <header class="navbar">
   <div class="logo">Mi Sistema</div>
-  <nav>
+  <button id="menu-toggle" class="menu-toggle"><i class="fa fa-bars"></i></button>
+  <nav class="nav-links" id="nav-links">
     <ul class="menu-horizontal">
       <li><button class="menu-btn" data-section="dashboard">Dashboard</button></li>
       <li><button class="menu-btn" data-section="aulas">Aulas</button></li>
@@ -60,6 +61,8 @@
 <script type="module">
 const dashboardCards = document.getElementById("dashboard-cards");
 const dynamicContent = document.getElementById("dynamic-content");
+const navLinks = document.getElementById("nav-links");
+const menuToggle = document.getElementById("menu-toggle");
 
 // Logout
 document.getElementById("logout").onclick = () => {
@@ -75,7 +78,7 @@ document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
 
-// Manejar clic en menú horizontal
+// Manejar clic en menú
 document.querySelectorAll('.menu-btn').forEach(btn => {
   btn.onclick = () => {
     const section = btn.getAttribute('data-section');
@@ -100,8 +103,13 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
           break;
       }
     }
+    // Cerrar menú en móvil
+    if(window.innerWidth <= 768) navLinks.classList.remove('active');
   };
 });
+
+// Toggle menú en móvil
+menuToggle.onclick = () => navLinks.classList.toggle('active');
 </script>
 
 </body>
