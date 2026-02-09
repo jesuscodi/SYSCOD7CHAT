@@ -33,7 +33,7 @@ cargarBtn.onclick = async () => {
       alert("Asistencia registrada");
       cargarHistorial();
     };
-    tabla.appendChild(tr);
+    listaAlumnos.appendChild(tr);
   });
 };
 
