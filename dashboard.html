@@ -80,33 +80,35 @@ document.getElementById("asistenciasHoy").innerText = 30;
 
 // Manejar clic en menú
 document.querySelectorAll('.menu-btn').forEach(btn => {
-  btn.onclick = () => {
+  btn.onclick = async () => {
     const section = btn.getAttribute('data-section');
+    
     if(section === 'dashboard'){
       dashboardCards.style.display = 'flex';
       dynamicContent.style.display = 'none';
     } else {
       dashboardCards.style.display = 'none';
       dynamicContent.style.display = 'block';
-      switch(section) {
-        case 'aulas':
-          dynamicContent.innerHTML = '<h2>Aulas Registradas</h2><p>Mostrando la lista de aulas...</p>';
-          break;
-        case 'alumnos':
-          dynamicContent.innerHTML = '<h2>Alumnos</h2><p>Mostrando la lista de alumnos...</p>';
-          break;
-        case 'asistencia':
-          dynamicContent.innerHTML = '<h2>Registrar Asistencia</h2><p>Formulario de asistencia aquí...</p>';
-          break;
-        case 'historial':
-          dynamicContent.innerHTML = '<h2>Historial de Asistencias</h2><p>Mostrando historial...</p>';
-          break;
+
+      // Cargar el HTML correspondiente
+      try {
+        const response = await fetch(`${section}-content.html`); // alumnos-content.html, aulas-content.html, etc.
+        if(response.ok){
+          const html = await response.text();
+          dynamicContent.innerHTML = html;
+        } else {
+          dynamicContent.innerHTML = `<p>Error al cargar ${section}-content.html</p>`;
+        }
+      } catch (error) {
+        dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
       }
     }
+
     // Cerrar menú en móvil
     if(window.innerWidth <= 768) navLinks.classList.remove('active');
   };
 });
+
 
 // Toggle menú en móvil
 menuToggle.onclick = () => navLinks.classList.toggle('active');
