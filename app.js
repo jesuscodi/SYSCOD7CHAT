@@ -2,7 +2,7 @@ import { db } from "./firebase.js";
 import { collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const fechaInput = document.getElementById("fecha");
-const tabla = document.querySelector("#tablaAsistencia tbody");
+const listaAlumnos = document.querySelector("#tablaAsistencia tbody");
 const historial = document.querySelector("#historial tbody");
 const cargarBtn = document.getElementById("cargar");
 
