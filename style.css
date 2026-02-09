@@ -1,125 +1,133 @@
-/* ===== RESET ===== */
+/* Reset básico */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-/* ===== FONDO GENERAL ===== */
-body {
-  min-height: 100vh;
+/* Navbar horizontal */
+.navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #4e73df, #1cc88a);
+  background: #ffb347;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-/* ===== CONTENEDOR LOGIN ===== */
-.login-wrapper {
-  width: 100%;
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-links li button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.nav-links li button:hover {
+  background-color: #ff7f50;
+}
+
+/* Main content */
+.main-content {
+  padding: 30px;
+  background-color: #fdf6e3;
+  min-height: calc(100vh - 60px);
+}
+
+/* Tarjetas */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  background-color: #fff3e0;
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
   padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-container {
-  background: #fff3e0; /* igual que las tarjetas del dashboard */
-  padding: 40px 30px;
   border-radius: 20px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  text-align: center;
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.3s;
 }
 
-.login-container:hover {
+.card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-/* ===== TITULOS ===== */
-.login-container h2 {
+.card-icon {
+  font-size: 2rem;
+  color: #ff6f61;
+}
+
+.card-info h3 {
   margin-bottom: 5px;
   color: #ff7f50;
 }
 
-.login-container p {
-  margin-bottom: 20px;
-  color: #555;
-  font-size: 14px;
+.card-info p {
+  font-size: 1.3rem;
+  color: #ff9f43;
 }
 
-/* ===== INPUTS ===== */
-.input-group {
-  position: relative;
-  margin-bottom: 15px;
-}
-
-.input-group i {
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
-  color: #ff7f50;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 10px 10px 10px 35px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  outline: none;
-  font-size: 14px;
-  transition: 0.3s;
-}
-
-.input-group input:focus {
-  border-color: #ff7f50;
-  box-shadow: 0 0 0 2px rgba(255,127,80,0.2);
-}
-
-/* ===== BOTONES ===== */
-.botones {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.botones button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-#btnLogin {
-  background: #ff7f50;
-  color: white;
-}
-
-#btnLogin:hover {
-  background: #ff6f40;
-}
-
-#btnRegistro {
-  background: #858796;
-  color: white;
-}
-
-#btnRegistro:hover {
-  background: #6c757d;
-}
-
-/* ===== MENSAJES ===== */
-#mensaje {
-  margin-top: 15px;
-  font-size: 14px;
-  font-weight: bold;
-  color: red;
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    width: 100%;
+  }
+  .nav-links.active {
+    display: block;
+  }
+  .nav-links ul {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+  .nav-links li button {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+  }
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
 }
