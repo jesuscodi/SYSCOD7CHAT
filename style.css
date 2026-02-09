@@ -108,14 +108,13 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
-  background-color: #ffb347;
-  color: #fff;
-  transition: width 0.3s;
-  padding: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+  height: 100vh;         /* que ocupe todo el alto */
+  position: fixed;        /* se fija al lado izquierdo */
+  top: 0;
+  left: 0;
+  z-index: 1000;          /* para que esté encima del main-content */
 }
+
 
 .sidebar.active {
   width: 60px;
