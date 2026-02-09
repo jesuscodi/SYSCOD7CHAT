@@ -10,13 +10,15 @@
 
 <h2>Registrar Asistencia</h2>
 
-<div>
+<div class="formulario">
   <label>Fecha:</label>
   <input type="date" id="fecha">
+  
   <label>Aula:</label>
   <select id="aulaSelect">
     <option value="">Seleccionar aula</option>
   </select>
+  
   <button id="cargarAlumnos">Cargar Alumnos</button>
 </div>
 
@@ -26,11 +28,12 @@
     <tr>
       <th>Alumno</th>
       <th>Presente</th>
-      <th>Acción</th>
     </tr>
   </thead>
   <tbody></tbody>
 </table>
+
+<button id="guardarAsistencia">Guardar Asistencia</button>
 
 <script type="module" src="registro-asistencia.js"></script>
 </body>
