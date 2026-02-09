@@ -108,18 +108,25 @@ body {
 
 /* Sidebar */
 .sidebar {
-  height: 100vh;         /* que ocupe todo el alto */
-  position: fixed;        /* se fija al lado izquierdo */
+  width: 250px;           
+  height: 100vh;          
+  position: fixed;        
   top: 0;
   left: 0;
-  z-index: 1000;          /* para que esté encima del main-content */
+  z-index: 1000;          
+  background-color: #ffb347;
+  color: #fff;
+  padding: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transition: width 0.3s;
 }
-
 
 .sidebar.active {
-  width: 60px;
+  width: 60px; 
 }
 
+/* Sidebar Header */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -138,11 +145,14 @@ body {
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
+  z-index: 1001;
 }
 
+/* Menú */
 .sidebar .menu {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar .menu li {
@@ -155,7 +165,7 @@ body {
   color: white;
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 15px;
   transition: 0.3s;
   background: none;
@@ -171,32 +181,32 @@ body {
 
 .sidebar .menu li a i,
 .sidebar .menu li button i {
-  margin-right: 10px;
   font-size: 1.2rem;
-  transition: margin 0.3s;
+  transition: all 0.3s;
 }
 
 /* Sidebar colapsado: solo iconos */
 .sidebar.active .menu li a span,
 .sidebar.active .menu li button span {
-  display: none; /* Oculta el texto */
+  display: none;
 }
 
 .sidebar.active .menu li a i,
 .sidebar.active .menu li button i {
-  margin: 0 auto; /* Centra iconos */
+  margin: 0 auto;
   display: block;
 }
 
-/* Contenido principal */
+/* Main content */
 .main-content {
   flex: 1;
   padding: 30px;
   margin-left: 250px;
   transition: margin-left 0.3s;
+  position: relative;
+  z-index: 1;
 }
 
-/* Ajuste cuando sidebar está colapsado */
 .sidebar.active ~ .main-content {
   margin-left: 60px;
 }
