@@ -1,0 +1,211 @@
+<div class="aulas-container">
+  <h2>Gestionar Aulas</h2>
+
+  <div class="aulas-form-table">
+    <!-- Formulario -->
+    <div class="aulas-form">
+      <h3>Registrar Aula</h3>
+      <input type="text" id="nombreAula" placeholder="Nombre del aula">
+      <button id="guardarAula">Guardar</button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="aulas-table">
+      <h3>Lista de aulas registradas</h3>
+      <table id="listaAulas">
+        <thead>
+          <tr>
+            <th>Nombre Aula</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const nombreAula = document.getElementById("nombreAula");
+const guardarBtn = document.getElementById("guardarAula");
+const listaAulas = document.querySelector("#listaAulas tbody");
+
+let editId = null;
+
+// Guardar nueva aula o actualizar existente
+guardarBtn.onclick = async () => {
+  if(!nombreAula.value.trim()) return alert("Ingrese un nombre de aula");
+
+  if(editId) {
+    await updateDoc(doc(db, "aulas", editId), { nombre: nombreAula.value });
+    editId = null;
+    guardarBtn.textContent = "Guardar";
+    alert("Aula actualizada");
+  } else {
+    await addDoc(collection(db, "aulas"), { nombre: nombreAula.value });
+    alert("Aula registrada");
+  }
+
+  nombreAula.value = "";
+  cargarAulas();
+};
+
+// Cargar aulas y mostrar en tabla
+async function cargarAulas() {
+  listaAulas.innerHTML = "";
+  const data = await getDocs(collection(db, "aulas"));
+  data.forEach(docu => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${docu.data().nombre}</td>
+      <td>
+        <button class="editar">Editar</button>
+        <button class="eliminar">Eliminar</button>
+      </td>
+    `;
+
+    // Editar aula
+    tr.querySelector(".editar").onclick = () => {
+      nombreAula.value = docu.data().nombre;
+      editId = docu.id;
+      guardarBtn.textContent = "Actualizar";
+    };
+
+    // Eliminar aula
+    tr.querySelector(".eliminar").onclick = async () => {
+      if(confirm(`¿Eliminar el aula ${docu.data().nombre}?`)) {
+        await deleteDoc(doc(db, "aulas", docu.id));
+        cargarAulas();
+      }
+    };
+
+    listaAulas.appendChild(tr);
+  });
+}
+
+// Inicial
+cargarAulas();
+</script>
+
+<style>
+/* Contenedor general */
+.aulas-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flex para formulario y tabla */
+.aulas-form-table {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Formulario */
+.aulas-form {
+  flex: 1;
+  min-width: 280px;
+  background: #fff3e0;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.aulas-form h3 {
+  margin-bottom: 15px;
+  color: #ff6f61;
+}
+
+.aulas-form input, .aulas-form button {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 2px solid #ffb347;
+  outline: none;
+  transition: 0.3s;
+}
+
+.aulas-form input:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 6px rgba(255,111,97,0.3);
+}
+
+.aulas-form button {
+  background: linear-gradient(90deg, #ff6f61, #ffb347);
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.aulas-form button:hover {
+  transform: scale(1.05);
+}
+
+/* Tabla */
+.aulas-table {
+  flex: 2;
+  min-width: 300px;
+  overflow-x: auto;
+}
+
+.aulas-table h3 {
+  margin-bottom: 10px;
+  color: #ff6f61;
+}
+
+.aulas-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff3e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.aulas-table th, .aulas-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ffdab9;
+}
+
+.aulas-table th {
+  background: #ffb347;
+  color: white;
+}
+
+.aulas-table td button {
+  margin-right: 5px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.aulas-table td .editar {
+  background: #ff6f61;
+}
+
+.aulas-table td .eliminar {
+  background: #ff9f43;
+}
+
+.aulas-table td button:hover {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+  .aulas-form-table {
+    flex-direction: column;
+  }
+}
+</style>
