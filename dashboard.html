@@ -17,12 +17,12 @@
       <button id="btnToggle">&#9776;</button>
     </div>
     <ul class="menu">
-  <li><a href="aulas.html"><i class="fa fa-chalkboard"></i> <span>Aulas</span></a></li>
-  <li><a href="alumnos.html"><i class="fa fa-user-graduate"></i> <span>Alumnos</span></a></li>
-  <li><a href="registro-asistencia.html"><i class="fa fa-clipboard-list"></i> <span>Registrar Asistencia</span></a></li>
-  <li><a href="historial-asistencia.html"><i class="fa fa-history"></i> <span>Historial</span></a></li>
-  <li><button id="logout"><i class="fa fa-sign-out-alt"></i> <span>Cerrar sesión</span></button></li>
-</ul>
+      <li><a href="aulas.html"><i class="fa fa-chalkboard"></i> <span>Aulas</span></a></li>
+      <li><a href="alumnos.html"><i class="fa fa-user-graduate"></i> <span>Alumnos</span></a></li>
+      <li><a href="registro-asistencia.html"><i class="fa fa-clipboard-list"></i> <span>Registrar Asistencia</span></a></li>
+      <li><a href="historial-asistencia.html"><i class="fa fa-history"></i> <span>Historial</span></a></li>
+      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> <span>Cerrar sesión</span></button></li>
+    </ul>
   </nav>
 
   <!-- Contenido principal -->
@@ -62,18 +62,19 @@
 const btnToggle = document.getElementById("btnToggle");
 const sidebar = document.getElementById("sidebar");
 
+// Toggle sidebar
 btnToggle.onclick = () => sidebar.classList.toggle("active");
 
 // Logout
 document.getElementById("logout").onclick = () => {
   localStorage.removeItem("usuario");
-  window.location = "index.html";
+  window.location.href = "index.html";
 };
 
 // Verificar login
-if (!localStorage.getItem("usuario")) window.location = "index.html";
+if (!localStorage.getItem("usuario")) window.location.href = "index.html";
 
-// Datos de ejemplo (puedes usar Firestore)
+// Datos de ejemplo
 document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
