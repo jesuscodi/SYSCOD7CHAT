@@ -17,22 +17,22 @@
       <button id="btnToggle">&#9776;</button>
     </div>
     <ul class="menu">
-      <li><a href="aulas.html"><i class="fa fa-chalkboard"></i> <span>Aulas</span></a></li>
-      <li><a href="alumnos.html"><i class="fa fa-user-graduate"></i> <span>Alumnos</span></a></li>
-      <li><a href="registro-asistencia.html"><i class="fa fa-clipboard-list"></i> <span>Registrar Asistencia</span></a></li>
-      <li><a href="historial-asistencia.html"><i class="fa fa-history"></i> <span>Historial</span></a></li>
+      <li><button class="menu-btn" data-section="aulas"><i class="fa fa-chalkboard"></i> <span>Aulas</span></button></li>
+      <li><button class="menu-btn" data-section="alumnos"><i class="fa fa-user-graduate"></i> <span>Alumnos</span></button></li>
+      <li><button class="menu-btn" data-section="asistencia"><i class="fa fa-clipboard-list"></i> <span>Registrar Asistencia</span></button></li>
+      <li><button class="menu-btn" data-section="historial"><i class="fa fa-history"></i> <span>Historial</span></button></li>
       <li><button id="logout"><i class="fa fa-sign-out-alt"></i> <span>Cerrar sesión</span></button></li>
     </ul>
   </nav>
 
   <!-- Contenido principal -->
-  <main class="main-content">
+  <main class="main-content" id="main-content">
     <header>
       <h1>¡Bienvenido!</h1>
       <p>Vamos a aprender y divertirnos 😊</p>
     </header>
 
-    <section class="cards">
+    <section class="cards" id="dashboard-cards">
       <div class="card card-aulas">
         <i class="fa fa-chalkboard card-icon"></i>
         <div class="card-info">
@@ -55,12 +55,20 @@
         </div>
       </div>
     </section>
+
+    <!-- Contenido dinámico -->
+    <section id="dynamic-content" style="display:none; text-align:center; margin-top:40px;">
+      <!-- Aquí se carga el contenido de cada sección -->
+    </section>
   </main>
 </div>
 
 <script type="module">
 const btnToggle = document.getElementById("btnToggle");
 const sidebar = document.getElementById("sidebar");
+const mainContent = document.getElementById("main-content");
+const dashboardCards = document.getElementById("dashboard-cards");
+const dynamicContent = document.getElementById("dynamic-content");
 
 // Toggle sidebar
 btnToggle.onclick = () => sidebar.classList.toggle("active");
@@ -78,6 +86,30 @@ if (!localStorage.getItem("usuario")) window.location.href = "index.html";
 document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
+
+// Manejar clic en menú
+document.querySelectorAll('.menu-btn').forEach(btn => {
+  btn.onclick = () => {
+    const section = btn.getAttribute('data-section');
+    dashboardCards.style.display = 'none'; // Oculta cards
+    dynamicContent.style.display = 'block'; // Muestra contenido dinámico
+    // Contenido según sección
+    switch(section) {
+      case 'aulas':
+        dynamicContent.innerHTML = '<h2>Aulas Registradas</h2><p>Mostrando la lista de aulas...</p>';
+        break;
+      case 'alumnos':
+        dynamicContent.innerHTML = '<h2>Alumnos</h2><p>Mostrando la lista de alumnos...</p>';
+        break;
+      case 'asistencia':
+        dynamicContent.innerHTML = '<h2>Registrar Asistencia</h2><p>Formulario de asistencia aquí...</p>';
+        break;
+      case 'historial':
+        dynamicContent.innerHTML = '<h2>Historial de Asistencias</h2><p>Mostrando historial...</p>';
+        break;
+    }
+  };
+});
 </script>
 
 </body>
