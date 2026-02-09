@@ -1,45 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Alumnos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alumnos | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-<h2>Gestionar Alumnos</h2>
+<!-- Navbar -->
+<header class="navbar">
+  <div class="logo">Mi Sistema</div>
+  <button id="menu-toggle" class="menu-toggle"><i class="fa fa-bars"></i></button>
+  <nav class="nav-links" id="nav-links">
+    <ul class="menu-horizontal">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="aulas.html">Aulas</a></li>
+      <li><a href="alumnos-dashboard.html">Alumnos</a></li>
+      <li><a href="registro-asistencia.html">Registrar Asistencia</a></li>
+      <li><a href="historial-asistencia.html">Historial</a></li>
+      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button></li>
+    </ul>
+  </nav>
+</header>
 
-<!-- Formulario de registro -->
-<input type="text" id="nombre" placeholder="Nombre alumno">
-<input type="number" id="edad" placeholder="Edad" min="3" max="18">
-<select id="aula">
-  <option value="">Seleccionar aula</option>
-</select>
-<button id="guardar">Guardar</button>
+<!-- Contenido principal -->
+<main class="main-content">
+  <h2>Gestionar Alumnos</h2>
 
-<h3>Lista de alumnos registrados</h3>
-<table id="listaAlumnos">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Edad</th>
-      <th>Aula</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <!-- Formulario de registro -->
+  <div class="alumnos-form-table">
+    <div class="alumnos-form">
+      <h3>Registrar Alumno</h3>
+      <input type="text" id="nombre" placeholder="Nombre alumno">
+      <input type="number" id="edad" placeholder="Edad" min="3" max="18">
+      <select id="aula">
+        <option value="">Seleccionar aula</option>
+      </select>
+      <button id="guardar">Guardar</button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="alumnos-table">
+      <h3>Lista de alumnos registrados</h3>
+      <table id="listaAlumnos">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Aula</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</main>
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Logout
+document.getElementById("logout").onclick = () => {
+  localStorage.removeItem("usuario");
+  window.location = "index.html";
+};
+
+// Verificar login
+if(!localStorage.getItem("usuario")) window.location = "index.html";
+
+// Variables del CRUD
 const nombre = document.getElementById("nombre");
 const edad = document.getElementById("edad");
 const aulaSelect = document.getElementById("aula");
 const guardarBtn = document.getElementById("guardar");
 const listaAlumnos = document.querySelector("#listaAlumnos tbody");
 
-let editId = null; // si estamos editando un alumno
+let editId = null;
 
 // Cargar aulas en select
 async function cargarAulas() {
@@ -50,14 +90,11 @@ async function cargarAulas() {
   });
 }
 
-// Guardar alumno (nuevo o editar)
+// Guardar alumno
 guardarBtn.onclick = async () => {
-  if(nombre.value.trim() === "" || edad.value === "" || aulaSelect.value === "") {
-    return alert("Complete todos los campos");
-  }
+  if(!nombre.value.trim() || !edad.value || !aulaSelect.value) return alert("Complete todos los campos");
 
   if(editId) {
-    // actualizar
     await updateDoc(doc(db, "alumnos", editId), {
       nombre: nombre.value,
       edad: parseInt(edad.value),
@@ -65,15 +102,12 @@ guardarBtn.onclick = async () => {
     });
     editId = null;
     guardarBtn.textContent = "Guardar";
-    alert("Alumno actualizado");
   } else {
-    // nuevo alumno
     await addDoc(collection(db, "alumnos"), {
       nombre: nombre.value,
       edad: parseInt(edad.value),
       aula: aulaSelect.value
     });
-    alert("Alumno registrado");
   }
 
   nombre.value = "";
@@ -82,7 +116,7 @@ guardarBtn.onclick = async () => {
   cargarAlumnos();
 };
 
-// Cargar lista de alumnos
+// Cargar alumnos
 async function cargarAlumnos() {
   listaAlumnos.innerHTML = "";
   const data = await getDocs(collection(db, "alumnos"));
@@ -97,7 +131,6 @@ async function cargarAlumnos() {
         <button class="eliminar">Eliminar</button>
       </td>
     `;
-    // Editar
     tr.querySelector(".editar").onclick = () => {
       nombre.value = docu.data().nombre;
       edad.value = docu.data().edad;
@@ -105,7 +138,6 @@ async function cargarAlumnos() {
       editId = docu.id;
       guardarBtn.textContent = "Actualizar";
     };
-    // Eliminar
     tr.querySelector(".eliminar").onclick = async () => {
       if(confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
         await deleteDoc(doc(db, "alumnos", docu.id));
@@ -119,6 +151,11 @@ async function cargarAlumnos() {
 // Inicial
 cargarAulas();
 cargarAlumnos();
+
+// Menu móvil
+const menuToggle = document.getElementById("menu-toggle");
+const navLinks = document.getElementById("nav-links");
+menuToggle.onclick = () => navLinks.classList.toggle("active");
 </script>
 
 </body>
