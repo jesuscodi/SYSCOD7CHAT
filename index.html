@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Iniciar sesión</h2>
+  <div class="login-container">
+    <h2>Iniciar sesión</h2>
 
-<input type="email" id="email" placeholder="Correo">
-<input type="password" id="password" placeholder="Contraseña">
+    <input type="email" id="email" placeholder="Correo">
+    <input type="password" id="password" placeholder="Contraseña">
 
-<div>
-  <button id="btnLogin">Ingresar</button>
-  <button id="btnRegistro">Registrarse</button>
-</div>
+    <div class="botones">
+      <button id="btnLogin">Ingresar</button>
+      <button id="btnRegistro">Registrarse</button>
+    </div>
 
-<script type="module" src="login.js"></script>
+    <p id="mensaje"></p>
+  </div>
+
+  <script type="module" src="login.js"></script>
 </body>
 </html>
