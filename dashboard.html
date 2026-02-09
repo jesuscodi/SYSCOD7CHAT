@@ -3,32 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Dashboard | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Panel Principal</h2>
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Mi Sistema</h2>
+      <button id="btnToggle">&#9776;</button> <!-- Botón hamburguesa -->
+    </div>
+    <ul class="menu">
+      <li><a href="aulas.html">Aulas</a></li>
+      <li><a href="alumnos.html">Alumnos</a></li>
+      <li><a href="registro-asistencia.html">Registrar Asistencia</a></li>
+      <li><a href="historial-asistencia.html">Historial de Asistencias</a></li>
+      <li><button id="logout">Cerrar sesión</button></li>
+    </ul>
+  </nav>
 
-<a href="aulas.html">Aulas</a>
-<a href="alumnos.html">Alumnos</a>
-<a href="registro-asistencia.html">Registrar Asistencia</a>
-<a href="historial-asistencia.html">Historial de Asistencias</a>
-
-<div>
-  <button id="logout">Cerrar sesión</button>
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <h1>Bienvenido al Dashboard</h1>
+    <p>Selecciona una opción en el panel lateral.</p>
+  </main>
 </div>
 
 <script>
+const btnToggle = document.getElementById("btnToggle");
+const sidebar = document.getElementById("sidebar");
+
+btnToggle.onclick = () => {
+  sidebar.classList.toggle("active");
+};
+
+// Logout
 document.getElementById("logout").onclick = () => {
   localStorage.removeItem("usuario");
   window.location = "index.html";
 };
 
 // Verificar login
-if (!localStorage.getItem("usuario")) {
-  window.location = "index.html";
-}
+if (!localStorage.getItem("usuario")) window.location = "index.html";
 </script>
 
 </body>
