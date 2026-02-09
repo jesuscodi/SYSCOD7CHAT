@@ -43,6 +43,7 @@ async function cargarHistorial() {
   
   const data = await getDocs(collection(db, "asistencias"));
   data.forEach(as => {
+      console.log(as.data());  // 👈 AQUI
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${as.data().fecha}</td>
