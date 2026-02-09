@@ -9,7 +9,7 @@ const dynamicContent = document.getElementById("dynamicContent"); // Div donde c
 export async function loadContent(url, initFunc) {
   const res = await fetch(url);
   dynamicContent.innerHTML = await res.text();
-  initFunc(); // Inicializa la lógica del contenido después de cargar el HTML
+  initFunc();
 }
 
 // ================= ALUMNOS =================
@@ -22,7 +22,6 @@ export async function initAlumnos() {
 
   let editId = null;
 
-  // Cargar aulas en select
   async function cargarAulas() {
     const data = await getDocs(collection(db, "aulas"));
     aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
@@ -31,7 +30,6 @@ export async function initAlumnos() {
     });
   }
 
-  // Guardar alumno
   guardarBtn.onclick = async () => {
     if(!nombre.value.trim() || !edad.value || !aulaSelect.value) return alert("Complete todos los campos");
 
@@ -57,7 +55,6 @@ export async function initAlumnos() {
     cargarAlumnos();
   };
 
-  // Cargar alumnos en tabla
   async function cargarAlumnos() {
     listaAlumnos.innerHTML = "";
     const data = await getDocs(collection(db, "alumnos"));
@@ -89,7 +86,6 @@ export async function initAlumnos() {
     });
   }
 
-  // Inicial
   await cargarAulas();
   await cargarAlumnos();
 }
@@ -102,7 +98,6 @@ export async function initAulas() {
 
   let editId = null;
 
-  // Guardar aula
   guardarBtn.onclick = async () => {
     if(!nombreAula.value.trim()) return alert("Ingrese un nombre de aula");
 
@@ -118,7 +113,6 @@ export async function initAulas() {
     cargarAulas();
   };
 
-  // Cargar aulas
   async function cargarAulas() {
     listaAulas.innerHTML = "";
     const data = await getDocs(collection(db, "aulas"));
@@ -149,71 +143,75 @@ export async function initAulas() {
   cargarAulas();
 }
 
-// ================= ASISTENCIA =================
+// ================= ASISTENCIA (ARREGLADO) =================
 export async function initAsistencia() {
   const fechaInput = document.getElementById("fecha");
-  const listaAlumnos = document.querySelector("#listaAlumnos tbody");
-  const historial = document.querySelector("#historial tbody");
-  const cargarBtn = document.getElementById("cargar");
+  const aulaSelect = document.getElementById("aulaSelect");
+  const cargarAlumnosBtn = document.getElementById("cargarAlumnos");
+  const tablaAlumnos = document.querySelector("#tablaAlumnos tbody");
 
-  cargarBtn.onclick = async () => {
-    if(!fechaInput.value) return alert("Seleccione una fecha");
-    listaAlumnos.innerHTML = "";
+  if (!fechaInput) return;
 
-    const data = await getDocs(collection(db, "alumnos"));
-    data.forEach(al => {
+  // Cargar aulas
+  const dataAulas = await getDocs(collection(db, "aulas"));
+  aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
+  dataAulas.forEach(a => {
+    aulaSelect.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
+  });
+
+  // Cargar alumnos
+  cargarAlumnosBtn.onclick = async () => {
+    if (!fechaInput.value || !aulaSelect.value) {
+      return alert("Seleccione fecha y aula");
+    }
+
+    tablaAlumnos.innerHTML = "";
+
+    const alumnosData = await getDocs(collection(db, "alumnos"));
+    const alumnosFiltrados = alumnosData.docs.filter(
+      al => al.data().aula === aulaSelect.value
+    );
+
+    for (const al of alumnosFiltrados) {
+      const idAsistencia = `${fechaInput.value}_${al.id}`;
+      const ref = doc(db, "asistencias", idAsistencia);
+
+      // Verificar si ya existe
+      const existente = await getDocs(
+        query(
+          collection(db, "asistencias"),
+          where("fecha", "==", fechaInput.value),
+          where("alumno", "==", al.id)
+        )
+      );
+
+      let marcado = false;
+      if (existente.docs.length > 0) {
+        marcado = existente.docs[0].data().presente;
+      }
+
       const tr = document.createElement("tr");
-      const idAsistencia = `${fechaInput.value}_${al.id}`; // ID único
-
       tr.innerHTML = `
         <td>${al.data().nombre}</td>
-        <td>${al.data().aula}</td>
-        <td><input type="checkbox" data-id="${idAsistencia}"></td>
-        <td><button data-id="${idAsistencia}">Guardar</button></td>
+        <td><input type="checkbox" ${marcado ? "checked" : ""}></td>
+        <td><button>Guardar</button></td>
       `;
 
       tr.querySelector("button").onclick = async () => {
         const presente = tr.querySelector("input").checked;
-        await setDoc(doc(db, "asistencias", idAsistencia), {
+
+        await setDoc(ref, {
           alumno: al.id,
           nombre: al.data().nombre,
           aula: al.data().aula,
           fecha: fechaInput.value,
           presente
         }, { merge: true });
-        cargarHistorial();
+
+        alert("Asistencia guardada");
       };
 
-      listaAlumnos.appendChild(tr);
-    });
-
-    cargarHistorial();
+      tablaAlumnos.appendChild(tr);
+    }
   };
-
-  async function cargarHistorial() {
-    historial.innerHTML = "";
-    if(!fechaInput.value) return;
-
-    const q = query(collection(db, "asistencias"), where("fecha", "==", fechaInput.value));
-    const data = await getDocs(q);
-
-    data.forEach(as => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${as.data().fecha}</td>
-        <td>${as.data().nombre}</td>
-        <td>${as.data().aula}</td>
-        <td><input type="checkbox" data-id="${as.id}" ${as.data().presente ? 'checked' : ''}></td>
-        <td><button data-id="${as.id}">Actualizar</button></td>
-      `;
-      tr.querySelector("button").onclick = async () => {
-        const presente = tr.querySelector("input").checked;
-        await updateDoc(doc(db, "asistencias", as.id), { presente });
-        cargarHistorial();
-      };
-      historial.appendChild(tr);
-    });
-  }
-
-  fechaInput.addEventListener("change", cargarHistorial);
 }
