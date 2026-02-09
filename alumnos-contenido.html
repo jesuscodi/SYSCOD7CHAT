@@ -1,36 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alumnos | Mi Sistema</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-
-<!-- Navbar -->
-<header class="navbar">
-  <div class="logo">Mi Sistema</div>
-  <button id="menu-toggle" class="menu-toggle"><i class="fa fa-bars"></i></button>
-  <nav class="nav-links" id="nav-links">
-    <ul class="menu-horizontal">
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="aulas.html">Aulas</a></li>
-      <li><a href="alumnos-dashboard.html">Alumnos</a></li>
-      <li><a href="registro-asistencia.html">Registrar Asistencia</a></li>
-      <li><a href="historial-asistencia.html">Historial</a></li>
-      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button></li>
-    </ul>
-  </nav>
-</header>
-
-<!-- Contenido principal -->
-<main class="main-content">
+<div class="alumnos-container">
   <h2>Gestionar Alumnos</h2>
 
-  <!-- Formulario de registro -->
   <div class="alumnos-form-table">
+    <!-- Formulario -->
     <div class="alumnos-form">
       <h3>Registrar Alumno</h3>
       <input type="text" id="nombre" placeholder="Nombre alumno">
@@ -57,22 +29,12 @@
       </table>
     </div>
   </div>
-</main>
+</div>
 
 <script type="module">
 import { db } from "./firebase.js";
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Logout
-document.getElementById("logout").onclick = () => {
-  localStorage.removeItem("usuario");
-  window.location = "index.html";
-};
-
-// Verificar login
-if(!localStorage.getItem("usuario")) window.location = "index.html";
-
-// Variables del CRUD
 const nombre = document.getElementById("nombre");
 const edad = document.getElementById("edad");
 const aulaSelect = document.getElementById("aula");
@@ -90,7 +52,7 @@ async function cargarAulas() {
   });
 }
 
-// Guardar alumno
+// Guardar alumno (nuevo o editar)
 guardarBtn.onclick = async () => {
   if(!nombre.value.trim() || !edad.value || !aulaSelect.value) return alert("Complete todos los campos");
 
@@ -102,12 +64,14 @@ guardarBtn.onclick = async () => {
     });
     editId = null;
     guardarBtn.textContent = "Guardar";
+    alert("Alumno actualizado");
   } else {
     await addDoc(collection(db, "alumnos"), {
       nombre: nombre.value,
       edad: parseInt(edad.value),
       aula: aulaSelect.value
     });
+    alert("Alumno registrado");
   }
 
   nombre.value = "";
@@ -116,7 +80,7 @@ guardarBtn.onclick = async () => {
   cargarAlumnos();
 };
 
-// Cargar alumnos
+// Cargar alumnos en tabla
 async function cargarAlumnos() {
   listaAlumnos.innerHTML = "";
   const data = await getDocs(collection(db, "alumnos"));
@@ -131,6 +95,8 @@ async function cargarAlumnos() {
         <button class="eliminar">Eliminar</button>
       </td>
     `;
+
+    // Editar
     tr.querySelector(".editar").onclick = () => {
       nombre.value = docu.data().nombre;
       edad.value = docu.data().edad;
@@ -138,12 +104,15 @@ async function cargarAlumnos() {
       editId = docu.id;
       guardarBtn.textContent = "Actualizar";
     };
+
+    // Eliminar
     tr.querySelector(".eliminar").onclick = async () => {
       if(confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
         await deleteDoc(doc(db, "alumnos", docu.id));
         cargarAlumnos();
       }
     };
+
     listaAlumnos.appendChild(tr);
   });
 }
@@ -151,12 +120,124 @@ async function cargarAlumnos() {
 // Inicial
 cargarAulas();
 cargarAlumnos();
-
-// Menu móvil
-const menuToggle = document.getElementById("menu-toggle");
-const navLinks = document.getElementById("nav-links");
-menuToggle.onclick = () => navLinks.classList.toggle("active");
 </script>
 
-</body>
-</html>
+<style>
+/* Contenedor general */
+.alumnos-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flex para formulario y tabla */
+.alumnos-form-table {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Formulario */
+.alumnos-form {
+  flex: 1;
+  min-width: 280px;
+  background: #fff3e0;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.alumnos-form h3 {
+  margin-bottom: 15px;
+  color: #ff6f61;
+}
+
+.alumnos-form input, .alumnos-form select, .alumnos-form button {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 2px solid #ffb347;
+  outline: none;
+  transition: 0.3s;
+}
+
+.alumnos-form input:focus, .alumnos-form select:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 6px rgba(255,111,97,0.3);
+}
+
+.alumnos-form button {
+  background: linear-gradient(90deg, #ff6f61, #ffb347);
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.alumnos-form button:hover {
+  transform: scale(1.05);
+}
+
+/* Tabla */
+.alumnos-table {
+  flex: 2;
+  min-width: 300px;
+  overflow-x: auto;
+}
+
+.alumnos-table h3 {
+  margin-bottom: 10px;
+  color: #ff6f61;
+}
+
+.alumnos-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff3e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.alumnos-table th, .alumnos-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ffdab9;
+}
+
+.alumnos-table th {
+  background: #ffb347;
+  color: white;
+}
+
+.alumnos-table td button {
+  margin-right: 5px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.alumnos-table td .editar {
+  background: #ff6f61;
+}
+
+.alumnos-table td .eliminar {
+  background: #ff9f43;
+}
+
+.alumnos-table td button:hover {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+  .alumnos-form-table {
+    flex-direction: column;
+  }
+}
+</style>
