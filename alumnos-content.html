@@ -1,0 +1,110 @@
+<h2>Gestionar Alumnos</h2>
+
+<!-- Formulario de registro -->
+<input type="text" id="nombre" placeholder="Nombre alumno">
+<input type="number" id="edad" placeholder="Edad" min="3" max="18">
+<select id="aula">
+  <option value="">Seleccionar aula</option>
+</select>
+<button id="guardar">Guardar</button>
+
+<h3>Lista de alumnos registrados</h3>
+<table id="listaAlumnos">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Edad</th>
+      <th>Aula</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const nombre = document.getElementById("nombre");
+const edad = document.getElementById("edad");
+const aulaSelect = document.getElementById("aula");
+const guardarBtn = document.getElementById("guardar");
+const listaAlumnos = document.querySelector("#listaAlumnos tbody");
+
+let editId = null; // si estamos editando un alumno
+
+// Cargar aulas en select
+async function cargarAulas() {
+  const data = await getDocs(collection(db, "aulas"));
+  aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
+  data.forEach(a => {
+    aulaSelect.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
+  });
+}
+
+// Guardar alumno (nuevo o editar)
+guardarBtn.onclick = async () => {
+  if(nombre.value.trim() === "" || edad.value === "" || aulaSelect.value === "") {
+    return alert("Complete todos los campos");
+  }
+
+  if(editId) {
+    await updateDoc(doc(db, "alumnos", editId), {
+      nombre: nombre.value,
+      edad: parseInt(edad.value),
+      aula: aulaSelect.value
+    });
+    editId = null;
+    guardarBtn.textContent = "Guardar";
+    alert("Alumno actualizado");
+  } else {
+    await addDoc(collection(db, "alumnos"), {
+      nombre: nombre.value,
+      edad: parseInt(edad.value),
+      aula: aulaSelect.value
+    });
+    alert("Alumno registrado");
+  }
+
+  nombre.value = "";
+  edad.value = "";
+  aulaSelect.value = "";
+  cargarAlumnos();
+};
+
+// Cargar lista de alumnos
+async function cargarAlumnos() {
+  listaAlumnos.innerHTML = "";
+  const data = await getDocs(collection(db, "alumnos"));
+  data.forEach(docu => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${docu.data().nombre}</td>
+      <td>${docu.data().edad}</td>
+      <td>${docu.data().aula}</td>
+      <td>
+        <button class="editar">Editar</button>
+        <button class="eliminar">Eliminar</button>
+      </td>
+    `;
+    tr.querySelector(".editar").onclick = () => {
+      nombre.value = docu.data().nombre;
+      edad.value = docu.data().edad;
+      aulaSelect.value = docu.data().aula;
+      editId = docu.id;
+      guardarBtn.textContent = "Actualizar";
+    };
+    tr.querySelector(".eliminar").onclick = async () => {
+      if(confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
+        await deleteDoc(doc(db, "alumnos", docu.id));
+        cargarAlumnos();
+      }
+    };
+    listaAlumnos.appendChild(tr);
+  });
+}
+
+// Inicial
+cargarAulas();
+cargarAlumnos();
+</script>
