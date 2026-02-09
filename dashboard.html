@@ -59,6 +59,8 @@
 </main>
 
 <script type="module">
+import { initAlumnos, initAulas, initAsistencia } from "./app.js";
+
 const dashboardCards = document.getElementById("dashboard-cards");
 const dynamicContent = document.getElementById("dynamic-content");
 const navLinks = document.getElementById("nav-links");
@@ -73,7 +75,7 @@ document.getElementById("logout").onclick = () => {
 // Verificar login
 if (!localStorage.getItem("usuario")) window.location.href = "index.html";
 
-// Datos de ejemplo
+// Datos de ejemplo (puedes reemplazar por conteo real desde Firestore)
 document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
@@ -90,25 +92,29 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
       dashboardCards.style.display = 'none';
       dynamicContent.style.display = 'block';
 
-      // Cargar el HTML correspondiente
       try {
-        const response = await fetch(`${section}-content.html`); // alumnos-content.html, aulas-content.html, etc.
+        const response = await fetch(`${section}-contenido.html`);
         if(response.ok){
           const html = await response.text();
           dynamicContent.innerHTML = html;
+
+          // 🔹 Inicializar la sección después de cargar el HTML
+          if(section === "alumnos") await initAlumnos();
+          if(section === "aulas") await initAulas();
+          if(section === "asistencia") await initAsistencia();
+          // Aquí puedes agregar initHistorial() si lo exportas desde app.js
+          
         } else {
-          dynamicContent.innerHTML = `<p>Error al cargar ${section}-content.html</p>`;
+          dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
         }
       } catch (error) {
         dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
       }
     }
 
-    // Cerrar menú en móvil
     if(window.innerWidth <= 768) navLinks.classList.remove('active');
   };
 });
-
 
 // Toggle menú en móvil
 menuToggle.onclick = () => navLinks.classList.toggle('active');
