@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,26 +12,24 @@
 
 <a href="aulas.html">Aulas</a>
 <a href="alumnos.html">Alumnos</a>
-<a href="asistencia.html">Asistencia</a>
+<a href="registro-asistencia.html">Registrar Asistencia</a>
+<a href="historial-asistencia.html">Historial de Asistencias</a>
 
 <div>
   <button id="logout">Cerrar sesión</button>
 </div>
 
-<script type="module">
-import { auth } from "./firebase.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-document.getElementById("logout").onclick = async () => {
-  await signOut(auth);
+<script>
+document.getElementById("logout").onclick = () => {
+  localStorage.removeItem("usuario");
   window.location = "index.html";
 };
-</script>
 
-<script type="module>
-  if (!localStorage.getItem("usuario")) {
+// Verificar login
+if (!localStorage.getItem("usuario")) {
   window.location = "index.html";
 }
 </script>
+
 </body>
 </html>
