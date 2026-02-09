@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | Mi Sistema</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,31 +14,55 @@
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>Mi Sistema</h2>
-      <button id="btnToggle">&#9776;</button> <!-- Botón hamburguesa -->
+      <button id="btnToggle">&#9776;</button>
     </div>
     <ul class="menu">
-      <li><a href="aulas.html">Aulas</a></li>
-      <li><a href="alumnos.html">Alumnos</a></li>
-      <li><a href="registro-asistencia.html">Registrar Asistencia</a></li>
-      <li><a href="historial-asistencia.html">Historial de Asistencias</a></li>
-      <li><button id="logout">Cerrar sesión</button></li>
+      <li><a href="aulas.html"><i class="fa fa-chalkboard"></i> Aulas</a></li>
+      <li><a href="alumnos.html"><i class="fa fa-user-graduate"></i> Alumnos</a></li>
+      <li><a href="registro-asistencia.html"><i class="fa fa-clipboard-list"></i> Registrar Asistencia</a></li>
+      <li><a href="historial-asistencia.html"><i class="fa fa-history"></i> Historial</a></li>
+      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button></li>
     </ul>
   </nav>
 
   <!-- Contenido principal -->
   <main class="main-content">
-    <h1>Bienvenido al Dashboard</h1>
-    <p>Selecciona una opción en el panel lateral.</p>
+    <header>
+      <h1>Bienvenido al Dashboard</h1>
+      <p>Visualiza tus datos y navega por las secciones.</p>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <i class="fa fa-chalkboard card-icon"></i>
+        <div class="card-info">
+          <h3>Aulas</h3>
+          <p id="totalAulas">0</p>
+        </div>
+      </div>
+      <div class="card">
+        <i class="fa fa-user-graduate card-icon"></i>
+        <div class="card-info">
+          <h3>Alumnos</h3>
+          <p id="totalAlumnos">0</p>
+        </div>
+      </div>
+      <div class="card">
+        <i class="fa fa-clipboard-list card-icon"></i>
+        <div class="card-info">
+          <h3>Asistencias Hoy</h3>
+          <p id="asistenciasHoy">0</p>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
-<script>
+<script type="module">
 const btnToggle = document.getElementById("btnToggle");
 const sidebar = document.getElementById("sidebar");
 
-btnToggle.onclick = () => {
-  sidebar.classList.toggle("active");
-};
+btnToggle.onclick = () => sidebar.classList.toggle("active");
 
 // Logout
 document.getElementById("logout").onclick = () => {
@@ -47,6 +72,11 @@ document.getElementById("logout").onclick = () => {
 
 // Verificar login
 if (!localStorage.getItem("usuario")) window.location = "index.html";
+
+// Cargar datos de ejemplo (puedes reemplazar con Firestore)
+document.getElementById("totalAulas").innerText = 5;
+document.getElementById("totalAlumnos").innerText = 42;
+document.getElementById("asistenciasHoy").innerText = 30;
 </script>
 
 </body>
