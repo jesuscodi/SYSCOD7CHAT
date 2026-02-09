@@ -26,5 +26,10 @@ document.getElementById("logout").onclick = async () => {
 };
 </script>
 
+<script type="module>
+  if (!localStorage.getItem("usuario")) {
+  window.location = "index.html";
+}
+</script>
 </body>
 </html>
