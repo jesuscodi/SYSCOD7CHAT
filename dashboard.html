@@ -9,69 +9,57 @@
 </head>
 <body>
 
-<div class="dashboard-container">
-  <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>Mi Sistema</h2>
-      <button id="btnToggle">&#9776;</button>
-    </div>
-    <ul class="menu">
-      <li><button class="menu-btn" data-section="aulas"><i class="fa fa-chalkboard"></i> <span>Aulas</span></button></li>
-      <li><button class="menu-btn" data-section="alumnos"><i class="fa fa-user-graduate"></i> <span>Alumnos</span></button></li>
-      <li><button class="menu-btn" data-section="asistencia"><i class="fa fa-clipboard-list"></i> <span>Registrar Asistencia</span></button></li>
-      <li><button class="menu-btn" data-section="historial"><i class="fa fa-history"></i> <span>Historial</span></button></li>
-      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> <span>Cerrar sesión</span></button></li>
+<!-- Navbar horizontal -->
+<header class="navbar">
+  <div class="logo">Mi Sistema</div>
+  <nav>
+    <ul class="menu-horizontal">
+      <li><button class="menu-btn" data-section="dashboard">Dashboard</button></li>
+      <li><button class="menu-btn" data-section="aulas">Aulas</button></li>
+      <li><button class="menu-btn" data-section="alumnos">Alumnos</button></li>
+      <li><button class="menu-btn" data-section="asistencia">Registrar Asistencia</button></li>
+      <li><button class="menu-btn" data-section="historial">Historial</button></li>
+      <li><button id="logout"><i class="fa fa-sign-out-alt"></i> Cerrar sesión</button></li>
     </ul>
   </nav>
+</header>
 
-  <!-- Contenido principal -->
-  <main class="main-content" id="main-content">
-    <header>
-      <h1>¡Bienvenidos!</h1>
-      <p>Vamos a aprender y divertirnos 😊</p>
-    </header>
+<!-- Contenido principal -->
+<main class="main-content" id="main-content">
+  <!-- Dashboard inicial -->
+  <section class="cards" id="dashboard-cards">
+    <div class="card card-aulas">
+      <i class="fa fa-chalkboard card-icon"></i>
+      <div class="card-info">
+        <h3>Aulas</h3>
+        <p id="totalAulas">0</p>
+      </div>
+    </div>
+    <div class="card card-alumnos">
+      <i class="fa fa-user-graduate card-icon"></i>
+      <div class="card-info">
+        <h3>Alumnos</h3>
+        <p id="totalAlumnos">0</p>
+      </div>
+    </div>
+    <div class="card card-asistencias">
+      <i class="fa fa-clipboard-list card-icon"></i>
+      <div class="card-info">
+        <h3>Asistencias Hoy</h3>
+        <p id="asistenciasHoy">0</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="cards" id="dashboard-cards">
-      <div class="card card-aulas">
-        <i class="fa fa-chalkboard card-icon"></i>
-        <div class="card-info">
-          <h3>Aulas</h3>
-          <p id="totalAulas">0</p>
-        </div>
-      </div>
-      <div class="card card-alumnos">
-        <i class="fa fa-user-graduate card-icon"></i>
-        <div class="card-info">
-          <h3>Alumnos</h3>
-          <p id="totalAlumnos">0</p>
-        </div>
-      </div>
-      <div class="card card-asistencias">
-        <i class="fa fa-clipboard-list card-icon"></i>
-        <div class="card-info">
-          <h3>Asistencias Hoy</h3>
-          <p id="asistenciasHoy">0</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contenido dinámico -->
-    <section id="dynamic-content" style="display:none; text-align:center; margin-top:40px;">
-      <!-- Aquí se carga el contenido de cada sección -->
-    </section>
-  </main>
-</div>
+  <!-- Contenido dinámico -->
+  <section id="dynamic-content" style="display:none; text-align:center; margin-top:40px;">
+    <!-- Aquí se carga el contenido de cada sección -->
+  </section>
+</main>
 
 <script type="module">
-const btnToggle = document.getElementById("btnToggle");
-const sidebar = document.getElementById("sidebar");
-const mainContent = document.getElementById("main-content");
 const dashboardCards = document.getElementById("dashboard-cards");
 const dynamicContent = document.getElementById("dynamic-content");
-
-// Toggle sidebar
-btnToggle.onclick = () => sidebar.classList.toggle("active");
 
 // Logout
 document.getElementById("logout").onclick = () => {
@@ -87,26 +75,30 @@ document.getElementById("totalAulas").innerText = 5;
 document.getElementById("totalAlumnos").innerText = 42;
 document.getElementById("asistenciasHoy").innerText = 30;
 
-// Manejar clic en menú
+// Manejar clic en menú horizontal
 document.querySelectorAll('.menu-btn').forEach(btn => {
   btn.onclick = () => {
     const section = btn.getAttribute('data-section');
-    dashboardCards.style.display = 'none'; // Oculta cards
-    dynamicContent.style.display = 'block'; // Muestra contenido dinámico
-    // Contenido según sección
-    switch(section) {
-      case 'aulas':
-        dynamicContent.innerHTML = '<h2>Aulas Registradas</h2><p>Mostrando la lista de aulas...</p>';
-        break;
-      case 'alumnos':
-        dynamicContent.innerHTML = '<h2>Alumnos</h2><p>Mostrando la lista de alumnos...</p>';
-        break;
-      case 'asistencia':
-        dynamicContent.innerHTML = '<h2>Registrar Asistencia</h2><p>Formulario de asistencia aquí...</p>';
-        break;
-      case 'historial':
-        dynamicContent.innerHTML = '<h2>Historial de Asistencias</h2><p>Mostrando historial...</p>';
-        break;
+    if(section === 'dashboard'){
+      dashboardCards.style.display = 'flex';
+      dynamicContent.style.display = 'none';
+    } else {
+      dashboardCards.style.display = 'none';
+      dynamicContent.style.display = 'block';
+      switch(section) {
+        case 'aulas':
+          dynamicContent.innerHTML = '<h2>Aulas Registradas</h2><p>Mostrando la lista de aulas...</p>';
+          break;
+        case 'alumnos':
+          dynamicContent.innerHTML = '<h2>Alumnos</h2><p>Mostrando la lista de alumnos...</p>';
+          break;
+        case 'asistencia':
+          dynamicContent.innerHTML = '<h2>Registrar Asistencia</h2><p>Formulario de asistencia aquí...</p>';
+          break;
+        case 'historial':
+          dynamicContent.innerHTML = '<h2>Historial de Asistencias</h2><p>Mostrando historial...</p>';
+          break;
+      }
     }
   };
 });
