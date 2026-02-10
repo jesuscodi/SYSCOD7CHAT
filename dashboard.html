@@ -98,6 +98,7 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
           if(section === "alumnos") await initAlumnos();
           if(section === "aulas") await initAulas();
           if(section === "asistencia") await initAsistencia();
+          if(section === "historial") await initHistorial(); 
         } else {
           dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
         }
