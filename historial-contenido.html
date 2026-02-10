@@ -1,20 +1,30 @@
-<h2>Historial de Asistencias</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial por Aula</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Historial de Asistencias por Aula</h2>
 
 <div class="form-grid">
   <div>
-    <label>Fecha:</label>
-    <input type="date" id="fecha">
-  </div>
-
-  <div>
     <label>Aula:</label>
-    <select id="aulaSelect">
-      <option value="">Seleccionar aula</option>
+    <select id="filtroAula">
+      <option value="">Todas las aulas</option>
     </select>
   </div>
 
+  <div>
+    <label>Fecha:</label>
+    <input type="date" id="filtroFecha">
+  </div>
+
   <div style="align-self:end;">
-    <button id="filtrar">Buscar</button>
+    <button id="filtrar">Filtrar</button>
   </div>
 </div>
 
@@ -22,13 +32,14 @@
   <thead>
     <tr>
       <th>Fecha</th>
-      <th>Alumno</th>
       <th>Aula</th>
+      <th>Alumno</th>
       <th>Presente</th>
-      <th>Acción</th>
     </tr>
   </thead>
   <tbody></tbody>
 </table>
 
-<script type="module" src="historial-asistencia.js"></script>
+<script type="module" src="historial-por-aula.js"></script>
+</body>
+</html>
