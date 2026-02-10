@@ -215,7 +215,7 @@ export async function initAsistencia() {
     }
   };
 }
-// ================= HISTORIAL DE ASISTENCIAS =================
+/** // ================= HISTORIAL DE ASISTENCIAS =================
 export async function initHistorial() {
   const filtroAula = document.getElementById("filtroAula");
   const filtroFecha = document.getElementById("filtroFecha");
@@ -261,3 +261,4 @@ export async function initHistorial() {
   // ===== INICIAL =====
   cargarHistorial();
 }
+**/
