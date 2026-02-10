@@ -6,7 +6,7 @@ setTimeout(iniciar, 100);
 
 function iniciar() {
   const filtroFecha = document.getElementById("filtroFecha");
-  const filtroAula = document.getElementById("filtroAula");
+  const filtroAula = document.getElementById("aula");
   const filtrarBtn = document.getElementById("filtrar");
   const tablaHistorial = document.querySelector("#tablaHistorial tbody");
 
