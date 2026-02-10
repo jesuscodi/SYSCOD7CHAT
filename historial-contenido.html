@@ -1,41 +1,34 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Historial de Asistencias</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
+<h2>Historial de Asistencias</h2>
 
-<section class="main-content">
-  <h2>Historial de Asistencias</h2>
-
-  <div class="filtros">
+<div class="form-grid">
+  <div>
     <label>Fecha:</label>
     <input type="date" id="filtroFecha">
-    <label>Aula:</label>
-    <select id="aula">
-      <option value="">Todas las aulas</option>
-    </select>
-    <button id="filtrar"><i class="fa fa-filter"></i> Filtrar</button>
   </div>
 
-  <table id="tablaHistorial">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Alumno</th>
-        <th>Aula</th>
-        <th>Presente</th>
-        <th>Acción</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</section>
+  <div>
+    <label>Aula:</label>
+    <select id="filtroAula">
+      <option value="">Todas las aulas</option>
+    </select>
+  </div>
+
+  <div style="align-self:end;">
+    <button id="filtrar">Buscar</button>
+  </div>
+</div>
+
+<table id="tablaHistorial">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Alumno</th>
+      <th>Aula</th>
+      <th>Presente</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script type="module" src="historial-asistencia.js"></script>
-</body>
-</html>
