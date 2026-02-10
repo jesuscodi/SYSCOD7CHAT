@@ -1,40 +1,28 @@
 import { db } from "./firebase.js";
-import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ⛔ importante: esperar que el html cargue en el div dinámico
-setTimeout(inicializar, 200);
+// Esperar a que el HTML cargue
+setTimeout(() => {
 
-function inicializar() {
-
-  const filtroFecha = document.getElementById("filtroFecha");
-  const filtroAula = document.getElementById("filtroAula");
+  const fechaInput = document.getElementById("fecha");
+  const aulaSelect = document.getElementById("aulaSelect");
   const filtrarBtn = document.getElementById("filtrar");
   const tablaHistorial = document.querySelector("#tablaHistorial tbody");
 
-  if (!filtroAula) {
-    console.error("No existe filtroAula");
-    return;
-  }
+ let alumnosSeleccionados = [];
 
   // ================= CARGAR AULAS =================
-  async function cargarAulas() {
-    try {
-      filtroAula.innerHTML = '<option value="">Todas las aulas</option>';
+ async function cargarAulas() {
+    aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
+    const data = await getDocs(collection(db, "aulas"));
 
-      const data = await getDocs(collection(db, "aulas"));
-
-      if (data.empty) {
-        console.warn("No hay aulas registradas");
-        return;
-      }
-
-      data.forEach(a => {
-        filtroAula.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
-      });
-
-    } catch (error) {
-      console.error("Error cargando aulas:", error);
-    }
+    data.forEach(a => {
+      aulaSelect.innerHTML += `
+        <option value="${a.data().nombre}">
+          ${a.data().nombre}
+        </option>
+      `;
+    });
   }
 
   // ================= CARGAR HISTORIAL =================
@@ -46,9 +34,10 @@ function inicializar() {
     data.forEach(as => {
       const d = as.data();
 
+      // Filtrar por fecha y aula
       if (
-        (filtroFecha.value && d.fecha !== filtroFecha.value) ||
-        (filtroAula.value && d.aula !== filtroAula.value)
+        (fecha.value && d.fecha !== fecha.value) ||
+        (aulaSelect.value && d.aula !== aulaSelect.value)
       ) return;
 
       const tr = document.createElement("tr");
@@ -60,20 +49,24 @@ function inicializar() {
         <td><button>Actualizar</button></td>
       `;
 
+      // ================= ACTUALIZAR =================
       tr.querySelector("button").onclick = async () => {
         const presente = tr.querySelector("input").checked;
         await updateDoc(doc(db, "asistencias", as.id), { presente });
-        alert("Actualizado ✅");
+        alert("Registro actualizado ✅");
       };
 
       tablaHistorial.appendChild(tr);
     });
   }
 
+  // ================= EVENTOS =================
   filtrarBtn.onclick = cargarHistorial;
   filtroFecha.addEventListener("change", cargarHistorial);
   filtroAula.addEventListener("change", cargarHistorial);
 
+  // ================= INICIAL =================
   cargarAulas();
   cargarHistorial();
-}
+
+}, 100);
