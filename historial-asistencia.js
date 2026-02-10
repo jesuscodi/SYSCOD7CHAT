@@ -1,31 +1,19 @@
 import { db } from "./firebase.js";
 import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Esperar a que el HTML dinámico exista
-setTimeout(iniciar, 100);
+// Esperar que cargue el HTML
+setTimeout(() => {
 
-function iniciar() {
   const filtroFecha = document.getElementById("filtroFecha");
-  const filtroAula = document.getElementById("aula");
+  const filtroAula = document.getElementById("filtroAula");
   const filtrarBtn = document.getElementById("filtrar");
   const tablaHistorial = document.querySelector("#tablaHistorial tbody");
-
-  if (!filtroAula) {
-    console.error("No existe filtroAula");
-    return;
-  }
 
   // ================= CARGAR AULAS =================
   async function cargarAulas() {
     filtroAula.innerHTML = '<option value="">Todas las aulas</option>';
 
     const data = await getDocs(collection(db, "aulas"));
-
-    if (data.empty) {
-      console.warn("No hay aulas registradas");
-      return;
-    }
-
     data.forEach(a => {
       filtroAula.innerHTML += `
         <option value="${a.data().nombre}">
@@ -38,13 +26,17 @@ function iniciar() {
   // ================= CARGAR HISTORIAL =================
   async function cargarHistorial() {
     tablaHistorial.innerHTML = "";
+
     const data = await getDocs(collection(db, "asistencias"));
 
     data.forEach(as => {
       const d = as.data();
 
-      if ((filtroFecha.value && d.fecha !== filtroFecha.value) ||
-          (filtroAula.value && d.aula !== filtroAula.value)) return;
+      // aplicar filtros
+      if (
+        (filtroFecha.value && d.fecha !== filtroFecha.value) ||
+        (filtroAula.value && d.aula !== filtroAula.value)
+      ) return;
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -55,10 +47,11 @@ function iniciar() {
         <td><button>Actualizar</button></td>
       `;
 
+      // actualizar asistencia
       tr.querySelector("button").onclick = async () => {
         const presente = tr.querySelector("input").checked;
         await updateDoc(doc(db, "asistencias", as.id), { presente });
-        alert("Registro actualizado");
+        alert("Actualizado correctamente ✅");
       };
 
       tablaHistorial.appendChild(tr);
@@ -67,8 +60,11 @@ function iniciar() {
 
   // Eventos
   filtrarBtn.onclick = cargarHistorial;
+  filtroFecha.addEventListener("change", cargarHistorial);
+  filtroAula.addEventListener("change", cargarHistorial);
 
   // Inicial
   cargarAulas();
   cargarHistorial();
-}
+
+}, 100);
