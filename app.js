@@ -222,22 +222,23 @@ export async function initHistorial() {
   const filtrarBtn = document.getElementById("filtrar");
   const tablaHistorial = document.querySelector("#tablaHistorial tbody");
 
-  // Cargar aulas
-  async function cargarAulas() {
-    filtroAula.innerHTML = '<option value="">Todas las aulas</option>';
-    const aulasSnapshot = await getDocs(collection(db, "aulas"));
-    aulasSnapshot.forEach(aula => {
-      filtroAula.innerHTML += `<option value="${aula.data().nombre}">${aula.data().nombre}</option>`;
-    });
-  }
+  if (!filtroAula) return; // Salir si no existe el HTML
 
-  // Cargar historial
+  // ===== CARGAR AULAS =====
+  const dataAulas = await getDocs(collection(db, "aulas"));
+  filtroAula.innerHTML = '<option value="">Todas las aulas</option>';
+  dataAulas.forEach(a => {
+    filtroAula.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
+  });
+
+  // ===== CARGAR HISTORIAL =====
   async function cargarHistorial() {
     tablaHistorial.innerHTML = "";
-    const asistenciasSnapshot = await getDocs(collection(db, "asistencias"));
+    const dataAsistencias = await getDocs(collection(db, "asistencias"));
 
-    asistenciasSnapshot.forEach(asistencia => {
-      const d = asistencia.data();
+    dataAsistencias.forEach(docu => {
+      const d = docu.data();
+      // Filtrar por aula y fecha
       if ((filtroAula.value && d.aula !== filtroAula.value) ||
           (filtroFecha.value && d.fecha !== filtroFecha.value)) return;
 
@@ -252,12 +253,12 @@ export async function initHistorial() {
     });
   }
 
-  // Eventos
+  // ===== EVENTOS =====
   filtrarBtn.onclick = cargarHistorial;
   filtroAula.addEventListener("change", cargarHistorial);
   filtroFecha.addEventListener("change", cargarHistorial);
 
-  // Inicial
-  cargarAulas();
+  // ===== INICIAL =====
   cargarHistorial();
 }
+
