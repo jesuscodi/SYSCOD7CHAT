@@ -62,8 +62,8 @@ setTimeout(() => {
 
   // ================= EVENTOS =================
   filtrarBtn.onclick = cargarHistorial;
-  filtroFecha.addEventListener("change", cargarHistorial);
-  filtroAula.addEventListener("change", cargarHistorial);
+  fecha.addEventListener("change", cargarHistorial);
+  aulaSelect.addEventListener("change", cargarHistorial);
 
   // ================= INICIAL =================
   cargarAulas();
