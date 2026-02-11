@@ -149,6 +149,8 @@ export async function initAsistencia() {
   const aulaSelect = document.getElementById("aulaSelect");
   const cargarAlumnosBtn = document.getElementById("cargarAlumnos");
   const tablaAlumnos = document.querySelector("#tablaAlumnos tbody");
+  const guardarBtn = document.getElementById("guardarAsistencia"); // Botón único abajo
+  let alumnosFiltrados = [];
 
   if (!fechaInput) return;
 
@@ -159,18 +161,15 @@ export async function initAsistencia() {
     aulaSelect.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
   });
 
-  // Cargar alumnos
+  // Cargar alumnos al hacer click
   cargarAlumnosBtn.onclick = async () => {
     if (!fechaInput.value || !aulaSelect.value) {
       return alert("Seleccione fecha y aula");
     }
 
     tablaAlumnos.innerHTML = "";
-
     const alumnosData = await getDocs(collection(db, "alumnos"));
-    const alumnosFiltrados = alumnosData.docs.filter(
-      al => al.data().aula === aulaSelect.value
-    );
+    alumnosFiltrados = alumnosData.docs.filter(al => al.data().aula === aulaSelect.value);
 
     for (const al of alumnosFiltrados) {
       const idAsistencia = `${fechaInput.value}_${al.id}`;
@@ -185,36 +184,46 @@ export async function initAsistencia() {
         )
       );
 
-      let marcado = false;
-      if (existente.docs.length > 0) {
-        marcado = existente.docs[0].data().presente;
-      }
+      const marcado = existente.docs.length > 0 ? existente.docs[0].data().presente : false;
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${al.data().nombre}</td>
-        <td><input type="checkbox" ${marcado ? "checked" : ""}></td>
-        <td><button>Guardar</button></td>
+        <td><input type="checkbox" data-id="${al.id}" ${marcado ? "checked" : ""}></td>
       `;
-
-      tr.querySelector("button").onclick = async () => {
-        const presente = tr.querySelector("input").checked;
-
-        await setDoc(ref, {
-          alumno: al.id,
-          nombre: al.data().nombre,
-          aula: al.data().aula,
-          fecha: fechaInput.value,
-          presente
-        }, { merge: true });
-
-        alert("Asistencia guardada");
-      };
 
       tablaAlumnos.appendChild(tr);
     }
   };
+
+  // Guardar asistencia para todos los checkboxes con un solo botón
+  guardarBtn.onclick = async () => {
+    if (!fechaInput.value || !aulaSelect.value) {
+      return alert("Seleccione fecha y aula antes de guardar");
+    }
+
+    const checkboxes = tablaAlumnos.querySelectorAll("input[type=checkbox]");
+
+    for (const cb of checkboxes) {
+      const alumnoId = cb.dataset.id;
+      const alumno = alumnosFiltrados.find(a => a.id === alumnoId);
+      const presente = cb.checked;
+      const docId = `${fechaInput.value}_${alumnoId}`;
+
+      await setDoc(doc(db, "asistencias", docId), {
+        alumno: alumnoId,
+        nombre: alumno.data().nombre,
+        aula: aulaSelect.value,
+        fecha: fechaInput.value,
+        presente
+      }, { merge: true });
+    }
+
+    document.getElementById("mensaje").textContent = "✅ Asistencia registrada correctamente";
+  };
 }
+
+// ================= HISTORIAL =================
 export async function initHistorial() {
   await cargarAulasFiltro();
   await cargarHistorial();
