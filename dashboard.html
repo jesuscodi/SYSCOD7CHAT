@@ -25,32 +25,109 @@
   </nav>
 </header>
 
-<!-- Contenido principal -->
-<main class="main-content">
-  <!-- Dashboard inicial -->
-  <section class="cards" id="dashboard-cards">
-    <div class="card card-aulas">
-      <i class="fa fa-chalkboard card-icon"></i>
-      <div class="card-info">
-        <h3>Aulas</h3>
-        <p id="totalAulas">0</p>
-      </div>
+<!-- <!-- Contenido principal -->
+<!-- Dashboard Cards -->
+<section class="cards" id="dashboard-cards">
+  <div class="card card-aulas">
+    <i class="fa fa-chalkboard card-icon"></i>
+    <div class="card-info">
+      <h3>Aulas</h3>
+      <p id="totalAulas">0</p>
     </div>
-    <div class="card card-alumnos">
-      <i class="fa fa-user-graduate card-icon"></i>
-      <div class="card-info">
-        <h3>Alumnos</h3>
-        <p id="totalAlumnos">0</p>
-      </div>
+  </div>
+  <div class="card card-alumnos">
+    <i class="fa fa-user-graduate card-icon"></i>
+    <div class="card-info">
+      <h3>Alumnos</h3>
+      <p id="totalAlumnos">0</p>
     </div>
-    <div class="card card-asistencias">
-      <i class="fa fa-clipboard-list card-icon"></i>
-      <div class="card-info">
-        <h3>Asistencias Hoy</h3>
-        <p id="asistenciasHoy">0</p>
-      </div>
+  </div>
+  <div class="card card-asistencias">
+    <i class="fa fa-clipboard-list card-icon"></i>
+    <div class="card-info">
+      <h3>Asistencias Hoy</h3>
+      <p id="asistenciasHoy">0</p>
     </div>
-  </section>
+  </div>
+</section>
+
+<style>
+/* Dashboard Cards */
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.card {
+  flex: 1;
+  min-width: 200px;
+  background: #fff3e0;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  color: #ff6f61;
+}
+
+.card-info h3 {
+  margin: 0;
+  color: #ff6f61;
+  font-size: 1.2rem;
+}
+
+.card-info p {
+  margin: 5px 0 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffb347;
+}
+
+/* Diferentes colores de tarjetas si quieres */
+.card-aulas .card-icon { color: #ff6f61; }
+.card-alumnos .card-icon { color: #ff9f43; }
+.card-asistencias .card-icon { color: #6a11cb; } /* un color morado para diferenciar */
+</style>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function cargarDashboard() {
+  // Total Alumnos
+  const alumnosSnap = await getDocs(collection(db, "alumnos"));
+  document.getElementById("totalAlumnos").textContent = alumnosSnap.size;
+
+  // Total Aulas
+  const aulasSnap = await getDocs(collection(db, "aulas"));
+  document.getElementById("totalAulas").textContent = aulasSnap.size;
+
+  // Asistencias de hoy
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const fechaHoy = `${yyyy}-${mm}-${dd}`;
+
+  const asistenciasSnap = await getDocs(query(collection(db, "asistencias"), where("fecha", "==", fechaHoy)));
+  document.getElementById("asistenciasHoy").textContent = asistenciasSnap.size;
+}
+
+cargarDashboard();
+</script>
 
   <!-- Contenido dinámico -->
   <section id="dynamic-content" style="display:none; margin-top:30px;">
