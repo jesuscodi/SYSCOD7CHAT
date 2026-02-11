@@ -227,6 +227,32 @@ export async function initAsistencia() {
 export async function initHistorial() {
   await cargarAulasFiltro();
   await cargarHistorial();
+// --- Botón descargar Excel ---
+const btnDescargar = document.getElementById("descargarExcel");
+if (btnDescargar) {
+  btnDescargar.onclick = () => {
+    const tbody = document.querySelector("#tablaHistorial tbody");
+    if (!tbody) return alert("No hay datos para descargar");
+
+    let csv = "Fecha,Aula,Alumno,Presente\n";
+    tbody.querySelectorAll("tr").forEach(tr => {
+      const cols = tr.querySelectorAll("td");
+      const row = [
+        cols[0].innerText,
+        cols[1].innerText,
+        cols[2].innerText,
+        cols[3].innerText
+      ].join(",");
+      csv += row + "\n";
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `historial_asistencias_${Date.now()}.csv`;
+    link.click();
+  };
+}
 
   const btnFiltrar = document.getElementById("filtrar");
   if (btnFiltrar) {
