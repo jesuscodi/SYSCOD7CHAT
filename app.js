@@ -215,49 +215,68 @@ export async function initAsistencia() {
     }
   };
 }
-/*// ================= HISTORIAL DE ASISTENCIAS =================
 export async function initHistorial() {
-  const filtroAula = document.getElementById("filtroAula");
-  const filtroFecha = document.getElementById("filtroFecha");
-  const filtrarBtn = document.getElementById("filtrar");
-  const tablaHistorial = document.querySelector("#tablaHistorial tbody");
+  await cargarAulasFiltro();
+  await cargarHistorial();
 
-  if (!filtroAula) return; // Salir si no existe el HTML
+  const btnFiltrar = document.getElementById("filtrar");
+  if (btnFiltrar) {
+    btnFiltrar.onclick = async () => {
+      await cargarHistorial();
+    };
+  }
+}
 
-  // ===== CARGAR AULAS =====
-  const dataAulas = await getDocs(collection(db, "aulas"));
-  filtroAula.innerHTML = '<option value="">Todas las aulas</option>';
-  dataAulas.forEach(a => {
-    filtroAula.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
+// Cargar aulas en el select
+async function cargarAulasFiltro() {
+  const select = document.getElementById("filtroAula");
+  if (!select) return;
+
+  select.innerHTML = `<option value="">Todas las aulas</option>`;
+
+  const data = await getDocs(collection(db, "aulas"));
+  data.forEach(a => {
+    select.innerHTML += `<option value="${a.data().nombre}">${a.data().nombre}</option>`;
   });
+}
 
-  // ===== CARGAR HISTORIAL =====
-  async function cargarHistorial() {
-    tablaHistorial.innerHTML = "";
-    const dataAsistencias = await getDocs(collection(db, "asistencias"));
+// Cargar historial
+async function cargarHistorial() {
+  const tbody = document.querySelector("#tablaHistorial tbody");
+  if (!tbody) return;
 
-    dataAsistencias.forEach(docu => {
-      const d = docu.data();
-      // Filtrar por aula y fecha
-      if ((filtroAula.value && d.aula !== filtroAula.value) ||
-          (filtroFecha.value && d.fecha !== filtroFecha.value)) return;
+  tbody.innerHTML = "";
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${d.fecha}</td>
-        <td>${d.aula}</td>
-        <td>${d.nombre}</td>
-        <td>${d.presente ? "✅ Presente" : "❌ Ausente"}</td>
-      `;
-      tablaHistorial.appendChild(tr);
-    });
+  const aula = document.getElementById("filtroAula")?.value || "";
+  const fecha = document.getElementById("filtroFecha")?.value || "";
+
+  let ref = collection(db, "asistencias");
+  let q = ref;
+
+  // aplicar filtros dinámicos
+  if (aula && fecha) {
+    q = query(ref, where("aula", "==", aula), where("fecha", "==", fecha));
+  } else if (aula) {
+    q = query(ref, where("aula", "==", aula));
+  } else if (fecha) {
+    q = query(ref, where("fecha", "==", fecha));
   }
 
-  // ===== EVENTOS =====
-  filtrarBtn.onclick = cargarHistorial;
-  filtroAula.addEventListener("change", cargarHistorial);
-  filtroFecha.addEventListener("change", cargarHistorial);
+  const data = await getDocs(q);
 
-  // ===== INICIAL =====
-  cargarHistorial();
-}*/
+  if (data.empty) {
+    tbody.innerHTML = `<tr><td colspan="4">No hay registros</td></tr>`;
+    return;
+  }
+
+  data.forEach(as => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${as.data().fecha}</td>
+      <td>${as.data().aula}</td>
+      <td>${as.data().nombre}</td>
+      <td>${as.data().presente ? "✅" : "❌"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
