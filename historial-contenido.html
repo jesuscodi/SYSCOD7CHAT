@@ -33,6 +33,7 @@
 </div>
 
 <style>
+/* Contenedor general */
 .historial-container {
   width: 100%;
   max-width: 1000px;
@@ -40,6 +41,13 @@
   padding: 20px;
 }
 
+/* Título */
+.historial-container h2 {
+  color: #ff6f61;
+  margin-bottom: 20px;
+}
+
+/* Flex para filtros */
 .historial-filtro {
   display: flex;
   gap: 20px;
@@ -47,40 +55,58 @@
   margin-bottom: 20px;
 }
 
+/* Labels */
 .historial-filtro label {
   font-weight: bold;
-  margin-right: 5px;
+  margin-bottom: 5px;
+  display: block;
 }
 
+/* Inputs, selects y botones */
 .historial-filtro select,
 .historial-filtro input,
 .historial-filtro button {
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #ffb347;
+  outline: none;
+  transition: 0.3s;
 }
 
+.historial-filtro select:focus,
+.historial-filtro input:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 6px rgba(255,111,97,0.3);
+}
+
+/* Botón filtrar */
 .historial-filtro button {
   background: linear-gradient(90deg, #ff6f61, #ffb347);
   color: white;
   font-weight: bold;
   cursor: pointer;
   border: none;
+  transition: transform 0.3s;
 }
 
 .historial-filtro button:hover {
-  opacity: 0.9;
+  transform: scale(1.05);
 }
 
+/* Tabla */
 #tablaHistorial {
   width: 100%;
   border-collapse: collapse;
+  background: #fff3e0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
+/* Encabezados */
 #tablaHistorial th, #tablaHistorial td {
   padding: 10px;
-  border-bottom: 1px solid #ccc;
   text-align: left;
+  border-bottom: 1px solid #ffdab9;
 }
 
 #tablaHistorial th {
@@ -88,7 +114,19 @@
   color: white;
 }
 
+/* Filas alternadas y hover */
 #tablaHistorial tr:nth-child(even) {
-  background: #fff3e0;
+  background: #ffeace;
+}
+
+#tablaHistorial tr:hover {
+  background: #ffd8b2;
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+  .historial-filtro {
+    flex-direction: column;
+  }
 }
 </style>
