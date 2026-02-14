@@ -22,7 +22,8 @@ export async function initAlumnos() {
   const listaAlumnos = document.querySelector("#listaAlumnos tbody");
 
   let editId = null;
-// Cargar aulas en select
+
+  // Cargar aulas en select
   async function cargarAulas() {
     const data = await getDocs(collection(db, "aulas"));
     aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
@@ -31,37 +32,44 @@ export async function initAlumnos() {
     });
   }
 
+  // Guardar alumno (nuevo o editar)
   guardarBtn.onclick = async () => {
-    if(!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) 
-      return alert("Complete todos los campos");// ✅ Validar fecha
+    // ✅ Validación de todos los campos, incluida fechaNacimiento
+    if (!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) {
+      return alert("Complete todos los campos");
+    }
 
-    if(editId) {
-      // ✅ Actualizar incluyendo fechaNacimiento
+    if (editId) {
+      // ✅ Actualizar alumno incluyendo fechaNacimiento
       await updateDoc(doc(db, "alumnos", editId), {
         nombre: nombre.value,
         edad: parseInt(edad.value),
         aula: aulaSelect.value,
-        fechaNacimiento: fechaNacimiento.value
+        fechaNacimiento: fechaNacimiento.value // ✅ agregado
       });
       editId = null;
       guardarBtn.textContent = "Guardar";
+      alert("Alumno actualizado correctamente");
     } else {
-       // ✅ Guardar incluyendo fechaNacimiento
+      // ✅ Crear nuevo alumno incluyendo fechaNacimiento
       await addDoc(collection(db, "alumnos"), {
         nombre: nombre.value,
         edad: parseInt(edad.value),
         aula: aulaSelect.value,
-        fechaNacimiento: fechaNacimiento.value
+        fechaNacimiento: fechaNacimiento.value // ✅ agregado
       });
+      alert("Alumno registrado correctamente");
     }
-  // Limpiar campos
+
+    // Limpiar campos
     nombre.value = "";
     edad.value = "";
     aulaSelect.value = "";
-    fechaNacimiento.value = ""; // ✅ Limpiar fecha
+    fechaNacimiento.value = ""; // ✅ limpiar fecha
     cargarAlumnos();
   };
 
+  // Cargar alumnos en la tabla
   async function cargarAlumnos() {
     listaAlumnos.innerHTML = "";
     const data = await getDocs(collection(db, "alumnos"));
@@ -71,35 +79,40 @@ export async function initAlumnos() {
         <td>${docu.data().nombre}</td>
         <td>${docu.data().edad}</td>
         <td>${docu.data().aula}</td>
-        <td>${docu.data().fechaNacimiento || ""}</td> <!-- ✅ Mostrar fecha en tabla -->
+        <td>${docu.data().fechaNacimiento || ""}</td> <!-- ✅ mostrar fecha -->
         <td>
           <button class="editar">Editar</button>
           <button class="eliminar">Eliminar</button>
         </td>
       `;
-      // Editar
+
+      // Editar alumno
       tr.querySelector(".editar").onclick = () => {
         nombre.value = docu.data().nombre;
         edad.value = docu.data().edad;
         aulaSelect.value = docu.data().aula;
-         fechaNacimiento.value = docu.data().fechaNacimiento || ""; // ✅ Llenar fecha al editar
+        fechaNacimiento.value = docu.data().fechaNacimiento || ""; // ✅ llenar fecha al editar
         editId = docu.id;
         guardarBtn.textContent = "Actualizar";
       };
-       // Eliminar
+
+      // Eliminar alumno
       tr.querySelector(".eliminar").onclick = async () => {
-        if(confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
+        if (confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
           await deleteDoc(doc(db, "alumnos", docu.id));
           cargarAlumnos();
         }
       };
+
       listaAlumnos.appendChild(tr);
     });
   }
 
+  // Inicial
   await cargarAulas();
   await cargarAlumnos();
 }
+
 
 // ================= AULAS =================
 export async function initAulas() {
