@@ -24,8 +24,8 @@
             <th>Nombre</th>
             <th>Edad</th>
             <th>Aula</th>
-            <th>Acciones</th>
             <th>Fecha Nac.</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -41,6 +41,8 @@ import { collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://
 const nombre = document.getElementById("nombre");
 const edad = document.getElementById("edad");
 const aulaSelect = document.getElementById("aula");
+  // NUEVO: Agregado fechaNacimiento
+const fechaNacimiento = document.getElementById("fechaNacimiento");
 const guardarBtn = document.getElementById("guardar");
 const listaAlumnos = document.querySelector("#listaAlumnos tbody");
 
@@ -57,13 +59,15 @@ async function cargarAulas() {
 
 // Guardar alumno (nuevo o editar)
 guardarBtn.onclick = async () => {
-  if(!nombre.value.trim() || !edad.value || !aulaSelect.value) return alert("Complete todos los campos");
+  if(!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value)
+    return alert("Complete todos los campos");
 
   if(editId) {
     await updateDoc(doc(db, "alumnos", editId), {
       nombre: nombre.value,
       edad: parseInt(edad.value),
       aula: aulaSelect.value
+      fechaNacimiento : fechaNacimiento.value  // NUEVO: actualizar fecha al editar
     });
     editId = null;
     guardarBtn.textContent = "Guardar";
@@ -77,10 +81,11 @@ guardarBtn.onclick = async () => {
     });
     alert("Alumno registrado");
   }
-
+ // Limpiar campos
   nombre.value = "";
   edad.value = "";
   aulaSelect.value = "";
+  fechaNacimiento.value = ""; // NUEVO: limpiar input fecha
   cargarAlumnos();
 };
 
@@ -94,6 +99,7 @@ async function cargarAlumnos() {
       <td>${docu.data().nombre}</td>
       <td>${docu.data().edad}</td>
       <td>${docu.data().aula}</td>
+       
       <td>${docu.data().fechaNacimiento || '-'}</td> <!-- nuevo campo -->
       <td>
         <button class="editar">Editar</button>
