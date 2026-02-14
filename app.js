@@ -33,26 +33,27 @@ export async function initAlumnos() {
   }
 
   // Guardar alumno (nuevo o editar)
-  guardarBtn.onclick = async () => {
+ guardarBtn.onclick = async () => {
   if (!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) {
     return alert("Complete todos los campos");
   }
 
-  // ✅ Calcular edad real desde fecha de nacimiento
+  // ✅ Convertir correctamente la fecha de nacimiento
+  const nacimientoParts = fechaNacimiento.value.split("-"); // "YYYY-MM-DD"
+  const nacimiento = new Date(nacimientoParts[0], nacimientoParts[1] - 1, nacimientoParts[2]);
+
   const hoy = new Date();
-  const nacimiento = new Date(fechaNacimiento.value);
   let edadCalculada = hoy.getFullYear() - nacimiento.getFullYear();
   const mesDiff = hoy.getMonth() - nacimiento.getMonth();
   const diaDiff = hoy.getDate() - nacimiento.getDate();
-  
-  // Ajustar si el cumpleaños aún no pasó este año
+
   if (mesDiff < 0 || (mesDiff === 0 && diaDiff < 0)) {
     edadCalculada--;
   }
 
   // ✅ Validar que la edad ingresada coincida
   if (parseInt(edad.value) !== edadCalculada) {
-    return alert(`La edad ingresada no coincide con la fecha de nacimiento. Edad correcta: ${edadCalculada}`);
+    return alert(`❌ La edad ingresada no coincide con la fecha de nacimiento.\nEdad correcta: ${edadCalculada}`);
   }
 
   if (editId) {
@@ -64,7 +65,7 @@ export async function initAlumnos() {
     });
     editId = null;
     guardarBtn.textContent = "Guardar";
-    alert("Alumno actualizado correctamente");
+    alert("✅ Alumno actualizado correctamente");
   } else {
     await addDoc(collection(db, "alumnos"), {
       nombre: nombre.value,
@@ -72,15 +73,17 @@ export async function initAlumnos() {
       aula: aulaSelect.value,
       fechaNacimiento: fechaNacimiento.value
     });
-    alert("Alumno registrado correctamente");
+    alert("✅ Alumno registrado correctamente");
   }
 
+  // Limpiar campos
   nombre.value = "";
   edad.value = "";
   aulaSelect.value = "";
   fechaNacimiento.value = "";
   cargarAlumnos();
 };
+
 
 
   // Cargar alumnos en la tabla
