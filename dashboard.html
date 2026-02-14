@@ -26,6 +26,18 @@
 </header>
 
 <!-- <!-- Contenido principal -->
+  <!-- Slider de imágenes -->
+<section class="slider" id="dashboard-slider">
+  <img src="images/nino1.png" alt="Imagen 1">
+  <img src="images/nino2.png" alt="Imagen 2">
+  <img src="images/nino3.png" alt="Imagen 3">
+  <img src="images/nino4.png" alt="Imagen 4">
+  <img src="images/nino5.png" alt="Imagen 5">
+  <img src="images/nino6.png" alt="Imagen 6">
+  <img src="images/nino7.png" alt="Imagen 7">
+  
+</section>
+
 <!-- Dashboard Cards -->
 <section class="cards" id="dashboard-cards">
   <div class="card card-aulas">
@@ -52,7 +64,26 @@
 </section>
 
 <style>
+  /* Slider de imágenes */
+.slider {
+  position: relative;
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+.slider img {
+  width: 100%;
+  display: none; /* Oculto por defecto */
+  object-fit: cover;
+  border-radius: 20px;
+  transition: opacity 1s ease-in-out;
+}
+
 /* Dashboard Cards */
+  
 .cards {
   display: flex;
   gap: 20px;
@@ -193,6 +224,27 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
 document.getElementById("menu-toggle").onclick = () => {
   document.getElementById("nav-links").classList.toggle('active');
 };
+
+// Slider Dashboard
+const slides = document.querySelectorAll('#dashboard-slider img');
+let currentSlide = 0;
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.style.display = i === index ? 'block' : 'none';
+  });
+}
+
+// Mostrar la primera imagen
+showSlide(currentSlide);
+
+// Cambiar cada 3 segundos
+setInterval(() => {
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
+}, 3000);
+
+  
 </script>
 
 </body>
