@@ -50,123 +50,67 @@
   </div>
 </section>
 
-<!-- Cinta de fotos tipo filmstrip -->
+<!-- Cinta de fotos -->
 <div class="filmstrip" id="dashboard-filmstrip">
   <div class="filmstrip-track">
-    <img src="img/nino1.jpg" alt="Imagen 1">
-    <img src="img/nino2.jpg" alt="Imagen 2">
-    <img src="img/nino3.jpg" alt="Imagen 3">
-    <img src="img/nino4.jpg" alt="Imagen 4">
-    <img src="img/nino5.jpg" alt="Imagen 5">
-    <img src="img/nino6.jpg" alt="Imagen 6">
-    <img src="img/nino7.jpg" alt="Imagen 7">
+    <img src="img/nino1.jpg">
+    <img src="img/nino2.jpg">
+    <img src="img/nino3.jpg">
+    <img src="img/nino4.jpg">
+    <img src="img/nino5.jpg">
+    <img src="img/nino6.jpg">
+    <img src="img/nino7.jpg">
   </div>
 </div>
 
-<!-- Cumpleaños del Mes -->
-<!-- Cumpleaños del Mes -->
+<!-- Cumpleaños -->
 <section id="cumple-mes" style="margin-top: 30px;">
   <h2>🎉 Cumpleaños del Mes</h2>
-
-  <!-- SOLO TARJETAS -->
   <div id="cumpleMesContainer" class="cumple-grid"></div>
 </section>
 
-
 <style>
-
 .cumple-grid{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
 .cumple-card{
-  width: 160px;
-  background: #fff3e0;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  text-align: center;
-  font-size: 14px;
+  width:160px;
+  background:#fff3e0;
+  border-radius:12px;
+  padding:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  text-align:center;
+  font-size:14px;
 }
 
 .cumple-card h3{
-  margin: 5px 0;
-  font-size: 15px;
-  color: #ff6f61;
+  margin:5px 0;
+  font-size:15px;
+  color:#ff6f61;
 }
 
+/* filmstrip */
+.filmstrip{width:100%;overflow:hidden;border-radius:15px;margin-top:30px;background:#f5f5f5;}
+.filmstrip-track{display:flex;gap:10px;animation:scroll 20s linear infinite;}
+.filmstrip-track img{width:200px;height:120px;object-fit:cover;border-radius:10px;}
+@keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
-
-  /* Slider de imágenes */
-  .filmstrip {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 15px;
-    margin-top: 30px;
-    background: #f5f5f5;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-
-  .filmstrip-track {
-    display: flex;
-    gap: 10px;
-    animation: scroll 20s linear infinite;
-  }
-
-  .filmstrip-track img {
-    width: 200px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* Dashboard Cards */
-  .cards {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-  }
-
-  .card {
-    flex: 1;
-    min-width: 200px;
-    background: #fff3e0;
-    border-radius: 15px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  }
-
-  .card-icon { font-size: 2.5rem; }
-  .card-info h3 { margin:0; color:#ff6f61; font-size:1.2rem; }
-  .card-info p { margin:5px 0 0; font-size:1.5rem; font-weight:bold; color:#ffb347; }
-
-  .card-aulas .card-icon { color: #ff6f61; }
-  .card-alumnos .card-icon { color: #ff9f43; }
-  .card-asistencias .card-icon { color: #6a11cb; }
+/* cards */
+.cards{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:30px;}
+.card{flex:1;min-width:200px;background:#fff3e0;border-radius:15px;padding:20px;display:flex;align-items:center;gap:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+.card-icon{font-size:2.5rem;}
+.card-info h3{margin:0;color:#ff6f61;font-size:1.2rem;}
+.card-info p{margin:5px 0 0;font-size:1.5rem;font-weight:bold;color:#ffb347;}
 </style>
 
+<!-- 🔥 SCRIPT PRINCIPAL -->
 <script type="module">
 import { db } from "./firebase.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Dashboard
 async function cargarDashboard() {
   const alumnosSnap = await getDocs(collection(db, "alumnos"));
   document.getElementById("totalAlumnos").textContent = alumnosSnap.size;
@@ -176,115 +120,97 @@ async function cargarDashboard() {
 
   const today = new Date();
   const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2,'0');
+  const mm = String(today.getMonth()+1).padStart(2,'0');
   const dd = String(today.getDate()).padStart(2,'0');
   const fechaHoy = `${yyyy}-${mm}-${dd}`;
 
-  const asistenciasSnap = await getDocs(query(collection(db, "asistencias"), where("fecha", "==", fechaHoy)));
+  const asistenciasSnap = await getDocs(query(collection(db,"asistencias"),where("fecha","==",fechaHoy)));
   document.getElementById("asistenciasHoy").textContent = asistenciasSnap.size;
 }
 
-cargarDashboard();
-
-// Cumpleaños del Mes
-async function cargarCumpleMes() {
+async function cargarCumpleMes(){
   const container = document.getElementById("cumpleMesContainer");
   container.innerHTML = "";
 
-  const alumnosSnap = await getDocs(collection(db, "alumnos"));
+  const alumnosSnap = await getDocs(collection(db,"alumnos"));
   const today = new Date();
-  const mesActual = today.getMonth() + 1;
+  const mesActual = today.getMonth()+1;
   const anioActual = today.getFullYear();
 
-  const cumpleaneros = alumnosSnap.docs.filter(al => {
-    const fecha = al.data().fechaNacimiento;
-    if (!fecha) return false;
-    const mes = parseInt(fecha.split("-")[1]);
-    return mes === mesActual;
-  });
+  alumnosSnap.forEach(docu=>{
+    const data = docu.data();
+    if(!data.fechaNacimiento) return;
 
-  if (cumpleaneros.length === 0) {
-    container.innerHTML = "<p>No hay cumpleaños este mes 🎉</p>";
-    return;
-  }
+    const mes = parseInt(data.fechaNacimiento.split("-")[1]);
+    if(mes !== mesActual) return;
 
-  cumpleaneros.forEach(al => {
-    const data = al.data();
-    const fechaObj = new Date(data.fechaNacimiento);
-
-    // 🔥 EDAD QUE CUMPLE ESTE AÑO
-    const edadCumple = anioActual - fechaObj.getFullYear();
+    const edad = anioActual - new Date(data.fechaNacimiento).getFullYear();
 
     const card = document.createElement("div");
-    card.classList.add("cumple-card");
-    card.innerHTML = `
+    card.className="cumple-card";
+    card.innerHTML=`
       <h3>${data.nombre}</h3>
-      <p>${edadCumple} años</p>
+      <p>${edad} años</p>
       <small>${data.aula}</small>
     `;
     container.appendChild(card);
   });
+
+  if(container.innerHTML===""){
+    container.innerHTML="<p>No hay cumpleaños este mes 🎉</p>";
+  }
 }
 
+// 🔥🔥 LLAMADAS IMPORTANTES
+cargarDashboard();
+cargarCumpleMes();
 </script>
 
 <!-- Contenido dinámico -->
-<section id="dynamic-content" style="display:none; margin-top:30px;">
-  <!-- Aquí se carga el contenido de cada sección -->
-</section>
+<section id="dynamic-content" style="display:none;margin-top:30px;"></section>
 
 <script type="module">
-import { loadContent, initAlumnos, initAulas, initAsistencia, initHistorial } from "./app.js";
+import { initAlumnos, initAulas, initAsistencia, initHistorial } from "./app.js";
 
 // Logout
-document.getElementById("logout").onclick = () => {
+document.getElementById("logout").onclick=()=>{
   localStorage.removeItem("usuario");
-  window.location.href = "index.html";
+  window.location.href="index.html";
 };
 
-// Verificar login
-if (!localStorage.getItem("usuario")) window.location.href = "index.html";
+if(!localStorage.getItem("usuario")) window.location.href="index.html";
 
-// Inicialización de cards
-document.getElementById("totalAulas").innerText = 0;
-document.getElementById("totalAlumnos").innerText = 0;
-document.getElementById("asistenciasHoy").innerText = 0;
+// Menú
+document.querySelectorAll('.menu-btn').forEach(btn=>{
+  btn.onclick=async()=>{
+    const section=btn.getAttribute('data-section');
 
-// Manejar clic en menú
-document.querySelectorAll('.menu-btn').forEach(btn => {
-  btn.onclick = async () => {
-    const section = btn.getAttribute('data-section');
-    if(section === 'dashboard'){
-      document.getElementById("dashboard-cards").style.display = 'flex';
-      document.getElementById("dashboard-filmstrip").style.display = 'flex';
-      document.getElementById("dynamic-content").style.display = 'none';
-    } else {
-      document.getElementById("dashboard-cards").style.display = 'none';
-      document.getElementById("dashboard-filmstrip").style.display = 'none';
-      const dynamicContent = document.getElementById("dynamic-content");
-      dynamicContent.style.display = 'block';
-      try {
-        const response = await fetch(`${section}-contenido.html`);
-        if(response.ok){
-          const html = await response.text();
-          dynamicContent.innerHTML = html;
-          if(section === "alumnos") await initAlumnos();
-          if(section === "aulas") await initAulas();
-          if(section === "asistencia") await initAsistencia();
-          if(section === "historial") await initHistorial();
-        } else {
-          dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
-        }
-      } catch(error) {
-        dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
-      }
+    if(section==='dashboard'){
+      document.getElementById("dashboard-cards").style.display='flex';
+      document.getElementById("dashboard-filmstrip").style.display='flex';
+      document.getElementById("cumple-mes").style.display='block';
+      document.getElementById("dynamic-content").style.display='none';
+    }else{
+      document.getElementById("dashboard-cards").style.display='none';
+      document.getElementById("dashboard-filmstrip").style.display='none';
+      document.getElementById("cumple-mes").style.display='none';
+      const dynamicContent=document.getElementById("dynamic-content");
+      dynamicContent.style.display='block';
+
+      const response=await fetch(`${section}-contenido.html`);
+      const html=await response.text();
+      dynamicContent.innerHTML=html;
+
+      if(section==="alumnos") await initAlumnos();
+      if(section==="aulas") await initAulas();
+      if(section==="asistencia") await initAsistencia();
+      if(section==="historial") await initHistorial();
     }
-    if(window.innerWidth <= 768) document.getElementById("nav-links").classList.remove('active');
   };
 });
 
-// Toggle menú móvil
-document.getElementById("menu-toggle").onclick = () => {
+// móvil
+document.getElementById("menu-toggle").onclick=()=>{
   document.getElementById("nav-links").classList.toggle('active');
 };
 </script>
