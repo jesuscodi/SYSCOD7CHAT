@@ -17,11 +17,12 @@ export async function initAlumnos() {
   const nombre = document.getElementById("nombre");
   const edad = document.getElementById("edad");
   const aulaSelect = document.getElementById("aula");
+  const fechaNacimiento = document.getElementById("fechaNacimiento"); // ✅ Añadido input fecha
   const guardarBtn = document.getElementById("guardar");
   const listaAlumnos = document.querySelector("#listaAlumnos tbody");
 
   let editId = null;
-
+// Cargar aulas en select
   async function cargarAulas() {
     const data = await getDocs(collection(db, "aulas"));
     aulaSelect.innerHTML = '<option value="">Seleccionar aula</option>';
@@ -31,27 +32,33 @@ export async function initAlumnos() {
   }
 
   guardarBtn.onclick = async () => {
-    if(!nombre.value.trim() || !edad.value || !aulaSelect.value) return alert("Complete todos los campos");
+    if(!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) 
+      return alert("Complete todos los campos");// ✅ Validar fecha
 
     if(editId) {
+      // ✅ Actualizar incluyendo fechaNacimiento
       await updateDoc(doc(db, "alumnos", editId), {
         nombre: nombre.value,
         edad: parseInt(edad.value),
-        aula: aulaSelect.value
+        aula: aulaSelect.value,
+        fechaNacimiento: fechaNacimiento.value
       });
       editId = null;
       guardarBtn.textContent = "Guardar";
     } else {
+       // ✅ Guardar incluyendo fechaNacimiento
       await addDoc(collection(db, "alumnos"), {
         nombre: nombre.value,
         edad: parseInt(edad.value),
-        aula: aulaSelect.value
+        aula: aulaSelect.value,
+        fechaNacimiento: fechaNacimiento.value
       });
     }
-
+  // Limpiar campos
     nombre.value = "";
     edad.value = "";
     aulaSelect.value = "";
+    fechaNacimiento.value = ""; // ✅ Limpiar fecha
     cargarAlumnos();
   };
 
@@ -64,18 +71,22 @@ export async function initAlumnos() {
         <td>${docu.data().nombre}</td>
         <td>${docu.data().edad}</td>
         <td>${docu.data().aula}</td>
+        <td>${docu.data().fechaNacimiento || ""}</td> <!-- ✅ Mostrar fecha en tabla -->
         <td>
           <button class="editar">Editar</button>
           <button class="eliminar">Eliminar</button>
         </td>
       `;
+      // Editar
       tr.querySelector(".editar").onclick = () => {
         nombre.value = docu.data().nombre;
         edad.value = docu.data().edad;
         aulaSelect.value = docu.data().aula;
+         fechaNacimiento.value = docu.data().fechaNacimiento || ""; // ✅ Llenar fecha al editar
         editId = docu.id;
         guardarBtn.textContent = "Actualizar";
       };
+       // Eliminar
       tr.querySelector(".eliminar").onclick = async () => {
         if(confirm(`¿Eliminar a ${docu.data().nombre}?`)) {
           await deleteDoc(doc(db, "alumnos", docu.id));
