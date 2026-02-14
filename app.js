@@ -34,40 +34,54 @@ export async function initAlumnos() {
 
   // Guardar alumno (nuevo o editar)
   guardarBtn.onclick = async () => {
-    // ✅ Validación de todos los campos, incluida fechaNacimiento
-    if (!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) {
-      return alert("Complete todos los campos");
-    }
+  if (!nombre.value.trim() || !edad.value || !aulaSelect.value || !fechaNacimiento.value) {
+    return alert("Complete todos los campos");
+  }
 
-    if (editId) {
-      // ✅ Actualizar alumno incluyendo fechaNacimiento
-      await updateDoc(doc(db, "alumnos", editId), {
-        nombre: nombre.value,
-        edad: parseInt(edad.value),
-        aula: aulaSelect.value,
-        fechaNacimiento: fechaNacimiento.value // ✅ agregado
-      });
-      editId = null;
-      guardarBtn.textContent = "Guardar";
-      alert("Alumno actualizado correctamente");
-    } else {
-      // ✅ Crear nuevo alumno incluyendo fechaNacimiento
-      await addDoc(collection(db, "alumnos"), {
-        nombre: nombre.value,
-        edad: parseInt(edad.value),
-        aula: aulaSelect.value,
-        fechaNacimiento: fechaNacimiento.value // ✅ agregado
-      });
-      alert("Alumno registrado correctamente");
-    }
+  // ✅ Calcular edad real desde fecha de nacimiento
+  const hoy = new Date();
+  const nacimiento = new Date(fechaNacimiento.value);
+  let edadCalculada = hoy.getFullYear() - nacimiento.getFullYear();
+  const mesDiff = hoy.getMonth() - nacimiento.getMonth();
+  const diaDiff = hoy.getDate() - nacimiento.getDate();
+  
+  // Ajustar si el cumpleaños aún no pasó este año
+  if (mesDiff < 0 || (mesDiff === 0 && diaDiff < 0)) {
+    edadCalculada--;
+  }
 
-    // Limpiar campos
-    nombre.value = "";
-    edad.value = "";
-    aulaSelect.value = "";
-    fechaNacimiento.value = ""; // ✅ limpiar fecha
-    cargarAlumnos();
-  };
+  // ✅ Validar que la edad ingresada coincida
+  if (parseInt(edad.value) !== edadCalculada) {
+    return alert(`La edad ingresada no coincide con la fecha de nacimiento. Edad correcta: ${edadCalculada}`);
+  }
+
+  if (editId) {
+    await updateDoc(doc(db, "alumnos", editId), {
+      nombre: nombre.value,
+      edad: parseInt(edad.value),
+      aula: aulaSelect.value,
+      fechaNacimiento: fechaNacimiento.value
+    });
+    editId = null;
+    guardarBtn.textContent = "Guardar";
+    alert("Alumno actualizado correctamente");
+  } else {
+    await addDoc(collection(db, "alumnos"), {
+      nombre: nombre.value,
+      edad: parseInt(edad.value),
+      aula: aulaSelect.value,
+      fechaNacimiento: fechaNacimiento.value
+    });
+    alert("Alumno registrado correctamente");
+  }
+
+  nombre.value = "";
+  edad.value = "";
+  aulaSelect.value = "";
+  fechaNacimiento.value = "";
+  cargarAlumnos();
+};
+
 
   // Cargar alumnos en la tabla
   async function cargarAlumnos() {
