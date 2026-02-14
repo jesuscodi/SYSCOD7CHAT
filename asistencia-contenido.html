@@ -3,6 +3,7 @@
 h2, h3 {
   color: #ff6f61;
   font-weight: bold;
+  text-align: center; /* Centrado */
 }
 
 h2 {
@@ -13,6 +14,14 @@ h2 {
 h3 {
   margin-bottom: 15px;
   font-size: 1.5rem;
+  margin-top: 30px;
+}
+
+/* Contenedor general */
+.asistencia-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 /* Grid para formulario */
@@ -82,11 +91,10 @@ h3 {
   overflow: hidden;
 }
 
-
 #tablaAlumnos th,
 #tablaAlumnos td {
   padding: 12px 10px;
-  text-align: left;
+  text-align: center; /* centrado */
   border-bottom: 1px solid #ffdab9;
   font-size: 1rem;
 }
@@ -105,9 +113,16 @@ h3 {
   cursor: pointer;
 }
 
+/* Botón Guardar Asistencia centrado */
+#guardarAsistencia {
+  display: block;
+  margin: 20px auto 0;
+}
+
 /* Mensaje de confirmación */
 #mensaje {
   margin-top: 10px;
+  text-align: center;
   color: green;
   font-weight: bold;
   font-size: 1rem;
@@ -121,43 +136,42 @@ h3 {
 }
 </style>
 
-<h2>Registrar Asistencia</h2>
+<div class="asistencia-container">
+  <h2>Registrar Asistencia</h2>
 
-<div class="form-grid">
-  <div>
-    <label>Fecha:</label>
-    <input type="date" id="fecha">
+  <div class="form-grid">
+    <div>
+      <label>Fecha:</label>
+      <input type="date" id="fecha">
+    </div>
+
+    <div>
+      <label>Aula:</label>
+      <select id="aulaSelect">
+        <option value="">Seleccionar aula</option>
+      </select>
+    </div>
+
+    <div style="align-self:end;">
+      <button id="cargarAlumnos">Cargar Alumnos</button>
+    </div>
   </div>
 
-  <div>
-    <label>Aula:</label>
-    <select id="aulaSelect">
-      <option value="">Seleccionar aula</option>
-    </select>
-  </div>
+  <h3>Alumnos</h3>
 
-  <div style="align-self:end;">
-    <button id="cargarAlumnos">Cargar Alumnos</button>
-  </div>
+  <table id="tablaAlumnos">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th>Presente</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button id="guardarAsistencia">💾 Guardar Asistencia</button>
+
+  <div id="mensaje"></div>
 </div>
-
-<h3>Alumnos</h3>
-
-<table id="tablaAlumnos">
-  <thead>
-    <tr>
-      <th>Alumno</th>
-      <th>Presente</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<br>
-<button id="guardarAsistencia">💾 Guardar Asistencia</button>
-
-
-
-<div id="mensaje"></div>
 
 <script type="module" src="registro-asistencia.js"></script>
