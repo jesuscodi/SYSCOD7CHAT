@@ -67,9 +67,47 @@
   <img src="img/nino7.jpg" alt="Imagen 7">
    </div>
 </div>
+<!-- Cumpleaños del Mes -->
+<section id="cumple-mes" style="margin-top: 30px;">
+  <h2>🎉 Cumpleaños del Mes</h2>
+
+  <!-- Contenedor de tarjetas -->
+  <div id="cumpleMesContainer" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
+
+  <!-- Tabla opcional -->
+  <table id="tablaCumpleMes" style="width: 100%; max-width: 700px; margin-top: 20px; display: none;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Aula</th>
+        <th>Fecha Nacimiento</th>
+        <th>Edad</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
 
 
 <style>
+  .cumple-card {
+  background: #fff3e0;
+  border-radius: 15px;
+  padding: 15px;
+  min-width: 200px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.cumple-card h3 {
+  margin: 0 0 10px 0;
+  color: #ff6f61;
+}
+
+.cumple-card p {
+  margin: 5px 0;
+}
+
   /* Slider de imágenes */
 /* Contenedor visible */
 .filmstrip {
@@ -289,6 +327,7 @@ document.querySelectorAll('.menu-btn').forEach(btn => {
   };
 });
 
+  
   
 </script>
 
