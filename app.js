@@ -263,6 +263,66 @@ export async function initAsistencia() {
     document.getElementById("mensaje").textContent = "✅ Asistencia registrada correctamente";
   };
 }
+///////////////////DASHBOARD CUMPLEAÑOS//////////////////////
+
+// Función para mostrar cumpleaños del mes
+export async function mostrarCumpleMes() {
+    const container = document.getElementById("cumpleMesContainer");
+    const tabla = document.getElementById("tablaCumpleMes");
+    const tbody = tabla.querySelector("tbody");
+
+    container.innerHTML = "";
+    tbody.innerHTML = "";
+
+    const mesActual = new Date().getMonth() + 1;
+
+    const dataAlumnos = await getDocs(collection(db, "alumnos"));
+    const cumpleMes = dataAlumnos.docs.filter(al => {
+        const fecha = al.data().fechaNacimiento;
+        if (!fecha) return false;
+        const mes = parseInt(fecha.split("-")[1]);
+        return mes === mesActual;
+    });
+
+    if (cumpleMes.length === 0) {
+        container.innerHTML = "<p>No hay cumpleaños este mes 🎉</p>";
+        return;
+    }
+
+    // Mostrar tarjetas
+    cumpleMes.forEach(al => {
+        const fecha = al.data().fechaNacimiento;
+        const nacimiento = new Date(fecha);
+        const hoy = new Date();
+        let edad = hoy.getFullYear() - nacimiento.getFullYear();
+        if (hoy.getMonth() < nacimiento.getMonth() ||
+            (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate())) {
+            edad--;
+        }
+
+        const card = document.createElement("div");
+        card.className = "cumple-card";
+        card.innerHTML = `
+          <h3>${al.data().nombre}</h3>
+          <p>Aula: ${al.data().aula}</p>
+          <p>Fecha: ${fecha}</p>
+          <p>🎂 Cumple ${edad} años</p>
+        `;
+        container.appendChild(card);
+
+        // Agregar a la tabla
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${al.data().nombre}</td>
+          <td>${al.data().aula}</td>
+          <td>${fecha}</td>
+          <td>${edad}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    tabla.style.display = "table"; // Mostrar tabla
+}
 
 // ================= HISTORIAL =================
 export async function initHistorial() {
