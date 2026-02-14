@@ -64,44 +64,40 @@
 </div>
 
 <!-- Cumpleaños del Mes -->
+<!-- Cumpleaños del Mes -->
 <section id="cumple-mes" style="margin-top: 30px;">
   <h2>🎉 Cumpleaños del Mes</h2>
 
-  <!-- Contenedor de tarjetas -->
-  <div id="cumpleMesContainer" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
-
-  <!-- Tabla opcional -->
-  <table id="tablaCumpleMes" style="width: 100%; max-width: 700px; margin-top: 20px; display: none;">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Aula</th>
-        <th>Fecha Nacimiento</th>
-        <th>Edad</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <!-- SOLO TARJETAS -->
+  <div id="cumpleMesContainer" class="cumple-grid"></div>
 </section>
 
+
 <style>
-  .cumple-card {
-    background: #fff3e0;
-    border-radius: 15px;
-    padding: 15px;
-    min-width: 200px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    text-align: center;
-  }
 
-  .cumple-card h3 {
-    margin: 0 0 10px 0;
-    color: #ff6f61;
-  }
+.cumple-grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-  .cumple-card p {
-    margin: 5px 0;
-  }
+.cumple-card{
+  width: 160px;
+  background: #fff3e0;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 14px;
+}
+
+.cumple-card h3{
+  margin: 5px 0;
+  font-size: 15px;
+  color: #ff6f61;
+}
+
+
 
   /* Slider de imágenes */
   .filmstrip {
@@ -193,13 +189,12 @@ cargarDashboard();
 // Cumpleaños del Mes
 async function cargarCumpleMes() {
   const container = document.getElementById("cumpleMesContainer");
-  const tabla = document.getElementById("tablaCumpleMes").querySelector("tbody");
   container.innerHTML = "";
-  tabla.innerHTML = "";
 
   const alumnosSnap = await getDocs(collection(db, "alumnos"));
   const today = new Date();
   const mesActual = today.getMonth() + 1;
+  const anioActual = today.getFullYear();
 
   const cumpleaneros = alumnosSnap.docs.filter(al => {
     const fecha = al.data().fechaNacimiento;
@@ -210,41 +205,27 @@ async function cargarCumpleMes() {
 
   if (cumpleaneros.length === 0) {
     container.innerHTML = "<p>No hay cumpleaños este mes 🎉</p>";
-    tabla.parentElement.style.display = "none";
     return;
   }
 
   cumpleaneros.forEach(al => {
-    const nombre = al.data().nombre;
-    const aula = al.data().aula;
-    const fechaNacimiento = al.data().fechaNacimiento;
-    const fechaObj = new Date(fechaNacimiento);
-    const edad = today.getFullYear() - fechaObj.getFullYear();
+    const data = al.data();
+    const fechaObj = new Date(data.fechaNacimiento);
+
+    // 🔥 EDAD QUE CUMPLE ESTE AÑO
+    const edadCumple = anioActual - fechaObj.getFullYear();
 
     const card = document.createElement("div");
     card.classList.add("cumple-card");
     card.innerHTML = `
-      <h3>${nombre}</h3>
-      <p>Aula: ${aula}</p>
-      <p>Fecha: ${fechaNacimiento}</p>
-      <p>Edad: ${edad}</p>
+      <h3>${data.nombre}</h3>
+      <p>${edadCumple} años</p>
+      <small>${data.aula}</small>
     `;
     container.appendChild(card);
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${nombre}</td>
-      <td>${aula}</td>
-      <td>${fechaNacimiento}</td>
-      <td>${edad}</td>
-    `;
-    tabla.appendChild(tr);
   });
-
-  tabla.parentElement.style.display = "table";
 }
 
-cargarCumpleMes();
 </script>
 
 <!-- Contenido dinámico -->
