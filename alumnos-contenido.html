@@ -10,6 +10,8 @@
       <select id="aula">
         <option value="">Seleccionar aula</option>
       </select>
+      
+      <input type="date" id="fechaNacimiento">
       <button id="guardar">Guardar</button>
     </div>
 
@@ -23,6 +25,7 @@
             <th>Edad</th>
             <th>Aula</th>
             <th>Acciones</th>
+            <th>Fecha Nac.</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -67,9 +70,10 @@ guardarBtn.onclick = async () => {
     alert("Alumno actualizado");
   } else {
     await addDoc(collection(db, "alumnos"), {
-      nombre: nombre.value,
-      edad: parseInt(edad.value),
-      aula: aulaSelect.value
+      nombre           : nombre.value,
+      edad             : parseInt(edad.value),
+      aula             : aulaSelect.value,
+      fechaNacimiento  : fechaNacimiento.value //implementado fecha
     });
     alert("Alumno registrado");
   }
@@ -90,6 +94,7 @@ async function cargarAlumnos() {
       <td>${docu.data().nombre}</td>
       <td>${docu.data().edad}</td>
       <td>${docu.data().aula}</td>
+      <td>${docu.data().fechaNacimiento || '-'}</td> <!-- nuevo campo -->
       <td>
         <button class="editar">Editar</button>
         <button class="eliminar">Eliminar</button>
@@ -98,10 +103,11 @@ async function cargarAlumnos() {
 
     // Editar
     tr.querySelector(".editar").onclick = () => {
-      nombre.value = docu.data().nombre;
-      edad.value = docu.data().edad;
-      aulaSelect.value = docu.data().aula;
-      editId = docu.id;
+      nombre.value           = docu.data().nombre;
+      edad.value             = docu.data().edad;
+      aulaSelect.value       = docu.data().aula;
+      fechaNacimiento.value  = docu.data().fechaNacimiento || "";
+      editId                 = docu.id;
       guardarBtn.textContent = "Actualizar";
     };
 
