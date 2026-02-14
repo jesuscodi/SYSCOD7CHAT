@@ -53,8 +53,11 @@
   </div>
 </section>
 
-    <!-- Slider de imágenes -->
-<section class="slider" id="dashboard-slider">
+
+
+  <!-- Cinta de fotos tipo filmstrip -->
+<div class="filmstrip">
+  <div class="filmstrip-track">
   <img src="img/nino1.jpg" alt="Imagen 1">
   <img src="img/nino2.jpg" alt="Imagen 2">
   <img src="img/nino3.jpg" alt="Imagen 3">
@@ -62,27 +65,47 @@
   <img src="img/nino5.jpg" alt="Imagen 5">
   <img src="img/nino6.jpg" alt="Imagen 6">
   <img src="img/nino7.jpg" alt="Imagen 7">
-  
-</section>
+  </div>
+</div>
+
 
 <style>
   /* Slider de imágenes */
-.slider {
-  position: relative;
+/* Contenedor visible */
+.filmstrip {
   width: 100%;
-  max-height: 100%;
   overflow: hidden;
-  border-radius: 20px;
-  margin-bottom: 30px;
+  border-radius: 15px;
+  margin-top: 30px;
+  background: #f5f5f5; /* opcional, fondo suave */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.slider img {
-  width: 100%;
-  display: none; /* Oculto por defecto */
-  object-fit: cover;
-  border-radius: 20px;
-  transition: opacity 1s ease-in-out;
+/* Track que se mueve */
+.filmstrip-track {
+  display: flex;
+  gap: 10px;
+  animation: scroll 20s linear infinite; /* animación continua */
 }
+
+/* Fotos dentro del track */
+.filmstrip-track img {
+  width: 200px;   /* tamaño de cada foto */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Animación */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* mueve la mitad del track, repetir imágenes para loop */
+  }
+}
+
 
 /* Dashboard Cards */
   
