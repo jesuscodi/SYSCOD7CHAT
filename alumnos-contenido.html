@@ -104,10 +104,11 @@ async function cargarAlumnos() {
       <td>${docu.data().aula}</td>
        
       <td>${docu.data().fechaNacimiento || '-'}</td> <!-- nuevo campo -->
-      <td>
-        <button class="editar">Editar</button>
-        <button class="eliminar">Eliminar</button>
+      <td class="acciones">
+         <button class="editar">Editar</button>
+         <button class="eliminar">Eliminar</button>
       </td>
+
     `;
 
     // Editar
@@ -248,6 +249,21 @@ cargarAlumnos();
 .alumnos-table td button:hover {
   opacity: 0.85;
 }
+  /* ===== ACCIONES ===== */
+.acciones{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  min-width: 140px;
+}
+
+.acciones button{
+  flex: 1;
+  padding: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 
 /* Responsive */
 @media(max-width: 768px) {
