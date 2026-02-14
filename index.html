@@ -16,13 +16,41 @@
     }
 
     /* ===== FONDO GENERAL ===== */
-    body {
+    /* body {
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #4e73df, #1cc88a);
-    }
+    } */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Fondo con la imagen de niños */
+  background-image: url('images/fondo-ninos.png');
+  background-size: cover;        /* La imagen cubre toda la pantalla */
+  background-position: center;   /* Centrada */
+  background-repeat: no-repeat;  /* No se repite */
+
+  /* Opcional: agrega un overlay semitransparente para que el login resalte */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255,255,255,0.3); /* ajuste de transparencia para resaltar el login */
+  z-index: 0;
+}
+
+.login-wrapper {
+  position: relative; /* Para que el login quede encima del overlay */
+  z-index: 1;
+}
 
     /* ===== CONTENEDOR LOGIN ===== */
     .login-wrapper {
