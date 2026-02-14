@@ -25,9 +25,6 @@
   </nav>
 </header>
 
-<!-- <!-- Contenido principal -->
-
-
 <!-- Dashboard Cards -->
 <section class="cards" id="dashboard-cards">
   <div class="card card-aulas">
@@ -53,20 +50,19 @@
   </div>
 </section>
 
-
-
-  <!-- Cinta de fotos tipo filmstrip -->
+<!-- Cinta de fotos tipo filmstrip -->
 <div class="filmstrip" id="dashboard-filmstrip">
   <div class="filmstrip-track">
-  <img src="img/nino1.jpg" alt="Imagen 1">
-  <img src="img/nino2.jpg" alt="Imagen 2">
-  <img src="img/nino3.jpg" alt="Imagen 3">
-  <img src="img/nino4.jpg" alt="Imagen 4">
-  <img src="img/nino5.jpg" alt="Imagen 5">
-  <img src="img/nino6.jpg" alt="Imagen 6">
-  <img src="img/nino7.jpg" alt="Imagen 7">
-   </div>
+    <img src="img/nino1.jpg" alt="Imagen 1">
+    <img src="img/nino2.jpg" alt="Imagen 2">
+    <img src="img/nino3.jpg" alt="Imagen 3">
+    <img src="img/nino4.jpg" alt="Imagen 4">
+    <img src="img/nino5.jpg" alt="Imagen 5">
+    <img src="img/nino6.jpg" alt="Imagen 6">
+    <img src="img/nino7.jpg" alt="Imagen 7">
+  </div>
 </div>
+
 <!-- Cumpleaños del Mes -->
 <section id="cumple-mes" style="margin-top: 30px;">
   <h2>🎉 Cumpleaños del Mes</h2>
@@ -88,132 +84,104 @@
   </table>
 </section>
 
-
 <style>
   .cumple-card {
-  background: #fff3e0;
-  border-radius: 15px;
-  padding: 15px;
-  min-width: 200px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  text-align: center;
-}
+    background: #fff3e0;
+    border-radius: 15px;
+    padding: 15px;
+    min-width: 200px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    text-align: center;
+  }
 
-.cumple-card h3 {
-  margin: 0 0 10px 0;
-  color: #ff6f61;
-}
+  .cumple-card h3 {
+    margin: 0 0 10px 0;
+    color: #ff6f61;
+  }
 
-.cumple-card p {
-  margin: 5px 0;
-}
+  .cumple-card p {
+    margin: 5px 0;
+  }
 
   /* Slider de imágenes */
-/* Contenedor visible */
-.filmstrip {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 15px;
-  margin-top: 30px;
-  background: #f5f5f5; /* opcional, fondo suave */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Track que se mueve */
-.filmstrip-track {
-  display: flex;
-  gap: 10px;
-  animation: scroll 20s linear infinite; /* animación continua */
-}
-
-/* Fotos dentro del track */
-.filmstrip-track img {
-  width: 200px;   /* tamaño de cada foto */
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-/* Animación */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
+  .filmstrip {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 15px;
+    margin-top: 30px;
+    background: #f5f5f5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   }
-  100% {
-    transform: translateX(-50%); /* mueve la mitad del track, repetir imágenes para loop */
+
+  .filmstrip-track {
+    display: flex;
+    gap: 10px;
+    animation: scroll 20s linear infinite;
   }
-}
 
+  .filmstrip-track img {
+    width: 200px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 
-/* Dashboard Cards */
-  
-.cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
 
-.card {
-  flex: 1;
-  min-width: 200px;
-  background: #fff3e0;
-  border-radius: 15px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+  /* Dashboard Cards */
+  .cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
+  .card {
+    flex: 1;
+    min-width: 200px;
+    background: #fff3e0;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
 
-.card-icon {
-  font-size: 2.5rem;
-  color: #ff6f61;
-}
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
 
-.card-info h3 {
-  margin: 0;
-  color: #ff6f61;
-  font-size: 1.2rem;
-}
+  .card-icon { font-size: 2.5rem; }
+  .card-info h3 { margin:0; color:#ff6f61; font-size:1.2rem; }
+  .card-info p { margin:5px 0 0; font-size:1.5rem; font-weight:bold; color:#ffb347; }
 
-.card-info p {
-  margin: 5px 0 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #ffb347;
-}
-
-/* Diferentes colores de tarjetas si quieres */
-.card-aulas .card-icon { color: #ff6f61; }
-.card-alumnos .card-icon { color: #ff9f43; }
-.card-asistencias .card-icon { color: #6a11cb; } /* un color morado para diferenciar */
+  .card-aulas .card-icon { color: #ff6f61; }
+  .card-alumnos .card-icon { color: #ff9f43; }
+  .card-asistencias .card-icon { color: #6a11cb; }
 </style>
 
 <script type="module">
 import { db } from "./firebase.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Dashboard
 async function cargarDashboard() {
-  // Total Alumnos
   const alumnosSnap = await getDocs(collection(db, "alumnos"));
   document.getElementById("totalAlumnos").textContent = alumnosSnap.size;
 
-  // Total Aulas
   const aulasSnap = await getDocs(collection(db, "aulas"));
   document.getElementById("totalAulas").textContent = aulasSnap.size;
 
-  // Asistencias de hoy
   const today = new Date();
   const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
   const fechaHoy = `${yyyy}-${mm}-${dd}`;
 
   const asistenciasSnap = await getDocs(query(collection(db, "asistencias"), where("fecha", "==", fechaHoy)));
@@ -221,16 +189,71 @@ async function cargarDashboard() {
 }
 
 cargarDashboard();
+
+// Cumpleaños del Mes
+async function cargarCumpleMes() {
+  const container = document.getElementById("cumpleMesContainer");
+  const tabla = document.getElementById("tablaCumpleMes").querySelector("tbody");
+  container.innerHTML = "";
+  tabla.innerHTML = "";
+
+  const alumnosSnap = await getDocs(collection(db, "alumnos"));
+  const today = new Date();
+  const mesActual = today.getMonth() + 1;
+
+  const cumpleaneros = alumnosSnap.docs.filter(al => {
+    const fecha = al.data().fechaNacimiento;
+    if (!fecha) return false;
+    const mes = parseInt(fecha.split("-")[1]);
+    return mes === mesActual;
+  });
+
+  if (cumpleaneros.length === 0) {
+    container.innerHTML = "<p>No hay cumpleaños este mes 🎉</p>";
+    tabla.parentElement.style.display = "none";
+    return;
+  }
+
+  cumpleaneros.forEach(al => {
+    const nombre = al.data().nombre;
+    const aula = al.data().aula;
+    const fechaNacimiento = al.data().fechaNacimiento;
+    const fechaObj = new Date(fechaNacimiento);
+    const edad = today.getFullYear() - fechaObj.getFullYear();
+
+    const card = document.createElement("div");
+    card.classList.add("cumple-card");
+    card.innerHTML = `
+      <h3>${nombre}</h3>
+      <p>Aula: ${aula}</p>
+      <p>Fecha: ${fechaNacimiento}</p>
+      <p>Edad: ${edad}</p>
+    `;
+    container.appendChild(card);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${nombre}</td>
+      <td>${aula}</td>
+      <td>${fechaNacimiento}</td>
+      <td>${edad}</td>
+    `;
+    tabla.appendChild(tr);
+  });
+
+  tabla.parentElement.style.display = "table";
+}
+
+cargarCumpleMes();
 </script>
 
-  <!-- Contenido dinámico -->
-  <section id="dynamic-content" style="display:none; margin-top:30px;">
-    <!-- Aquí se carga el contenido de cada sección -->
-  </section>
-</main>
+<!-- Contenido dinámico -->
+<section id="dynamic-content" style="display:none; margin-top:30px;">
+  <!-- Aquí se carga el contenido de cada sección -->
+</section>
 
 <script type="module">
-import { loadContent, initAlumnos, initAulas, initAsistencia,initHistorial } from "./app.js";
+import { loadContent, initAlumnos, initAulas, initAsistencia, initHistorial } from "./app.js";
 
 // Logout
 document.getElementById("logout").onclick = () => {
@@ -241,7 +264,7 @@ document.getElementById("logout").onclick = () => {
 // Verificar login
 if (!localStorage.getItem("usuario")) window.location.href = "index.html";
 
-// Datos de ejemplo (puedes actualizar luego con Firestore)
+// Inicialización de cards
 document.getElementById("totalAulas").innerText = 0;
 document.getElementById("totalAlumnos").innerText = 0;
 document.getElementById("asistenciasHoy").innerText = 0;
@@ -250,85 +273,39 @@ document.getElementById("asistenciasHoy").innerText = 0;
 document.querySelectorAll('.menu-btn').forEach(btn => {
   btn.onclick = async () => {
     const section = btn.getAttribute('data-section');
-    
     if(section === 'dashboard'){
       document.getElementById("dashboard-cards").style.display = 'flex';
+      document.getElementById("dashboard-filmstrip").style.display = 'flex';
       document.getElementById("dynamic-content").style.display = 'none';
     } else {
       document.getElementById("dashboard-cards").style.display = 'none';
+      document.getElementById("dashboard-filmstrip").style.display = 'none';
       const dynamicContent = document.getElementById("dynamic-content");
       dynamicContent.style.display = 'block';
-
       try {
         const response = await fetch(`${section}-contenido.html`);
         if(response.ok){
           const html = await response.text();
           dynamicContent.innerHTML = html;
-
-          // Inicializar la lógica de cada sección
           if(section === "alumnos") await initAlumnos();
           if(section === "aulas") await initAulas();
           if(section === "asistencia") await initAsistencia();
-          if(section === "historial") await initHistorial(); 
+          if(section === "historial") await initHistorial();
         } else {
           dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
         }
-      } catch (error) {
+      } catch(error) {
         dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
       }
     }
-
-    // Cerrar menú en móvil
     if(window.innerWidth <= 768) document.getElementById("nav-links").classList.remove('active');
   };
 });
 
-// Toggle menú en móvil
+// Toggle menú móvil
 document.getElementById("menu-toggle").onclick = () => {
   document.getElementById("nav-links").classList.toggle('active');
 };
-
-document.querySelectorAll('.menu-btn').forEach(btn => {
-  btn.onclick = async () => {
-    const section = btn.getAttribute('data-section');
-
-    if(section === 'dashboard'){
-      document.getElementById("dashboard-cards").style.display = 'flex';
-      document.getElementById("dashboard-filmstrip").style.display = 'flex';  // mostrar cinta
-      document.getElementById("dynamic-content").style.display = 'none';
-    } else {
-      document.getElementById("dashboard-cards").style.display = 'none';
-      document.getElementById("dashboard-filmstrip").style.display = 'none'; // ocultar cinta
-      const dynamicContent = document.getElementById("dynamic-content");
-      dynamicContent.style.display = 'block';
-
-      // cargar sección dinámica
-      try {
-        const response = await fetch(`${section}-contenido.html`);
-        if(response.ok){
-          const html = await response.text();
-          dynamicContent.innerHTML = html;
-
-          // Inicializar lógica de cada sección
-          if(section === "alumnos") await initAlumnos();
-          if(section === "aulas") await initAulas();
-          if(section === "asistencia") await initAsistencia();
-          if(section === "historial") await initHistorial(); 
-        } else {
-          dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
-        }
-      } catch (error) {
-        dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
-      }
-    }
-
-    // cerrar menú en móvil
-    if(window.innerWidth <= 768) document.getElementById("nav-links").classList.remove('active');
-  };
-});
-
-  
-  
 </script>
 
 </body>
