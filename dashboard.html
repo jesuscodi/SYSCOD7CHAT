@@ -56,7 +56,7 @@
 
 
   <!-- Cinta de fotos tipo filmstrip -->
-<div class="filmstrip">
+<div class="filmstrip" id="dashboard-filmstrip">
   <div class="filmstrip-track">
   <img src="img/nino1.jpg" alt="Imagen 1">
   <img src="img/nino2.jpg" alt="Imagen 2">
@@ -65,7 +65,7 @@
   <img src="img/nino5.jpg" alt="Imagen 5">
   <img src="img/nino6.jpg" alt="Imagen 6">
   <img src="img/nino7.jpg" alt="Imagen 7">
-  </div>
+   </div>
 </div>
 
 
@@ -250,24 +250,44 @@ document.getElementById("menu-toggle").onclick = () => {
   document.getElementById("nav-links").classList.toggle('active');
 };
 
-// Slider Dashboard
-const slides = document.querySelectorAll('#dashboard-slider img');
-let currentSlide = 0;
+document.querySelectorAll('.menu-btn').forEach(btn => {
+  btn.onclick = async () => {
+    const section = btn.getAttribute('data-section');
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.style.display = i === index ? 'block' : 'none';
-  });
-}
+    if(section === 'dashboard'){
+      document.getElementById("dashboard-cards").style.display = 'flex';
+      document.getElementById("dashboard-filmstrip").style.display = 'flex';  // mostrar cinta
+      document.getElementById("dynamic-content").style.display = 'none';
+    } else {
+      document.getElementById("dashboard-cards").style.display = 'none';
+      document.getElementById("dashboard-filmstrip").style.display = 'none'; // ocultar cinta
+      const dynamicContent = document.getElementById("dynamic-content");
+      dynamicContent.style.display = 'block';
 
-// Mostrar la primera imagen
-showSlide(currentSlide);
+      // cargar sección dinámica
+      try {
+        const response = await fetch(`${section}-contenido.html`);
+        if(response.ok){
+          const html = await response.text();
+          dynamicContent.innerHTML = html;
 
-// Cambiar cada 3 segundos
-setInterval(() => {
-  currentSlide = (currentSlide + 1) % slides.length;
-  showSlide(currentSlide);
-}, 3000);
+          // Inicializar lógica de cada sección
+          if(section === "alumnos") await initAlumnos();
+          if(section === "aulas") await initAulas();
+          if(section === "asistencia") await initAsistencia();
+          if(section === "historial") await initHistorial(); 
+        } else {
+          dynamicContent.innerHTML = `<p>Error al cargar ${section}-contenido.html</p>`;
+        }
+      } catch (error) {
+        dynamicContent.innerHTML = `<p>Error: ${error}</p>`;
+      }
+    }
+
+    // cerrar menú en móvil
+    if(window.innerWidth <= 768) document.getElementById("nav-links").classList.remove('active');
+  };
+});
 
   
 </script>
