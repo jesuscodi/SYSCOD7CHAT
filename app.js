@@ -93,15 +93,16 @@ export async function initAlumnos() {
     data.forEach(docu => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${docu.data().nombre}</td>
-        <td>${docu.data().edad}</td>
-        <td>${docu.data().aula}</td>
-        <td>${docu.data().fechaNacimiento || ""}</td> <!-- ✅ mostrar fecha -->
-        <td>
-          <button class="editar">Editar</button>
-          <button class="eliminar">Eliminar</button>
-        </td>
-      `;
+  <td>${docu.data().nombre}</td>
+  <td>${docu.data().edad}</td>
+  <td>${docu.data().aula}</td>
+  <td>${docu.data().fechaNacimiento || ""}</td>
+  <td class="acciones">
+    <button class="editar">Editar</button>
+    <button class="eliminar">Eliminar</button>
+  </td>
+`;
+
 
       // Editar alumno
       tr.querySelector(".editar").onclick = () => {
