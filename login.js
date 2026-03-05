@@ -8,7 +8,7 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ===== ELEMENTOS ===== */
+/* ===== ELEMENTOS HTML ===== */
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -20,26 +20,15 @@ const mensaje = document.getElementById("mensaje");
 
 const usuariosCollection = collection(db, "usuarios");
 
-/* ===== MENSAJES ===== */
+/* ===== FUNCION MENSAJES ===== */
 
-function mostrarMensaje(texto, color="red"){
+function mostrarMensaje(texto, color = "red") {
   mensaje.textContent = texto;
   mensaje.style.color = color;
 
-  setTimeout(()=>{
-    mensaje.textContent="";
-  },4000);
-}
-
-/* =============================
-   BUSCAR USUARIO
-============================= */
-
-async function buscarUsuario(email){
-  const q = query(usuariosCollection, where("email","==",email));
-  const resultado = await getDocs(q);
-
-  return resultado.docs.length > 0 ? resultado.docs[0] : null;
+  setTimeout(() => {
+    mensaje.textContent = "";
+  }, 4000);
 }
 
 /* =============================
@@ -51,31 +40,38 @@ btnRegistro.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
-  if(!email || !password){
+  if (!email || !password) {
     mostrarMensaje("Complete todos los campos");
     return;
   }
 
-  try{
+  try {
 
-    const existe = await buscarUsuario(email);
+    // Verificar si usuario existe
+    const q = query(
+      usuariosCollection,
+      where("email", "==", email)
+    );
 
-    if(existe){
+    const resultado = await getDocs(q);
+
+    if (!resultado.empty) {
       mostrarMensaje("El usuario ya existe");
       return;
     }
 
-    await addDoc(usuariosCollection,{
+    await addDoc(usuariosCollection, {
       email,
       password
     });
 
-    mostrarMensaje("Usuario registrado ✅","green");
+    mostrarMensaje("Usuario registrado ✅", "green");
 
-    emailInput.value="";
-    passwordInput.value="";
+    emailInput.value = "";
+    passwordInput.value = "";
 
-  }catch(error){
+  } catch (error) {
+    console.log(error);
     mostrarMensaje("Error al registrar usuario");
   }
 };
@@ -89,36 +85,37 @@ btnLogin.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
-  if(!email || !password){
+  if (!email || !password) {
     mostrarMensaje("Complete todos los campos");
     return;
   }
 
-  try{
+  try {
 
     const q = query(
       usuariosCollection,
-      where("email","==",email),
-      where("password","==",password)
+      where("email", "==", email),
+      where("password", "==", password)
     );
 
     const resultado = await getDocs(q);
 
-    if(resultado.empty){
+    if (resultado.empty) {
       mostrarMensaje("Usuario o contraseña incorrectos");
       return;
     }
 
     localStorage.setItem("usuario", email);
 
-    mostrarMensaje("Ingresando...","green");
+    mostrarMensaje("Ingresando...", "green");
 
-    setTimeout(()=>{
-      window.location="dashboard.html";
-    },1000);
+    setTimeout(() => {
+      window.location = "dashboard.html";
+    }, 1000);
 
-  }catch(error){
-    mostrarMensaje("Error en login");
+  } catch (error) {
+    console.log(error);
+    mostrarMensaje(error.message);
   }
 
 };
